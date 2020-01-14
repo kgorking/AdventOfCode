@@ -8,15 +8,9 @@
 #include "input.h"
 
 using signal = unsigned short;
-using identifier = std::string_view;
 
-enum class gate_op {
-	And,
-	Or,
-	LShift,
-	RShift,
-	Not,
-};
+enum class gate_op { And, Or, LShift, RShift, Not };
+
 
 struct wire;
 struct gate {
@@ -24,7 +18,7 @@ struct gate {
 	std::variant<wire const*, signal> const input2;
 	gate_op const op;
 
-	mutable std::optional<signal> cache;
+	mutable std::optional<signal> cached_signal;
 };
 
 struct wire {
@@ -37,8 +31,8 @@ struct wire {
 signal run(wire const& w);
 
 signal run(gate const& g) {
-	if (g.cache)
-		return *g.cache;
+	if (g.cached_signal)
+		return *g.cached_signal;
 
 	signal const s1 = (g.input1.index() == 0) ? run(*std::get<wire const*>(g.input1)) : std::get<signal>(g.input1);
 
@@ -51,15 +45,15 @@ signal run(gate const& g) {
 		case gate_op::Not:      val = ~s1; break;
 	}
 
-	g.cache = val;
+	g.cached_signal = val;
 	return val;;
 }
 
 signal run(wire const& w) {
 	switch (w.value.index()) {
-		case 0: return run(*std::get<gate const*>(w.value));
-		case 1: return run(*std::get<wire const*>(w.value));
-		case 2: return std::get<signal>(w.value);
+		case 0: return run(*std::get<gate const*>(w.value));	// x OP y -> z
+		case 1: return run(*std::get<wire const*>(w.value));	// x -> z
+		case 2: return std::get<signal>(w.value);				// 7 -> z
 	}
 
 	throw;
@@ -69,14 +63,14 @@ signal run(wire const& w) {
 template <typename Fn>
 void for_each_part(std::string_view s, char splitter, Fn f) {
 	int offset = 0;
-	int nl = s.find_first_of(splitter, 0);
-	while (nl != std::string_view::npos) {
-		std::string_view part = s.substr(offset, nl - offset);
+	int index = s.find_first_of(splitter, 0);
+	while (index != std::string_view::npos) {
+		std::string_view part = s.substr(offset, index - offset);
 
 		f(part);
 
-		offset = nl + 1;
-		nl = s.find_first_of(splitter, offset);
+		offset = index + 1;
+		index = s.find_first_of(splitter, offset);
 	}
 
 	f(s.substr(offset));
@@ -113,16 +107,16 @@ signal to_signal(std::string_view s) {
 
 
 int main() {
-	std::map<identifier, wire> wire_map;
+	std::map<std::string_view, wire> wire_map;
 	std::list<gate> gates;
 
 	// Parse the input on a per-line basis
-	for_each_part(input, '\n', [&](auto line) {
-		if (line.empty())
-			return;
-
+	for_each_part(input, '\n', [&](std::string_view line) {
 		// Split the line into its parts
 		std::vector<std::string_view> parts;
+		auto const num_spaces = std::count(line.begin(), line.end(), ' ');
+		parts.reserve(num_spaces + 1);
+
 		for_each_part(line, ' ', [&parts](auto part) {
 			parts.push_back(part);
 		});
@@ -146,8 +140,7 @@ int main() {
 
 			case 4: {
 				// NOT x -> f
-				gates.push_back({ &wire_map[parts[1]], nullptr, gate_op::Not });
-				wire_map[parts[3]].value = &gates.back();
+				wire_map[parts[3]].value = &gates.emplace_back(gate{ &wire_map[parts[1]], nullptr, gate_op::Not });
 				break;
 			}
 
@@ -159,13 +152,11 @@ int main() {
 						std::variant<wire const*, signal>{ &wire_map[sv] };
 				};
 
-				gates.push_back({
+				wire& out = wire_map[parts[4]];
+				out.value = &gates.emplace_back(gate{
 					parse_wire(parts[0]),
 					parse_wire(parts[2]),
 					get_operand_from_string(parts[1]) });
-
-				wire& out = wire_map[parts[4]];
-				out.value = &gates.back();
 
 				break;
 			}
@@ -175,18 +166,21 @@ int main() {
 		}
 	});
 
-	signal const sig_a = run(wire_map["a"]);
+	// Get the result from wire 'a'
+	auto const& wire_a = wire_map["a"];
+	signal const sig_a = run(wire_a);
 	std::cout << "Wire a: " << sig_a << '\n';
 
-	// a -> b
+	// Re-write the value of 'b' to the value of 'a'
 	auto& wire_b = wire_map["b"];
 	wire_b.value = sig_a;
 
-	// Reset all the caches
+	// Reset all the caches, so the new value of 'b' is used
 	for (auto& gate : gates) {
-		gate.cache.reset();
+		gate.cached_signal.reset();
 	}
 
-	signal const new_sig_a = run(wire_map["a"]);
+	// Get the new result from wire 'a'
+	signal const new_sig_a = run(wire_a);
 	std::cout << "New wire a: " << new_sig_a << '\n';
 }
