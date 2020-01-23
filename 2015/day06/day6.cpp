@@ -18,7 +18,7 @@ int main() {
 			case command::off:
 				for (int x = op.bottom_left.first; x <= op.top_right.first; ++x) {
 					for (int y = op.bottom_left.second; y <= op.top_right.second; ++y) {
-						lights[x][y] = std::max(0, lights[x][y] - 1);
+						lights[x][y] = std::max<unsigned char>(0, lights[x][y] - 1);
 					}
 				}
 				break;

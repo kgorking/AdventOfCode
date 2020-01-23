@@ -46,8 +46,8 @@ md5_result md5(std::string const initial_msg) {
 	msg.resize(new_len + 64);
 	msg[initial_msg.size()] = 128; // write the "1" bit
 
-	uint32_t bits_len = 8 * initial_msg.size(); // note, we append the len
-	msg[new_len] = bits_len;
+	size_t bits_len = 8 * initial_msg.size(); // note, we append the len
+	msg[new_len] = static_cast<uint8_t>(bits_len);
 
 	// Process the message in successive 512-bit chunks:
 	// for each 512-bit chunk of message:

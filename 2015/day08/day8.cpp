@@ -22,7 +22,7 @@ int main() {
 
 	// \\ \" \x00
 	for_each_part(input, '\n', [&](std::string_view  line) {
-		for (int i = 0; i < line.length(); i++) {
+		for (size_t i = 0; i < line.length(); i++) {
 			switch (line[i]) {
 				case '\"':
 					code_length++;
@@ -62,7 +62,7 @@ int main() {
 	for_each_part(input, '\n', [&](std::string_view  line) {
 		encode_length += 2; // 2x \"
 
-		for (int i = 0; i < line.length(); i++) {
+		for (size_t i = 0; i < line.length(); i++) {
 			switch (line[i]) {
 				case '"':
 					encode_length += 2;

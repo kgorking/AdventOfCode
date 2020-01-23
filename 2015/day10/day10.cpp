@@ -2,7 +2,7 @@
 #include <string>
 
 std::string look_and_say(std::string const& input) {
-	int count = 1;
+	char count = 1;
 	char last_c = input[0];
 
 	std::string result;
