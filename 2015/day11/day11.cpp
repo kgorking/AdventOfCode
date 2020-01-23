@@ -15,10 +15,7 @@ bool has_increasing_straight(password const& pw) {
 
 bool has_valid_letters(password const& pw) {
 	auto const is_valid_letter = [](char c) {
-		return
-			c != 'i' &&
-			c != 'o' &&
-			c != 'l';
+		return c != 'i' && c != 'o' && c != 'l';
 	};
 
 	return std::all_of(pw.begin(), pw.end(), is_valid_letter);
@@ -56,7 +53,7 @@ void inc_helper(password& pw, int index) {
 }
 
 void increment(password& pw) {
-	inc_helper(pw, 7);
+	inc_helper(pw, pw.size() - 1);
 }
 
 void print(password const& pw) {

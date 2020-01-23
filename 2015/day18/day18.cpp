@@ -2,15 +2,7 @@
 #include <array>
 #include "input.h"
 
-/*std::array<std::array<char, 7>, 6> lights{ {
-	{ "##.#.#" },
-	{ "...##." },
-	{ "#....#" },
-	{ "..#..." },
-	{ "#.#..#" },
-	{ "####.#" }
-} };*/
-int constexpr Dimensions = 100;// 6;
+int constexpr Dimensions = 100;
 
 struct packed_char {
 	unsigned char state : 6;
@@ -21,7 +13,7 @@ packed_char& get_packed_char(int x, int y) {
 	return reinterpret_cast<packed_char&>(lights[y][x]);
 }
 
-bool get_state(int x, int y) {
+bool is_light_on(int x, int y) {
 	if (x < 0 || y < 0 || x >= Dimensions || y >= Dimensions)
 		return false;
 	return ('#' == get_packed_char(x,y).state);
@@ -41,14 +33,14 @@ void count_neighbours() {
 	for (int y = 0; y < Dimensions; y++) {
 		for (int x = 0; x < Dimensions; x++) {
 			int const neighbours_on =
-				get_state(x - 1, y - 1) +
-				get_state(x, y - 1) +
-				get_state(x + 1, y - 1) +
-				get_state(x - 1, y) +
-				get_state(x + 1, y) +
-				get_state(x - 1, y + 1) +
-				get_state(x, y + 1) +
-				get_state(x + 1, y + 1);
+				is_light_on(x - 1, y - 1) +
+				is_light_on(x, y - 1) +
+				is_light_on(x + 1, y - 1) +
+				is_light_on(x - 1, y) +
+				is_light_on(x + 1, y) +
+				is_light_on(x - 1, y + 1) +
+				is_light_on(x, y + 1) +
+				is_light_on(x + 1, y + 1);
 			set_num_neighbours(x, y, neighbours_on);
 		}
 	}
@@ -57,7 +49,7 @@ void count_neighbours() {
 void update_state() {
 	for (int y = 0; y < Dimensions; y++) {
 		for (int x = 0; x < Dimensions; x++) {
-			// Dont alter the corners
+			// Dont alter the corners (part 2)
 			if ((x == 0 || x == Dimensions - 1) && (y == 0 || y == Dimensions - 1))
 				continue;
 
@@ -89,29 +81,16 @@ int count_active_lights() {
 	int total = 0;
 	for (int y = 0; y < Dimensions; y++) {
 		for (int x = 0; x < Dimensions; x++) {
-			total += (get_packed_char(x, y).state == '#');
+			total += is_light_on(x, y);
 		}
 	}
 	return total;
 }
 
 int main() {
-#if 0
-	std::cout << "Initial step\n";
-	print_lights();
-
-	for (int i = 0; i < 5; i++) {
-		count_neighbours();
-		update_state();
-
-		std::cout << "\nAfter " << i+1 << " step\n";
-		print_lights();
-	}
-#else
 	for (int i = 0; i < 100; i++) {
 		count_neighbours();
 		update_state();
 	}
 	std::cout << "Active lights after 100 iterations: " << count_active_lights() << '\n';
-#endif
 }

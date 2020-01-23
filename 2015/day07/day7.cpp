@@ -22,7 +22,7 @@ struct gate {
 };
 
 struct wire {
-	//           node,  node,  leaf
+	//                  node,        node,   leaf
 	std::variant<gate const*, wire const*, signal> value;
 };
 
@@ -59,23 +59,6 @@ signal run(wire const& w) {
 	throw;
 }
 
-// Calls the function f on each part of the string divided by the 'splitter' character
-template <typename Fn>
-void for_each_part(std::string_view s, char splitter, Fn f) {
-	int offset = 0;
-	int index = s.find_first_of(splitter, 0);
-	while (index != std::string_view::npos) {
-		std::string_view part = s.substr(offset, index - offset);
-
-		f(part);
-
-		offset = index + 1;
-		index = s.find_first_of(splitter, offset);
-	}
-
-	f(s.substr(offset));
-}
-
 // Converts an operator name to its enum value
 gate_op get_operand_from_string(std::string_view s) {
 	switch (s[0]) {
@@ -105,6 +88,21 @@ signal to_signal(std::string_view s) {
 	return static_cast<signal>(val);
 }
 
+
+// Calls the function f on each part of the string divided by the 'splitter' character
+template <typename Fn>
+void for_each_part(std::string_view s, char splitter, Fn func) {
+	size_t offset = 0;
+	size_t index = s.find_first_of(splitter, 0);
+	while (index != std::string_view::npos) {
+		func(s.substr(offset, index - offset));
+
+		offset = index + 1;
+		index = s.find_first_of(splitter, offset);
+	}
+
+	func(s.substr(offset));
+}
 
 int main() {
 	std::map<std::string_view, wire> wire_map;

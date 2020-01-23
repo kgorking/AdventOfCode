@@ -122,11 +122,6 @@ int sum(std::any value) {
 		return 0;
 }
 
-int do_accounting(std::string_view input) {
-	int sum = 0;
-	return sum;
-}
-
 int main() {
 	// test-input
 	//std::string_view input = R"([1,2,3])";
