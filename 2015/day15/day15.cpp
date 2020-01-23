@@ -1,19 +1,15 @@
 #include <iostream>
 #include <array>
 #include <valarray>
+#include <numeric>
 
 using ingredient = std::valarray<int>;
 
-int calc_ingredient_score(ingredient const& i) {
+int calc_ingredient_score(ingredient i) {
 	ingredient const sliced = i[std::slice(0, 4, 1)]; // skip the calories in the product
 	if (sliced.min() <= 0)
 		return 0;
-
-	int mul = 1;
-	for (auto v : sliced) {
-		mul *= v;
-	}
-	return mul;
+	return std::reduce(std::begin(sliced), std::end(sliced), 1, std::multiplies<>{});
 }
 
 int find_max_4way_score(ingredient const& a, ingredient const& b, ingredient const& c, ingredient const& d) {
