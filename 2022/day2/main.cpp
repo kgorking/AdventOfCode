@@ -8,9 +8,9 @@ constexpr auto input = std::to_array<pair>({
 
 constexpr char lookup[6][3] = {
 // rock(1), paper(2), scissor(3)
-	{4, 1, 7}, // rock
-	{8, 5, 2}, // paper
-	{3, 9, 6}, // scissor
+	{4, 1, 7}, // vs rock
+	{8, 5, 2}, // vs paper
+	{3, 9, 6}, // vs scissor
 
 	{3, 1, 2}, // lose(+0) - rotate right
 	{4, 5, 6}, // draw(+3) - rotate none
