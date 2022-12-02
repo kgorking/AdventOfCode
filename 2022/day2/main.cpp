@@ -1,7 +1,7 @@
 ﻿#include <array>
 #include <iostream>
 
-struct pair { char a, b; };
+struct pair { int a, b; };
 constexpr auto input = std::to_array<pair>({
 	#include "input.txt"
 });
@@ -18,16 +18,15 @@ constexpr char lookup[6][3] = {
 };
 
 int main() {
-	int res1 = 0;
-	int res2 = 0;
+	pair res{0, 0};
 	for(pair const p : input) {
-		res1 += lookup[0 + p.b][p.a];
-		res2 += lookup[3 + p.b][p.a];
+		res.a += lookup[0 + p.b][p.a];
+		res.b += lookup[3 + p.b][p.a];
 	}
 
 	// Part 1
-	std::cout << res1 << '\n';
+	std::cout << res.a << '\n';
 
 	// Part 2
-	std::cout << res2 << '\n';
+	std::cout << res.b << '\n';
 }
