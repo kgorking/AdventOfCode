@@ -20,13 +20,14 @@ constexpr char lookup[6][3] = {
 int main() {
 	pair res{0, 0};
 	for(pair const p : input) {
+		// Part 1
 		res.a += lookup[0 + p.b][p.a];
+
+		// Part 2
 		res.b += lookup[3 + p.b][p.a];
 	}
 
-	// Part 1
-	std::cout << res.a << '\n';
-
-	// Part 2
-	std::cout << res.b << '\n';
+	std::cout
+		<< res.a << '\n'
+		<< res.b << '\n';
 }
