@@ -28,6 +28,6 @@ int main() {
 	// Part 1
 	std::cout << res1 << '\n';
 
-	// Part 2 <14058
+	// Part 2
 	std::cout << res2 << '\n';
 }
