@@ -9,7 +9,7 @@ static constexpr std::string_view input{
 };
 
 template<std::size_t N>
-bool is_unique(std::array<char, N> marker) noexcept {
+bool is_unique(std::string_view marker) noexcept {
 	uint32_t bits = 0;
 	for(char c : marker)
 		bits |= 1 << (c - 'a');
@@ -19,12 +19,8 @@ bool is_unique(std::array<char, N> marker) noexcept {
 template<std::size_t N>
 std::size_t find_marker_start(std::string_view sv) {
 	std::size_t processed = N;
-	std::array<char, N> marker;
-	sv.copy(marker.data(), N);
 
-	while(!is_unique(marker) && processed < sv.size() - 1) {
-		std::ranges::shift_left(marker, 1);
-		marker[N-1] = sv[processed];
+	while(!is_unique<N>(sv.substr(processed - N, N))) {
 		processed += 1;
 	}
 
