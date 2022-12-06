@@ -1,7 +1,5 @@
-﻿#include <array>
-#include <iostream>
+﻿#include <iostream>
 #include <string_view>
-#include <algorithm>
 #include <bit>
 
 static constexpr std::string_view input{
@@ -20,9 +18,8 @@ template<std::size_t N>
 std::size_t find_marker_start(std::string_view sv) {
 	std::size_t processed = N;
 
-	while(!is_unique<N>(sv.substr(processed - N, N))) {
+	while(!is_unique<N>(sv.substr(processed - N, N)))
 		processed += 1;
-	}
 
 	return processed;
 }
