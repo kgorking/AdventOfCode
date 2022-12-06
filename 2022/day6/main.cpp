@@ -25,9 +25,7 @@ std::size_t find_marker_start(std::string_view sv) {
 }
 
 int main() {
-	// Part 1
-	std::cout << find_marker_start<4>(input) << '\n';
-
-	// Part 2
-	std::cout << find_marker_start<14>(input) << '\n';
+	std::cout
+		<< "Part 1: " << find_marker_start<4>(input) << '\n'
+		<< "Part 2: " << find_marker_start<14>(input);
 }
