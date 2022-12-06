@@ -7,15 +7,15 @@ static constexpr std::string_view input{
 };
 
 template<std::size_t N>
-bool is_unique(std::string_view marker) noexcept {
+constexpr bool is_unique(std::string_view marker) noexcept {
 	uint32_t bits = 0;
-	for(char c : marker)
-		bits |= 1 << (c - 'a');
+	for(std::size_t i = 0; i < N; i++)
+		bits |= 1 << (marker[i] - 'a');
 	return N == std::popcount(bits);
 }
 
 template<std::size_t N>
-std::size_t find_marker_start(std::string_view sv) {
+constexpr std::size_t find_marker_start(std::string_view sv) {
 	std::size_t processed = N;
 
 	while(!is_unique<N>(sv.substr(processed - N, N)))
