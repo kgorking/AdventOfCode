@@ -54,7 +54,7 @@ int main() {
 	// Sort the directory sizes
 	std::ranges::sort(directory_sizes);
 
-	int64_t total_under_100k = 0;
+	int total_under_100k = 0;
 	for (auto const size : directory_sizes) {
 		if (size >= 100'000)
 			break;
