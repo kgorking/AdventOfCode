@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string_view>
 #include <vector>
+#include <algorithm>
 
 static constexpr std::string_view input{
 #include "input.txt"
@@ -9,7 +10,6 @@ static constexpr std::string_view input{
 int calc_dir_sizes(std::string_view& sv, std::vector<int>& directory_sizes) {
 	int current_dir_size = 0;
 
-	// Check for command
 	while (!sv.empty()) {
 		if (sv[0] == '$') {
 			if (sv[2] == 'c') { // CD
