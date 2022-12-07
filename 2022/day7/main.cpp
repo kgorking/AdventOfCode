@@ -7,7 +7,7 @@ static constexpr std::string_view input{
 #include "input.txt"
 };
 
-int build_dirs(std::string_view& sv, std::vector<int>& sizes) {
+int calc_dir_sizes(std::string_view& sv, std::vector<int>& directory_sizes) {
 	int current_dir_size = 0;
 
 	// Check for command
@@ -25,8 +25,8 @@ int build_dirs(std::string_view& sv, std::vector<int>& sizes) {
 				} else {
 					// Switch to new directory, save its resulting size
 					// and accumulate it into the current directory size.
-					int const size = build_dirs(sv, sizes);
-					sizes.push_back(size);
+					int const size = calc_dir_sizes(sv, directory_sizes);
+					directory_sizes.push_back(size);
 					current_dir_size += size;
 				}
 			} else if (sv[2] == 'l') { // LS
@@ -52,13 +52,13 @@ int build_dirs(std::string_view& sv, std::vector<int>& sizes) {
 int main() {
 	std::vector<int> directory_sizes;
 	std::string_view input_copy = input;
-	build_dirs(input_copy, directory_sizes);
+	int const used_space = calc_dir_sizes(input_copy, directory_sizes);
 
 	// Sort the directory sizes
 	std::ranges::sort(directory_sizes);
 
 	int64_t total_under_100k = 0;
-	for (auto const size : directory_sizes) { // std::accumulate_if when?
+	for (auto const size : directory_sizes) {
 		if (size >= 100'000)
 			break;
 		total_under_100k += size;
@@ -67,7 +67,6 @@ int main() {
 
 	int const total_space = 70'000'000;
 	int const needed_space = 30'000'000;
-	int const used_space = directory_sizes.back();
 	int const free_space = total_space - used_space;
 	int const missing_space = needed_space - free_space;
 
