@@ -11,36 +11,34 @@ int calc_dir_sizes(std::string_view& sv, std::vector<int>& directory_sizes) {
 	int current_dir_size = 0;
 
 	while (!sv.empty()) {
-		if (sv[0] == '$') {
-			if (sv[2] == 'c') { // CD
-				// Check if moving out of directory
-				bool const move_out = sv[5] == '.';
+		if (sv[2] == 'c') { // CD
+			// Check if moving out of directory
+			bool const move_out = sv[5] == '.';
+
+			// skip to next line
+			sv.remove_prefix(1 + sv.find('\n'));
+
+			if (move_out) {
+				return current_dir_size;
+			} else {
+				// Switch to new directory, save its resulting size
+				// and accumulate it into the current directory size.
+				int const size = calc_dir_sizes(sv, directory_sizes);
+				directory_sizes.push_back(size);
+				current_dir_size += size;
+			}
+		} else if (sv[2] == 'l') { // LS
+			sv.remove_prefix(5);   // skip '$ ls\n'
+
+			// Accumulate file sizes
+			while (!sv.empty() && sv[0] != '$') {
+				// Ignore 'dir'
+				if (sv[0] != 'd') {
+					current_dir_size += std::atoi(sv.data());
+				}
 
 				// skip to next line
 				sv.remove_prefix(1 + sv.find('\n'));
-
-				if (move_out) {
-					return current_dir_size;
-				} else {
-					// Switch to new directory, save its resulting size
-					// and accumulate it into the current directory size.
-					int const size = calc_dir_sizes(sv, directory_sizes);
-					directory_sizes.push_back(size);
-					current_dir_size += size;
-				}
-			} else if (sv[2] == 'l') { // LS
-				sv.remove_prefix(5);   // skip '$ ls\n'
-
-				// Accumulate file sizes
-				while (!sv.empty() && sv[0] != '$') {
-					// Ignore 'dir'
-					if (sv[0] != 'd') {
-						current_dir_size += std::atoi(sv.data());
-					}
-
-					// skip to next line
-					sv.remove_prefix(1 + sv.find('\n'));
-				}
 			}
 		}
 	}
