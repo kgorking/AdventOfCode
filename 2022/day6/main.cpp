@@ -1,31 +1,32 @@
-﻿#include <iostream>
+﻿#include <bit>
+#include <iostream>
 #include <string_view>
-#include <bit>
 
 static constexpr std::string_view input{
-	#include "input.txt"
+#include "input.txt"
 };
 
-template<std::size_t N>
-constexpr bool is_unique(std::string_view marker) noexcept {
-	uint32_t bits = 0;
-	for(std::size_t i = 0; i < N; i++)
-		bits |= 1 << (marker[i] - 'a');
-	return N == std::popcount(bits);
+constexpr std::uint32_t to_bit(char ch) {
+	return 1 << (ch - 'a');
 }
 
-template<std::size_t N>
+template <std::size_t N>
 constexpr std::size_t find_marker_start(std::string_view sv) {
-	std::size_t processed = N;
+	std::uint32_t mask = 0;
+	for (std::size_t i = 0; i < N; i++)
+		mask ^= to_bit(sv[i]);
 
-	while(!is_unique<N>(sv.substr(processed - N, N)))
-		processed += 1;
+	std::size_t i = N;
+    while (std::popcount(mask) != N) {
+        mask ^= to_bit(sv[i - N]);
+        mask ^= to_bit(sv[i]);
+		i += 1;
+    }
 
-	return processed;
+	return i;
 }
 
 int main() {
-	std::cout
-		<< "Part 1: " << find_marker_start<4>(input) << '\n'
-		<< "Part 2: " << find_marker_start<14>(input);
+	std::cout << find_marker_start<4>(input) << '\n';
+	std::cout << find_marker_start<14>(input);
 }
