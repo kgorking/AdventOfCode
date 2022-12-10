@@ -16,6 +16,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 build/
+out/
 
 # Visual C++ cache files
 ipch/
