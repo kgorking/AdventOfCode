@@ -36,31 +36,27 @@ int main() {
 
 			// left
 			char const left = data[y][x];
-			bool visible = (left > maxl[y]);
-			bool b = visible | trees[y].test(x);
-			trees[y].set(x, b);
-			maxl[y] = visible ? left : maxl[y];
+			bool const l_visible = (left > maxl[y]);
+			trees[y].set(x, l_visible | trees[y].test(x));
+			maxl[y] = l_visible ? left : maxl[y];
 
 			// right
 			char const right = data[y][ix];
-			visible = (right > maxr[y]);
-			b = visible | trees[y].test(ix);
-			trees[y].set(ix, b);
-			maxr[y] = visible ? right : maxr[y];
+			bool const r_visible = (right > maxr[y]);
+			trees[y].set(ix, r_visible | trees[y].test(ix));
+			maxr[y] = r_visible ? right : maxr[y];
 
 			// top
 			char const top = left; // data[y][x];
-			visible = (top > maxt[x]);
-			b = visible | trees[y].test(x);
-			trees[y].set(x, b);
-			maxt[x] = visible ? top : maxt[x];
+			bool const t_visible = (top > maxt[x]);
+			trees[y].set(x, t_visible | trees[y].test(x));
+			maxt[x] = t_visible ? top : maxt[x];
 
 			// bottom
 			char const bottom = data[iy][x];
-			visible = (bottom > maxb[x]);
-			b = visible | trees[iy].test(x);
-			trees[iy].set(x, b);
-			maxb[x] = visible ? bottom : maxb[x];
+			bool const b_visible = (bottom > maxb[x]);
+			trees[iy].set(x, b_visible | trees[iy].test(x));
+			maxb[x] = b_visible ? bottom : maxb[x];
 		}
 	}
 
