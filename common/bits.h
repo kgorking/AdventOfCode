@@ -1,6 +1,7 @@
 #pragma once
 #include <bit>
 #include <bitset>
+#include <assert.h>
 
 // Contains bit- and bitset related stuff
 
@@ -57,6 +58,7 @@ constexpr std::bitset<N> negate(std::bitset<N> const& bs) {
 // Returns the distance of the first set bit to the left of 'pos'
 template <int N>
 constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
+	assert(pos >= 0 && pos < N);
 	if (pos == N - 1)
 		return 1;
 
@@ -68,6 +70,7 @@ constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
 // Returns the distance of the first set bit to the right of 'pos'
 template <int N>
 constexpr int bit_distance_right(std::bitset<N> x, int const pos) {
+	assert(pos >= 0 && pos < N);
 	if (pos == 0)
 		return 1;
 
