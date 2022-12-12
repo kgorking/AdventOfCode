@@ -47,7 +47,7 @@ constexpr int ctz(std::bitset<N> x) noexcept {
 }
 
 // Negates a std::bitset
-template <unsigned int N>
+template <int N>
 constexpr std::bitset<N> negate(std::bitset<N> const& bs) {
 	static constexpr std::bitset<N> bs_one{1};
 	int const lz = ctz(bs);
@@ -55,7 +55,7 @@ constexpr std::bitset<N> negate(std::bitset<N> const& bs) {
 }
 
 // Returns the distance of the first set bit to the left of 'pos'
-template <ptrdiff_t N>
+template <int N>
 constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
 	if (pos == N - 1)
 		return 1;
@@ -66,7 +66,7 @@ constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
 }
 
 // Returns the distance of the first set bit to the right of 'pos'
-template <ptrdiff_t N>
+template <int N>
 constexpr int bit_distance_right(std::bitset<N> x, int const pos) {
 	if (pos == 0)
 		return 1;
