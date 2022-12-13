@@ -1,9 +1,7 @@
-﻿#include <array>
-#include <iostream>
-#include <queue>
+﻿import std;
 
 struct monkey {
-	std::vector<size_t> items;
+	std::vector<std::size_t> items;
 	char op;
 	char test;
 	char dest_true;
@@ -18,7 +16,7 @@ struct monkey {
 template <bool Part1>
 size_t calc_monkey_business(auto monkeys, int rounds) {
 	// Calculate the product of all the monkeys divisors.
-	uint64_t product = 1;
+	std::uint64_t product = 1;
 	for (monkey const& m : monkeys)
 		product *= m.test;
 
