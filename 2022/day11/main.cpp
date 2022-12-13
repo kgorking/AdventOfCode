@@ -4,7 +4,7 @@
 
 struct monkey {
 	std::vector<size_t> items;
-	char op; // +=+, -=*, 0=**
+	char op;
 	char test;
 	char dest_true;
 	char dest_false;
@@ -28,11 +28,14 @@ size_t calc_monkey_business(auto monkeys, int rounds) {
 			for (size_t worry : m.items) {
 				// Calculate the worry
 				if (m.op < 0) {
-					worry = worry * -m.op;
+					// negative op -> multiply
+					worry *= -m.op;
 				} else if (m.op > 0) {
-					worry = worry + m.op;
-				} else {
-					worry = worry * worry;
+					// positive op -> addition
+					worry += m.op;
+				} else/*if (m.op == 0)*/ {
+					// zero op -> square
+					worry *= worry;
 				}
 
 				if constexpr (Part1) {
@@ -43,7 +46,7 @@ size_t calc_monkey_business(auto monkeys, int rounds) {
 					worry %= product;
 				}
 
-				// Sent the item to another monkey
+				// Send the item to another monkey
 				char const destination = ((worry % m.test) == 0) ? m.dest_true : m.dest_false;
 				monkeys[destination].items.push_back(worry);
 			}
@@ -64,9 +67,6 @@ int main() {
 		#include "input.txt"
 	});
 
-	// Part 1
 	std::cout << "Part 1: " << calc_monkey_business<true>(input, 20) << '\n';
-
-	// Part 2
-	std::cout << "Part 2: " << calc_monkey_business<false>(input, 10000) << '\n';
+	std::cout << "Part 2: " << calc_monkey_business<false>(input, 10000);
 }
