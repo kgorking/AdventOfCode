@@ -30,7 +30,7 @@ size_t calc_monkey_business(auto monkeys, int rounds) {
 				if (m.op < 0) {
 					worry = worry * -m.op;
 				} else if (m.op > 0) {
-					worry += m.op;
+					worry = worry + m.op;
 				} else {
 					worry = worry * worry;
 				}
