@@ -35,3 +35,4 @@ ipch/
 *.user
 *.userosscache
 *.sln.docstates
+*.pdb
