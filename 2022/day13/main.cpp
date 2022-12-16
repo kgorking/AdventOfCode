@@ -99,7 +99,7 @@ int main() {
 	std::sort(packets.begin(), packets.end());
 
 	auto const it2 = std::find(packets.begin(), packets.end(), divider2);
-	auto const it6 = std::find(packets.begin(), packets.end(), divider6);
+	auto const it6 = std::find(it2 + 1, packets.end(), divider6);
 	auto const index2 = 1 + std::distance(packets.begin(), it2);
 	auto const index6 = 1 + std::distance(packets.begin(), it6);
 
