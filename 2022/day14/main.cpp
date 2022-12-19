@@ -83,17 +83,17 @@ int main() {
 	});
 	std::cout << "Part 2: " << sand_count << '\n';
 
-	for (std::size_t y = 0; y < cave.size(); y++) {
-		for (std::size_t x = 0; x < cave[0].size(); x++) {
-			if (y == 0 && x == sand_spawn_pos)
-				std::cout << '+';
-			else if (cave[y][x])
-				std::cout << '#';
-			else if (sand[y][x])
-				std::cout << '.';
-			else
-				std::cout << ' ';
-		}
-		std::cout << '\n';
-	}
+	//for (std::size_t y = 0; y < cave.size(); y++) {
+	//	for (std::size_t x = 0; x < cave[0].size(); x++) {
+	//		if (y == 0 && x == sand_spawn_pos)
+	//			std::cout << '+';
+	//		else if (cave[y][x])
+	//			std::cout << '#';
+	//		else if (sand[y][x])
+	//			std::cout << '.';
+	//		else
+	//			std::cout << ' ';
+	//	}
+	//	std::cout << '\n';
+	//}
 }
