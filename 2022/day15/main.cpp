@@ -11,7 +11,7 @@ struct pair {
 };
 
 constexpr auto input = std::to_array<pair>({
-	#include "input.txt"
+#include "input.txt"
 });
 
 constexpr int ce_abs(int i) {
@@ -22,7 +22,7 @@ constexpr int distance(pair const& p) {
 	return ce_abs(p.sensor.x - p.beacon.x) + ce_abs(p.sensor.y - p.beacon.y);
 }
 
-constexpr std::optional<pos> get_line_intersection(pos p0, pos p1, pos p2, pos p3) {
+constexpr pos get_line_intersection(pos p0, pos p1, pos p2, pos p3) {
 	kg::pos2d<double> const s1(p1.x - p0.x, p1.y - p0.y);
 	kg::pos2d<double> const s2(p3.x - p2.x, p3.y - p2.y);
 
@@ -30,11 +30,9 @@ constexpr std::optional<pos> get_line_intersection(pos p0, pos p1, pos p2, pos p
 	double const s = (-s1.y * (p0.x - p2.x) + s1.x * (p0.y - p2.y)) / det;
 	double const t = (+s2.x * (p0.y - p2.y) - s2.y * (p0.x - p2.x)) / det;
 
-	if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-		return p0 + pos{static_cast<int>(t * s1.x), static_cast<int>(t * s1.y)};
-	}
-
-	return {}; // No collision
+	// if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+	//  never fails, thanks to the bound checks in 'find_sensor_segments'
+	return pos{p0.x + static_cast<int>(t * s1.x), p0.y + static_cast<int>(t * s1.y)};
 }
 
 struct sensor_area {
@@ -43,40 +41,43 @@ struct sensor_area {
 	pos t, l, r, b;
 };
 
-std::vector<segment> find_sensor_segments(std::vector<sensor_area> const& sensor_areas, pos p_start, pos p_end) {
-	std::vector<segment> segments;
-
-	for (sensor_area const& area : sensor_areas) {
-		// Test against top of area
-		std::optional<pos> const int_tl = get_line_intersection(p_start, p_end, area.l, area.t);
-		if (int_tl) {
-			std::optional<pos> const int_tr = get_line_intersection(p_start, p_end, area.r, area.t);
-			segment const s{*int_tl, *int_tr};
-			segments.push_back(s);
-			continue;
-		}
-
-		// Test against bottom of area
-		std::optional<pos> const int_bl = get_line_intersection(p_start, p_end, area.l, area.b);
-		if (int_bl) {
-			std::optional<pos> const int_br = get_line_intersection(p_start, p_end, area.r, area.b);
-			segment const s{*int_bl, *int_br};
-			segments.push_back(s);
-			// continue;
-		}
-	}
-
-	// Combine overlapping segments
+template <typename T>
+void combine_overlapping_segments(std::vector<kg::range<T>>& segments) {
 	std::size_t j = 0;
 	for (std::size_t i = 1; i < segments.size(); i++) {
 		if (segments[j].overlaps(segments[i])) {
-			segments[j] = segment::overlapping(segments[i], segments[j]);
+			segments[j] = kg::range<T>::overlapping(segments[i], segments[j]);
 		} else {
 			j++;
 			segments[j] = segments[i];
 		}
 	}
 	segments.resize(j + 1);
+}
+
+std::vector<segment> find_sensor_segments(std::vector<sensor_area> const& sensor_areas, pos p_start, pos p_end) {
+	std::vector<segment> segments;
+
+	for (sensor_area const& area : sensor_areas) {
+		// Test against top of area
+		if (p_start.y > area.t.y && p_start.y < area.l.y) {
+			pos const int_tl = get_line_intersection(p_start, p_end, area.l, area.t);
+			pos const int_tr = get_line_intersection(p_start, p_end, area.r, area.t);
+			segment const s{int_tl, int_tr};
+			segments.push_back(s);
+			continue;
+		}
+
+		// Test against bottom of area
+		if (p_start.y > area.l.y && p_start.y < area.b.y) {
+			pos const int_bl = get_line_intersection(p_start, p_end, area.l, area.b);
+			pos const int_br = get_line_intersection(p_start, p_end, area.r, area.b);
+			segment const s{int_bl, int_br};
+			segments.push_back(s);
+		}
+	}
+
+	combine_overlapping_segments(segments);
 
 	return segments;
 }
@@ -97,7 +98,6 @@ int main() {
 	std::ranges::sort(sensor_areas, [](sensor_area const& l, sensor_area const& r) {
 		return l.t.x < r.t.x;
 	});
-
 
 	// Part 1
 	// Find segments in the sensor areas
