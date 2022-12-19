@@ -6,21 +6,12 @@ constexpr std::size_t sand_spawn_pos = 500;
 using row = std::bitset<2 * sand_spawn_pos>;
 using volume = std::array<row, max_y_rock + 1>;
 
-
 struct pos {
 	int x, y;
 };
 
 const auto input = std::to_array<std::vector<pos>>({
-#if 1
 #include "input.txt"
-#else
-	{{498, 4}, {498, 6}, {496, 6}}, {
-		{503, 4}, {502, 4}, {502, 9}, {
-			494, 9
-		}
-	}
-#endif
 });
 
 volume fill_cave_paths() {
