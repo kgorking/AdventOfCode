@@ -1,4 +1,5 @@
 ﻿import std;
+#include "../../common/bits.h"
 
 struct valve {
 	std::string_view name;
@@ -47,19 +48,26 @@ adjacency_list build_adjacency_list() {
 template <typename T, int N>
 matrix<T, N> build_shortest_path_matrix(adjacency_list_t<T, N> const& adj) {
 	matrix<T, N> minutes;
+	// std::memset(&minutes, 99, sizeof(minutes));
 
 	// Initialize the matrix from the adjacency graph
+#if 0
+	for (std::size_t i = 0; i < adj.size(); i++) {
+		minutes[i].fill(89);
+		for (int j : adj[i])
+			minutes[i][j] = 1;
+	}
+	for (std::size_t d = 0; d < N; d++)
+		minutes[d][d] = 0;
+#else
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-			if (i == j)
-				minutes[i][j] = 0;
-			else if (std::find(adj[i].begin(), adj[i].end(), j) != adj[i].end())
-				minutes[i][j] = 1;
-			else
-				minutes[i][j] = std::numeric_limits<T>::max() / 2;
+			minutes[i][j] = (i != j) * std::numeric_limits<T>::max() / 2;
 		}
+		for (int j : adj[i])
+			minutes[i][j] = 1;
 	}
-
+#endif
 	// Fill in remaining minutes between valves
 	for (int k = 0; k < N; k++) {
 		for (int i = 0; i < N; i++) {
@@ -74,31 +82,50 @@ matrix<T, N> build_shortest_path_matrix(adjacency_list_t<T, N> const& adj) {
 
 struct traversal_state {
 	// remaining time
-	int time;
+	int time = 0;
 
 	// current pressure
-	int pressure;
+	int pressure = 0;
 
 	// current valve
-	int valve;
+	int valve = 0;
 
-	// valves that are still closed
-	valve_set closed_valves;
-
-	// for sorting
-	bool operator<(traversal_state const& ts) {
-		return time > ts.time;
-	}
+	// valves that have been opened
+	valve_set open_valves = 0;
 };
 
 template <typename T, int N>
-int find_best_pressure(adjacency_list const& adj, matrix<T, N> const& shortest_paths, std::vector<std::size_t> const& valves,
-					   int start_valve, int time) {
-	traversal_state initial{time, 0, start_valve};
-	for (auto i : valves)
-		;
-	std::priority_queue<traversal_state> queue;
-	return 0;
+traversal_state find_best_pressure(matrix<T, N> const& shortest_paths, valve_set const valves, int start_valve, int time) {
+	// Load up the initial state in the queue
+	std::stack<traversal_state> queue;
+	queue.emplace(time - (input[start_valve].flow_rate > 0), 0, start_valve, valve_set{1} << start_valve);
+
+	// Traverse the valves
+	traversal_state max_state;
+	while (!queue.empty()) {
+		traversal_state state = queue.top();
+		queue.pop();
+
+		if (state.pressure > max_state.pressure)
+			max_state = state;
+
+		auto const closed_valves = valves ^ state.open_valves;
+		int valve = kg::find_first_set(closed_valves);
+		while (valve < closed_valves.size()) {
+			auto neighbour = state;
+			neighbour.time -= 1 + shortest_paths[state.valve][valve];
+			if (neighbour.time >= 0) {
+				neighbour.pressure += input[valve].flow_rate * neighbour.time;
+				neighbour.valve = valve;
+				neighbour.open_valves.set(valve);
+				queue.push(neighbour);
+			}
+
+			valve = kg::bit_position_left(closed_valves, valve);
+		}
+	}
+
+	return max_state;
 }
 
 int main() {
@@ -108,33 +135,23 @@ int main() {
 	// Create the shortest-path minute-cost matrix
 	auto const shortest_paths = build_shortest_path_matrix(adj_list);
 
-	// The 'interresting ' valves
-	std::vector<std::size_t> valves;
+	// The 'interresting' valves
+	valve_set valves;
 	for (std::size_t i = 0; i < input.size(); i++) {
 		if (input[i].flow_rate > 0)
-			valves.push_back(i);
+			valves.set(i);
 	}
-	std::ranges::sort(valves);
 
-	std::size_t max_pressure = 0;
-	do {
-		std::size_t last_valve = 0;
-		std::size_t total_pressure = 0;
-		std::size_t total_time = 0;
-		for (std::size_t v : valves) {
-			total_time += 1 + shortest_paths[last_valve][v];
-			last_valve = v;
-			if (total_time > 30) {
-				break;
-			}
-			total_pressure += input[v].flow_rate * (30 - total_time);
-		}
-
-		max_pressure = std::max(max_pressure, total_pressure);
-	} while (std::next_permutation(valves.begin(), valves.end()));
+	auto const max_pressure_30 = find_best_pressure(shortest_paths, valves, 0, 30);
 
 	// Part 1
-	std::cout << "Part 1: " << max_pressure << '\n';
+	// > 1836
+	// ! 2165
+	// ! 2176
+	// ! 2285
+	// < 2296
+	// < 2484
+	std::cout << "Part 1: " << max_pressure_30.pressure << '\n';
 
 	// Part 2
 	std::cout << "Part 2: " << 0 << '\n';

@@ -1,7 +1,7 @@
 #pragma once
-#include <bit>
-#include <bitset>
-#include <assert.h>
+//#include <bit>
+//#include <bitset>
+//#include <assert.h>
 
 // Contains bit- and bitset related stuff
 
@@ -9,7 +9,7 @@ namespace kg {
 // count leading zeroes in a bitset
 template <int N>
 constexpr int clz(std::bitset<N> x) noexcept {
-	constexpr ptrdiff_t Bitsperword = CHAR_BIT * sizeof(x._Getword(0));
+	constexpr ptrdiff_t Bitsperword = 8 * sizeof(x._Getword(0));
 	constexpr ptrdiff_t Words = (N - 1) / Bitsperword;
 	constexpr ptrdiff_t Remainder = (N % Bitsperword);
 
@@ -32,7 +32,7 @@ constexpr int clz(std::bitset<N> x) noexcept {
 // count trailing zeroes in a bitset
 template <int N>
 constexpr int ctz(std::bitset<N> x) noexcept {
-	constexpr ptrdiff_t Bitsperword = CHAR_BIT * sizeof(x._Getword(0));
+	constexpr ptrdiff_t Bitsperword = 8 * sizeof(x._Getword(0));
 	constexpr ptrdiff_t Words = (N - 1) / Bitsperword;
 
 	int count = 0;
@@ -55,10 +55,19 @@ constexpr std::bitset<N> negate(std::bitset<N> const& bs) {
 	return (~(bs >> lz) | bs_one) << lz;
 }
 
-// Returns the distance of the first set bit to the left of 'pos'
+// Returns the position of the first set bit
+template <int N>
+constexpr int find_first_set(std::bitset<N> x) noexcept {
+	if (x.none())
+		return N;
+	//return static_cast<int>((x ^ ~negate(x)).count()) - 1;
+	return N - clz(x & negate(x)) - 1;
+}
+
+// Returns the distance from 'pos' to the first set bit to the left of 'pos'
 template <int N>
 constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
-	assert(pos >= 0 && pos < N);
+	//assert(pos >= 0 && pos < N);
 	if (pos == N - 1)
 		return 1;
 
@@ -67,15 +76,39 @@ constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
 	return x.none() ? (N - 1 - pos) : ctz(x) - pos;
 }
 
-// Returns the distance of the first set bit to the right of 'pos'
+// Returns the distance from 'pos' to the first set bit to the right of 'pos'
 template <int N>
 constexpr int bit_distance_right(std::bitset<N> x, int const pos) {
-	assert(pos >= 0 && pos < N);
+	//assert(pos >= 0 && pos < N);
 	if (pos == 0)
 		return 1;
 
 	auto const mask = ~(~std::bitset<N>{} << pos);
 	x = x & mask;
 	return x.none() ? pos : clz(x) - (N - 1 - pos);
+}
+
+// Returns the position of the first set bit to the left of 'pos'
+template <int N>
+constexpr int bit_position_left(std::bitset<N> x, int const pos) {
+	//assert(pos >= 0 && pos < N);
+	if (pos >= N - 1)
+		return N;
+
+	auto const mask = ~std::bitset<N>{} << (pos + 1);
+	x = x & mask;
+	return x.none() ? N : ctz(x);
+}
+
+// Returns the position to the first set bit to the right of 'pos'
+template <int N>
+constexpr int bit_position_right(std::bitset<N> x, int const pos) {
+	//assert(pos >= 0 && pos < N);
+	if (pos == 0)
+		return N;
+
+	auto const mask = ~(~std::bitset<N>{} << pos);
+	x = x & mask;
+	return x.none() ? N : clz(x) - (N - 1);
 }
 } // namespace kg
