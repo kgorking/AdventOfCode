@@ -28,14 +28,17 @@ using valve_set = std::bitset<input.size()>;
 
 // Create an adjacency matrix for the valves
 matrix build_adjacency_matrix() {
+	// Convert valve names to indices
 	std::unordered_map<std::string_view, short> name_index;
 	for (valve_input const& v : input)
 		name_index[v.name] = static_cast<short>(std::distance(input.data(), &v));
 
+	// Fill the matrix with "inf" values
 	matrix adj;
 	for (auto& row : adj)
 		row.fill(100);
 
+	// Set the edge distances (minutes)
 	for (valve_input const& v : input) {
 		short const u = name_index[v.name];
 		for (auto sv : v.connections) {
@@ -45,6 +48,7 @@ matrix build_adjacency_matrix() {
 		}
 	}
 
+	// Zero the diagonal (distance to self)
 	for (std::size_t i = 0; i < adj.size(); i++) {
 		adj[i][i] = 0;
 	}
@@ -57,7 +61,6 @@ template <typename T, int N>
 matrix build_shortest_path_matrix() {
 	matrix m = build_adjacency_matrix();
 
-	// Fill in remaining minutes between valves
 	for (int k = 0; k < N; k++) {
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
@@ -69,8 +72,7 @@ matrix build_shortest_path_matrix() {
 	return m;
 }
 
-template <typename T, int N>
-int find_best_pressure(matrix_t<T, N> const& shortest_paths, valve_set const closed_valves, int const valve, int const time) {
+int find_best_pressure(matrix const& shortest_paths, valve_set const closed_valves, int const valve, int const time) {
 	// Pressure accumulator
 	int pressure = 0;
 
@@ -90,7 +92,6 @@ int find_best_pressure(matrix_t<T, N> const& shortest_paths, valve_set const clo
 			valve_set const open_n_valve = valve_set{1} << n_valve;
 
 			// Calculate the pressure of the remaining valves in the remaining time
-			//vis |= open_valve;
 			int const rec_pressure = find_best_pressure(shortest_paths, closed_valves ^ open_n_valve, n_valve, n_time);
 
 			// Calculate the total pressure this valve will
