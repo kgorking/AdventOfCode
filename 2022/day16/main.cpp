@@ -110,7 +110,8 @@ int find_best_pressure(matrix const& shortest_paths, valve_set const closed_valv
 }
 
 int main() {
-	// Create the shortest-path minute-cost matrix
+	// Create the shortest-path minute-cost matrix.
+	// This holds the time taken to move between valves, without opening them
 	auto const shortest_paths = build_shortest_path_matrix<short, input.size()>();
 
 	// The 'interresting' valves
