@@ -24,7 +24,7 @@ template <typename T, int N> using adjacency_list_t = std::array<std::vector<T>,
 
 using adjacency_list = adjacency_list_t<short, input.size()>;
 using matrix = matrix_t<short, input.size()>;
-using valve_set = std::bitset<input.size()>;
+using bitset = std::bitset<input.size()>;
 
 // Create an adjacency matrix for the valves
 matrix build_adjacency_matrix() {
@@ -72,7 +72,7 @@ matrix build_shortest_path_matrix() {
 	return m;
 }
 
-int find_best_pressure(matrix const& shortest_paths, valve_set const closed_valves, int const valve, int const time) {
+int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves, int const valve, int const time) {
 	// Pressure accumulator
 	int pressure = 0;
 
@@ -89,7 +89,7 @@ int find_best_pressure(matrix const& shortest_paths, valve_set const closed_valv
 		if (n_time >= 0) {
 			// Prepare a bitset with the newly opened valve set.
 			// This is used to 'open' the bit in the closed valve set
-			valve_set const open_n_valve = valve_set{1} << n_valve;
+			bitset const open_n_valve = bitset{1} << n_valve;
 
 			// Calculate the pressure of the remaining valves in the remaining time
 			int const rec_pressure = find_best_pressure(shortest_paths, closed_valves ^ open_n_valve, n_valve, n_time);
@@ -115,7 +115,7 @@ int main() {
 	auto const shortest_paths = build_shortest_path_matrix<short, input.size()>();
 
 	// The 'interresting' valves
-	valve_set valves;
+	bitset valves;
 	for (std::size_t i = 0; i < input.size(); i++) {
 		if (input[i].flow_rate > 0)
 			valves.set(i);
