@@ -111,4 +111,13 @@ constexpr int bit_position_right(std::bitset<N> x, int const pos) {
 	x = x & mask;
 	return x.none() ? N : clz(x) - (N - 1);
 }
+
+// Iterate the indices in a bitset
+template<int N>
+constexpr void iterate_set(std::bitset<N> const& bs, auto fn) {
+	for (int i = find_first_set(bs); i < N; i = bit_position_left(bs, i)) {
+		fn(i);
+	}
+}
+
 } // namespace kg

@@ -1,5 +1,6 @@
 ﻿import std;
 #include "../../common/bits.h"
+#include "../../common/min_spanning_tree.h"
 
 struct valve_input {
 	std::string_view name;
@@ -75,32 +76,30 @@ int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves,
 	// Get the index of the first set bit in the closed valve set
 	int n_valve = kg::find_first_set(closed_valves);
 
-	// Keep iterating while I have a valid valve index
-	while (n_valve < closed_valves.size()) {
+	// Iterate the indices in the bitset
+	kg::iterate_set(closed_valves, [&](int const n_valve) {
 		// Calculate the time needed to move to this neighbouring valve,
 		// +1 for the time to open the valve.
 		int const n_time = time - (1 + shortest_paths[valve][n_valve]);
 
 		// Check that the time limit is not crossed
-		if (n_time >= 0) {
-			// Prepare a bitset with the newly opened valve set.
-			// This is used to 'open' the bit in the closed valve set
-			bitset const open_n_valve = bitset{1} << n_valve;
+		if (n_time < 0)
+			return;
 
-			// Calculate the pressure of the remaining valves in the remaining time
-			int const rec_pressure = find_best_pressure(shortest_paths, closed_valves ^ open_n_valve, n_valve, n_time);
+		// Prepare a bitset with the newly opened valve set.
+		// This is used to 'open' the bit in the closed valve set
+		bitset const open_n_valve = bitset{1} << n_valve;
 
-			// Calculate the total pressure this valve will
-			// produce in the remaining minutes it is open
-			int const n_pressure = input[n_valve].flow_rate * n_time;
+		// Calculate the pressure of the remaining valves in the remaining time
+		int const rec_pressure = find_best_pressure(shortest_paths, closed_valves ^ open_n_valve, n_valve, n_time);
 
-			// Update the maximum pressure found
-			pressure = std::max(pressure, n_pressure + rec_pressure);
-		}
+		// Calculate the total pressure this valve will
+		// produce in the remaining minutes it is open
+		int const n_pressure = input[n_valve].flow_rate * n_time;
 
-		// Skip to the next valve index in the bitset
-		n_valve = kg::bit_position_left(closed_valves, n_valve);
-	}
+		// Update the maximum pressure found
+		pressure = std::max(pressure, n_pressure + rec_pressure);
+	});
 
 	return pressure;
 }
