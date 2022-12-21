@@ -115,7 +115,7 @@ int main() {
 
 	// Find start position
 	auto const aa_pos = std::ranges::find(input, "AA", &valve_input::name);
-	int const start_pos = std::ranges::distance(input.begin(), aa_pos);
+	int const start_pos = static_cast<int>(std::ranges::distance(input.begin(), aa_pos));
 
 	// Part 1
 	int const max_pressure_30 = find_best_pressure(shortest_paths, valves, start_pos, 30);
