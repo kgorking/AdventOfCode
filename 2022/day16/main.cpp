@@ -19,15 +19,19 @@ const auto input = std::to_array<valve_input>({
 #endif
 });
 
-using matrix = std::array<std::array<short, input.size()>, input.size()>;
-using bitset = std::bitset<input.size()>;
+
+constexpr std::size_t N = input.size();
+using T = short;
+using matrix = std::array<std::array<T, N>, N>;
+using bitset = std::bitset<N>;
+
 
 // Create an adjacency matrix for the valves
 matrix build_adjacency_matrix() {
 	// Convert valve names to indices
-	std::unordered_map<std::string_view, short> name_index;
+	std::unordered_map<std::string_view, T> name_index;
 	for (valve_input const& v : input)
-		name_index[v.name] = static_cast<short>(std::distance(input.data(), &v));
+		name_index[v.name] = static_cast<T>(std::distance(input.data(), &v));
 
 	// Fill the matrix with "inf" values
 	matrix adj;
@@ -36,9 +40,9 @@ matrix build_adjacency_matrix() {
 
 	// Set the edge distances (minutes)
 	for (valve_input const& v : input) {
-		short const u = name_index[v.name];
+		T const u = name_index[v.name];
 		for (auto sv : v.connections) {
-			short const v = name_index[sv];
+			T const v = name_index[sv];
 			adj[u][v] = 1;
 			adj[v][u] = 1;
 		}
@@ -53,17 +57,13 @@ matrix build_adjacency_matrix() {
 }
 
 // Returns a matrix with the shortest paths between all valves
-template <typename T, int N>
 matrix build_shortest_path_matrix() {
 	matrix m = build_adjacency_matrix();
 
-	for (int k = 0; k < N; k++) {
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
+	for (int k = 0; k < N; k++)
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < N; j++)
 				m[i][j] = std::min<T>(m[i][j], m[i][k] + m[k][j]);
-			}
-		}
-	}
 
 	return m;
 }
@@ -108,11 +108,11 @@ int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves,
 int main() {
 	// Create the shortest-path minute-cost matrix.
 	// This holds the time taken to move between valves, without opening them
-	auto const shortest_paths = build_shortest_path_matrix<short, input.size()>();
+	auto const shortest_paths = build_shortest_path_matrix();
 
 	// The 'interresting' valves
 	bitset valves;
-	for (std::size_t i = 0; i < input.size(); i++) {
+	for (std::size_t i = 0; i < N; i++) {
 		if (input[i].flow_rate > 0)
 			valves.set(i);
 	}
