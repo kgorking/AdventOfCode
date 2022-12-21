@@ -19,11 +19,7 @@ const auto input = std::to_array<valve_input>({
 #endif
 });
 
-template <typename T, int N> using matrix_t = std::array<std::array<T, N>, N>;
-template <typename T, int N> using adjacency_list_t = std::array<std::vector<T>, N>;
-
-using adjacency_list = adjacency_list_t<short, input.size()>;
-using matrix = matrix_t<short, input.size()>;
+using matrix = std::array<std::array<short, input.size()>, input.size()>;
 using bitset = std::bitset<input.size()>;
 
 // Create an adjacency matrix for the valves
