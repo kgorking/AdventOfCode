@@ -1,6 +1,6 @@
 ﻿import std;
 #include "../../common/bits.h"
-#include "../../common/min_spanning_tree.h"
+#include "../../common/matrix.h"
 
 struct valve_input {
 	std::string_view name;
@@ -23,7 +23,7 @@ const auto input = std::to_array<valve_input>({
 
 constexpr std::size_t N = input.size();
 using T = short;
-using matrix = std::array<std::array<T, N>, N>;
+using matrix = kg::matrix_t<T, N>;
 using bitset = std::bitset<N>;
 
 
@@ -72,9 +72,6 @@ matrix build_shortest_path_matrix() {
 int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves, int const valve, int const time) {
 	// Pressure accumulator
 	int pressure = 0;
-
-	// Get the index of the first set bit in the closed valve set
-	int n_valve = kg::find_first_set(closed_valves);
 
 	// Iterate the indices in the bitset
 	kg::iterate_set(closed_valves, [&](int const n_valve) {
