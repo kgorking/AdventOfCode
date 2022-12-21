@@ -28,7 +28,7 @@ using bitset = std::bitset<N>;
 
 
 // Create an adjacency matrix for the valves
-matrix build_adjacency_matrix() {
+matrix build_adjacency_matrix(T inf = 100) {
 	// Convert valve names to indices
 	std::unordered_map<std::string_view, T> name_index;
 	for (valve_input const& v : input)
@@ -37,7 +37,7 @@ matrix build_adjacency_matrix() {
 	// Fill the matrix with "inf" values
 	matrix adj;
 	for (auto& row : adj)
-		row.fill(100);
+		row.fill(inf);
 
 	// Set the edge distances (minutes)
 	for (valve_input const& v : input) {
@@ -76,8 +76,8 @@ int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves,
 	// Iterate the indices in the bitset
 	kg::iterate_set(closed_valves, [&](int const n_valve) {
 		// Calculate the time needed to move to this neighbouring valve,
-		// +1 for the time to open the valve.
-		int const n_time = time - (1 + shortest_paths[valve][n_valve]);
+		// -1 for the time to open the valve.
+		int const n_time = time - 1 - shortest_paths[valve][n_valve];
 
 		// Check that the time limit is not crossed
 		if (n_time < 0)
