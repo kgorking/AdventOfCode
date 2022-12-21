@@ -113,15 +113,12 @@ int main() {
 			valves.set(i);
 	}
 
-	int const max_pressure_30 = find_best_pressure(shortest_paths, valves, 0, 30);
+	// Find start position
+	auto const aa_pos = std::ranges::find(input, "AA", &valve_input::name);
+	int const start_pos = std::ranges::distance(input.begin(), aa_pos);
 
 	// Part 1
-	// > 1836
-	// ! 2165
-	// ! 2176
-	// ! 2285
-	// < 2296
-	// < 2484
+	int const max_pressure_30 = find_best_pressure(shortest_paths, valves, start_pos, 30);
 	std::cout << "Part 1: " << max_pressure_30 << '\n';
 
 	// Part 2
