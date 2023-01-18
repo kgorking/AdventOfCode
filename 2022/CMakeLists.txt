@@ -2,8 +2,6 @@
 
 project (AoC_2022 CXX)
 
-add_subdirectory ("common_unittests")
-
 add_subdirectory ("day1")
 add_subdirectory ("day2")
 add_subdirectory ("day3")
