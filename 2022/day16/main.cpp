@@ -13,19 +13,17 @@ const auto input = std::to_array<valve_input>({
 #include "input.txt"
 #else
 #include "example.txt"
-//#include "testcase1.txt"
-//#include "testcase2.txt"
-//#include "testcase3.txt"
-//#include "testcase4.txt"
+// #include "testcase1.txt"
+// #include "testcase2.txt"
+// #include "testcase3.txt"
+// #include "testcase4.txt"
 #endif
 });
-
 
 constexpr std::size_t N = input.size();
 using T = short;
 using matrix = kg::matrix_t<T, N>;
 using bitset = std::bitset<N>;
-
 
 // Create an adjacency matrix for the valves
 matrix build_adjacency_matrix(T inf = 100) {
@@ -60,7 +58,6 @@ matrix build_adjacency_matrix(T inf = 100) {
 // Returns a matrix with the shortest paths between all valves
 matrix build_shortest_path_matrix() {
 	matrix m = build_adjacency_matrix();
-
 	for (int k = 0; k < N; k++)
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < N; j++)
@@ -108,7 +105,8 @@ int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves,
 }
 
 // Part 2: expanded version of part 1, which saves pressure-bitset pairs as well
-int find_best_pressure_p2(matrix const& shortest_paths, bitset const closed_valves, int const valve, int const time, std::vector<result_pair>& results) {
+int find_best_pressure_p2(matrix const& shortest_paths, bitset const closed_valves, int const valve, int const time,
+						  std::vector<result_pair>& results) {
 	// Pressure accumulator
 	int pressure = 0;
 
@@ -165,15 +163,15 @@ int main() {
 	// Part 2
 	std::vector<result_pair> results;
 	find_best_pressure_p2(shortest_paths, valves, start_pos, 26, results);
-	//std::ranges::sort(results, [](result_pair const& l, result_pair const& r) {
+	// std::ranges::sort(results, [](result_pair const& l, result_pair const& r) {
 	//	return l.pressure < r.pressure;
-	//});
+	// });
 
 	std::size_t const num_valves = valves.count();
 	int max_pressure_26 = 0;
 	for (auto l = results.begin(); l != results.end() - 1; ++l) {
 		for (auto r = l + 1; r < results.end(); ++r) {
-			if (((l->valves^valves) | (r->valves^valves)) == valves) {
+			if (((l->valves ^ valves) | (r->valves ^ valves)) == valves) {
 				// No overlapping valves
 				max_pressure_26 = std::max(max_pressure_26, l->pressure + r->pressure);
 			}
