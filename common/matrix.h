@@ -8,7 +8,6 @@ using matrix_t = std::array<std::array<T, N>, N>;
 
 // Multiplies two matrices A and B
 template <typename T, int N>
-	requires(N > 0)
 matrix_t<T, N> mat_multiply(matrix_t<T, N> const& a, matrix_t<T, N> const& b) {
 	matrix_t<T, N> r;
 
@@ -26,7 +25,6 @@ matrix_t<T, N> mat_multiply(matrix_t<T, N> const& a, matrix_t<T, N> const& b) {
 
 // Raise matrix to the power of p
 template <typename T, int N>
-	requires(N > 0)
 matrix_t<T, N> mat_power(matrix_t<T, N> a, int p) {
 	// Identity Matrix.
 	matrix_t<T, N> b;
