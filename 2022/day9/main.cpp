@@ -1,7 +1,5 @@
 ﻿// https://adventofcode.com/2022/day/9
-#include <array>
-#include <iostream>
-#include <set>
+import common;
 
 enum Dir : char { L, R, U, D };
 struct move {
@@ -19,22 +17,7 @@ static constexpr auto input = std::to_array<move>({
 #endif
 });
 
-struct pos {
-	int x = 0, y = 0;
-
-	bool follow(pos p) {
-		int const dx = (p.x - x);
-		int const dy = (p.y - y);
-
-		// branchless
-		bool const b = (std::abs(dx) | std::abs(dy)) > 1;
-		x += b * ((dx > 0) - (dx < 0));
-		y += b * ((dy > 0) - (dy < 0));
-		return b;
-	}
-
-	auto operator<=>(pos const&) const = default;
-};
+using pos = kg::pos2d<int>;
 
 // L R U D
 static constexpr pos offsets[] = {pos{-1, 0}, pos{1, 0}, pos{0, 1}, pos{0, -1}};
