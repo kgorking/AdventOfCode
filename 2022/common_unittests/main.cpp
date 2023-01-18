@@ -12,7 +12,7 @@ consteval void test_matrix_mul() {
 		throw "result matrix is wrong size";
 
 	matrix_t<int, 3, 2> const expected{9, 42, 21, 99, 20, 102};
-	if (!std::ranges::equal(mC, expected))
+	if (mC != expected)
 		throw "incorrect result";
 }
 
@@ -22,7 +22,7 @@ consteval void test_matrix_add() {
 	auto const mC = mat_add(mA, mB);
 
 	matrix_t<int, 2, 3> const expected{10,10,7,11,10,5};
-	if (!std::ranges::equal(mC, expected))
+	if (mC != expected)
 		throw "incorrect result";
 }
 
@@ -31,7 +31,7 @@ consteval void test_matrix_scale() {
 	auto const mC = mat_scale(mA, 2);
 
 	matrix_t<int, 2, 3> const expected{12,2,8,6,18,4};
-	if (!std::ranges::equal(mC, expected))
+	if (mC != expected)
 		throw "incorrect result";
 }
 
@@ -40,7 +40,16 @@ consteval void test_matrix_power() {
 	auto const mC = mat_power(mA, 3);
 
 	matrix_t<int, 2, 2> const expected{48, 165, 33, 114};
-	if (!std::ranges::equal(mC, expected))
+	if (mC != expected)
+		throw "incorrect result";
+}
+
+consteval void test_matrix_power_zero() {
+	matrix_t<int, 3, 3> const mA{2, 4, 4, 5, 1, 4};
+	auto const mC = mat_power(mA, 0);
+
+	matrix_t<int, 3, 3> const expected{1, 0, 0, 0, 1, 0, 0, 0, 1};
+	if (mC != expected)
 		throw "incorrect result";
 }
 
@@ -53,7 +62,7 @@ consteval void test_matrix_linrec() {
 	auto const v = vector_t<int, 2>{5, 8};
 	auto const result = mat_multiply(mLR, v);
 	auto const expected = vector_t<int, 2>{8, 13};
-	if (!std::ranges::equal(result, expected))
+	if (result != expected)
 		throw "incorrect result";
 
 	// test 33rd fibonacci number
@@ -70,5 +79,6 @@ int main() {
 	test_matrix_add();
 	test_matrix_scale();
 	test_matrix_power();
+	test_matrix_power_zero();
 	test_matrix_linrec();
 }
