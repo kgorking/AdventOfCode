@@ -12,7 +12,7 @@ set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "3c375311-a3c9-4396-a187-3227ef64204
 set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP 1)
 
 add_library(AdventOfCode OBJECT)
-target_compile_options(AdventOfCode PRIVATE /EHsc /nologo)
+target_compile_options(AdventOfCode PRIVATE /c /EHsc /nologo)
 
 target_sources(AdventOfCode
   PUBLIC

@@ -53,17 +53,6 @@ matrix build_adjacency_matrix(T inf = 100) {
 	return adj;
 }
 
-// Returns a matrix with the shortest paths between all valves
-matrix build_shortest_path_matrix() {
-	matrix m = build_adjacency_matrix();
-	for (int k = 0; k < N; k++)
-		for (int i = 0; i < N; i++)
-			for (int j = 0; j < N; j++)
-				m[i][j] = std::min<T>(m[i][j], m[i][k] + m[k][j]);
-
-	return m;
-}
-
 struct result_pair {
 	int pressure;
 	bitset valves;
@@ -140,7 +129,7 @@ int find_best_pressure_p2(matrix const& shortest_paths, bitset const closed_valv
 int main() {
 	// Create the shortest-path minute-cost matrix.
 	// This holds the time taken to move between valves, without opening them
-	auto const shortest_paths = build_shortest_path_matrix();
+	auto const shortest_paths = kg::graph_shortest_path(build_adjacency_matrix());
 
 	// The 'interresting' valves
 	bitset valves;
@@ -161,9 +150,9 @@ int main() {
 	// Part 2
 	std::vector<result_pair> results;
 	find_best_pressure_p2(shortest_paths, valves, start_pos, 26, results);
-	// std::ranges::sort(results, [](result_pair const& l, result_pair const& r) {
-	//	return l.pressure < r.pressure;
-	// });
+	std::ranges::sort(results, [](result_pair const& l, result_pair const& r) {
+		return l.pressure < r.pressure;
+	});
 
 	std::size_t const num_valves = valves.count();
 	int max_pressure_26 = 0;

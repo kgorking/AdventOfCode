@@ -145,6 +145,7 @@ export module common;
 
 #pragma warning(pop)
 
+// KG: Commonly used stuff
 #include "matrix.h"
 #include "graph.h"
 #include "bits.h"
