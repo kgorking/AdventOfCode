@@ -150,9 +150,9 @@ int main() {
 	// Part 2
 	std::vector<result_pair> results;
 	find_best_pressure_p2(shortest_paths, valves, start_pos, 26, results);
-	std::ranges::sort(results, [](result_pair const& l, result_pair const& r) {
-		return l.pressure < r.pressure;
-	});
+	//std::ranges::sort(results, [](result_pair const& l, result_pair const& r) {
+	//	return l.pressure < r.pressure;
+	//});
 
 	std::size_t const num_valves = valves.count();
 	int max_pressure_26 = 0;
