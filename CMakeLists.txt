@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.12)
+﻿cmake_minimum_required (VERSION 3.24)
 
 project (AdventOfCode CXX)
 
@@ -18,7 +18,7 @@ target_sources(AdventOfCode
   PUBLIC
     FILE_SET CXX_MODULES FILES
         "common/std.ixx"
-)
+ )
 
 
 # Include sub-projects.
