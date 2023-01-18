@@ -112,6 +112,21 @@ constexpr int bit_position_right(std::bitset<N> x, int const pos) {
 	return x.none() ? N : clz(x) - (N - 1);
 }
 
+// Find the nth set bit
+template<int N>
+constexpr int find_nth_set(std::bitset<N> const& bs, int n) {
+	int i = find_first_set(bs);
+	if (i == N)
+		return N;
+
+	int count = 1;
+	while(count < n) {
+		i = bit_position_left(bs, i);
+		count += 1;
+	}
+	return i;
+}
+
 // Iterate the indices in a bitset
 template<int N>
 constexpr void iterate_set(std::bitset<N> const& bs, auto fn) {
