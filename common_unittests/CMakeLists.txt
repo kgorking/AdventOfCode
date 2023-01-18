@@ -9,5 +9,5 @@ target_link_libraries(${DEST} AdventOfCode)
 
 target_sources(${DEST}
   PRIVATE
-    main.cpp
+    "matrix.cpp"
 )

@@ -1,5 +1,5 @@
 ﻿import std;
-#include "../../common/matrix.h"
+#include "../common/matrix.h"
 
 using namespace kg;
 
