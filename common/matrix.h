@@ -56,28 +56,41 @@ constexpr auto mat_scale(matrix_t<T, R, C> const& a, T s) {
 
 // Raise matrix to the power of p
 template <typename T, int R, int C>
+	requires(R == C) // only for square matrices
 constexpr matrix_t<T, R, C> mat_power(matrix_t<T, R, C> a, int p) {
-	auto b = a;
+	if (p < 0)
+		throw std::invalid_argument("p can not be negative");
 
-	// a^p = a * a^(p - 1).
-	p = p - 1;
-	while (p > 0) {
-		// If n is odd, a = a * b.
-		if (p & 1)
-			a = mat_multiply(a, b);
+	if (p == 0) {
+		matrix_t<T, R, C> ident;
+		for (int i = 0; i < R; i++) {
+			ident[i].fill(0);
+			ident[i][i] = 1;
+		}
+		return ident;
+	} else {
+		auto b = a;
 
-		// b = b * b.
-		b = mat_multiply(b, b);
+		// a^p = a * a^(p - 1).
+		p = p - 1;
+		while (p > 0) {
+			// If n is odd, a = a * b.
+			if (p & 1)
+				a = mat_multiply(a, b);
 
-		// n = n / 2.
-		p = p >> 1;
+			// b = b * b.
+			b = mat_multiply(b, b);
+
+			// n = n / 2.
+			p = p >> 1;
+		}
+
+		return a;
 	}
-
-	return a;
 }
 
 // Create a matrix used for linear recurrences
-template<typename... Ts>
+template <typename... Ts>
 	requires(sizeof...(Ts) > 0)
 constexpr auto make_linrec(Ts... coefficients) {
 	using T = decltype((Ts{}, ...));
@@ -85,9 +98,9 @@ constexpr auto make_linrec(Ts... coefficients) {
 
 	matrix_t<T, N, N> m;
 
-	for (int i = 0; i < N-1; i++) {
+	for (int i = 0; i < N - 1; i++) {
 		for (int j = 0; j < N; j++) {
-			m[i][j] = (i+1 == j);
+			m[i][j] = (i + 1 == j);
 		}
 	}
 
