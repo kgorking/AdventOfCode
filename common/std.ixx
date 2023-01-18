@@ -6,6 +6,9 @@
 
 module;
 
+#pragma warning(push)
+#pragma warning(disable : 5244) // '#include <meow>' in the purview of module 'std' appears erroneous.
+
 // The subset of "C headers" [tab:c.headers] corresponding to
 // the "C++ headers for C library facilities" [tab:headers.cpp.c]
 #include <assert.h>
@@ -31,9 +34,6 @@ module;
 #include <wctype.h>
 
 export module std;
-
-#pragma warning(push)
-#pragma warning(disable : 5244) // '#include <meow>' in the purview of module 'std' appears erroneous.
 
 // "C++ library headers" [tab:headers.cpp]
 #include <algorithm>

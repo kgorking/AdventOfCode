@@ -9,7 +9,7 @@ struct valve_input {
 };
 
 const auto input = std::to_array<valve_input>({
-#if 1
+#if 0
 #include "input.txt"
 #else
 #include "example.txt"
@@ -69,6 +69,12 @@ matrix build_shortest_path_matrix() {
 	return m;
 }
 
+struct result_pair {
+	int pressure;
+	bitset valves;
+};
+
+// Part 1: finds the best achiveable pressure release
 int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves, int const valve, int const time) {
 	// Pressure accumulator
 	int pressure = 0;
@@ -101,6 +107,40 @@ int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves,
 	return pressure;
 }
 
+// Part 2: expanded version of part 1, which saves pressure-bitset pairs as well
+int find_best_pressure_p2(matrix const& shortest_paths, bitset const closed_valves, int const valve, int const time, std::vector<result_pair>& results) {
+	// Pressure accumulator
+	int pressure = 0;
+
+	// Iterate the indices in the bitset
+	kg::iterate_set(closed_valves, [&](int const n_valve) {
+		// Calculate the time needed to move to this neighbouring valve,
+		// -1 for the time to open the valve.
+		int const n_time = time - 1 - shortest_paths[valve][n_valve];
+
+		// Check that the time limit is not crossed
+		if (n_time <= 0)
+			return;
+
+		// Prepare a bitset with the newly opened valve set.
+		// This is used to 'open' the bit in the closed valve set
+		bitset const remaining_valves = closed_valves ^ (bitset{1} << n_valve);
+
+		// Calculate the pressure of the remaining valves in the remaining time
+		int const rec_pressure = find_best_pressure_p2(shortest_paths, remaining_valves, n_valve, n_time, results);
+
+		// Calculate the total pressure this valve will
+		// produce in the remaining minutes it is open
+		int const n_pressure = input[n_valve].flow_rate * n_time;
+
+		// Update the maximum pressure found
+		results.push_back({n_pressure + rec_pressure, remaining_valves});
+		pressure = std::max(pressure, n_pressure + rec_pressure);
+	});
+
+	return pressure;
+}
+
 int main() {
 	// Create the shortest-path minute-cost matrix.
 	// This holds the time taken to move between valves, without opening them
@@ -109,8 +149,9 @@ int main() {
 	// The 'interresting' valves
 	bitset valves;
 	for (std::size_t i = 0; i < N; i++) {
-		if (input[i].flow_rate > 0)
+		if (input[i].flow_rate > 0) {
 			valves.set(i);
+		}
 	}
 
 	// Find start position
@@ -122,5 +163,24 @@ int main() {
 	std::cout << "Part 1: " << max_pressure_30 << '\n';
 
 	// Part 2
-	std::cout << "Part 2: " << 0 << '\n';
+	std::vector<result_pair> results;
+	find_best_pressure_p2(shortest_paths, valves, start_pos, 26, results);
+	//std::ranges::sort(results, [](result_pair const& l, result_pair const& r) {
+	//	return l.pressure < r.pressure;
+	//});
+
+	std::size_t const num_valves = valves.count();
+	int max_pressure_26 = 0;
+	for (auto l = results.begin(); l != results.end() - 1; ++l) {
+		for (auto r = l + 1; r < results.end(); ++r) {
+			if (((l->valves^valves) | (r->valves^valves)) == valves) {
+				// No overlapping valves
+				max_pressure_26 = std::max(max_pressure_26, l->pressure + r->pressure);
+			}
+		}
+	}
+
+	// example = 1707
+	// > 1512
+	std::cout << "Part 2: " << max_pressure_26 << '\n';
 }
