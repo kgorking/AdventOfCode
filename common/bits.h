@@ -1,11 +1,6 @@
-#pragma once
-//#include <bit>
-//#include <bitset>
-//#include <assert.h>
-
 // Contains bit- and bitset related stuff
 
-namespace kg {
+export namespace kg {
 // count leading zeroes in a bitset
 template <int N>
 constexpr int clz(std::bitset<N> x) noexcept {

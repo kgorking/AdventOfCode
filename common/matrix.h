@@ -1,6 +1,4 @@
-#pragma once
-
-namespace kg {
+export namespace kg {
 
 template <typename T, int R, int C = R>
 	requires(R > 0 && C > 0)
@@ -9,20 +7,29 @@ using matrix_t = std::array<std::array<T, C>, R>;
 template <typename T, int R>
 using vector_t = matrix_t<T, R, 1>;
 
+// Returns an identity matrix
+template <typename T, int N>
+	requires(N > 0)
+constexpr matrix_t<T, N> mat_identity() {
+	matrix_t<T, N, N> ident;
+	for (int i = 0; i < N; i++) {
+		ident[i].fill(0);
+		ident[i][i] = 1;
+	}
+	return ident;
+}
+
 // Multiplies two matrices A and B
 template <typename T, int N, int RA, int CB>
 constexpr auto mat_multiply(matrix_t<T, RA, N> const& a, matrix_t<T, N, CB> const& b) {
-	matrix_t<T, RA, CB> r;
-
-	for (int i = 0; i < RA; i++) {
-		for (int j = 0; j < CB; j++) {
-			r[i][j] = 0;
-			for (int k = 0; k < N; k++) {
+	matrix_t<T, RA, CB> r{};
+	for (int k = 0; k < N; k++) {
+		for (int i = 0; i < RA; i++) {
+			for (int j = 0; j < CB; j++) {
 				r[i][j] += a[i][k] * b[k][j];
 			}
 		}
 	}
-
 	return r;
 }
 
@@ -62,12 +69,7 @@ constexpr matrix_t<T, R, C> mat_power(matrix_t<T, R, C> a, int p) {
 		throw std::invalid_argument("p can not be negative");
 
 	if (p == 0) {
-		matrix_t<T, R, C> ident;
-		for (int i = 0; i < R; i++) {
-			ident[i].fill(0);
-			ident[i][i] = 1;
-		}
-		return ident;
+		return mat_identity<T, R>();
 	} else {
 		auto b = a;
 

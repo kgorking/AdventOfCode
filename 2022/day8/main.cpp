@@ -1,10 +1,5 @@
 ﻿// https://adventofcode.com/2022/day/8
-#include <array>
-#include <bitset>
-#include <iostream>
-#include <string_view>
-#include <assert.h>
-#include "../../common/bits.h"
+import common;
 
 static constexpr auto input = std::to_array<std::string_view>({
 #include "input.txt"

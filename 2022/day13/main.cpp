@@ -1,4 +1,4 @@
-﻿import std;
+﻿import common;
 
 struct item {
 	std::size_t first = 0, last = 0;

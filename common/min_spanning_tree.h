@@ -1,6 +1,4 @@
-#pragma once
-
-namespace kg {
+export namespace kg {
 
 // A helper class for creating a spanning tree.
 // Insert the edges (a,b) in sorted order.

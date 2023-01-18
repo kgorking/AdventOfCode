@@ -1,7 +1,4 @@
-﻿import std;
-
-#include "../../common/pos2d.h"
-#include "../../common/range.h"
+﻿import common;
 
 using pos = kg::pos2d<int>;
 using segment = kg::range<pos>;

@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+// Modified to also include my own junk
 
 // This named module expects to be built with classic headers, not header units.
 #define _BUILD_STD_MODULE
@@ -33,7 +34,7 @@ module;
 #include <wchar.h>
 #include <wctype.h>
 
-export module std;
+export module common;
 
 // "C++ library headers" [tab:headers.cpp]
 #include <algorithm>
@@ -143,3 +144,10 @@ export module std;
 #include <cwctype>
 
 #pragma warning(pop)
+
+#include "matrix.h"
+#include "graph.h"
+#include "bits.h"
+#include "range.h"
+#include "pos2d.h"
+#include "min_spanning_tree.h"

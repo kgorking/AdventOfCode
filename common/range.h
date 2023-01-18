@@ -1,6 +1,4 @@
-#pragma once
-
-namespace kg {
+export namespace kg {
 
 template <typename T>
 struct range {

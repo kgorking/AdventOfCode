@@ -1,6 +1,4 @@
-﻿import std;
-#include "../../common/bits.h"
-#include "../../common/matrix.h"
+﻿import common;
 
 struct valve_input {
 	std::string_view name;

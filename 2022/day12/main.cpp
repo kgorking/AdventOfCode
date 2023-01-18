@@ -1,4 +1,4 @@
-﻿import std;
+﻿import common;
 
 struct pos {
 	short x = 0, y = 0;

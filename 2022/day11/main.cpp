@@ -1,4 +1,4 @@
-﻿import std;
+﻿import common;
 
 struct monkey {
 	std::vector<std::size_t> items;
