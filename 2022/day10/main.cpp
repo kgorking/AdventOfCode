@@ -1,8 +1,5 @@
 ﻿// https://adventofcode.com/2022/day/9
-#include <array>
-#include <iostream>
-#include <queue>
-#include <string_view>
+import common;
 
 enum code : char { noop = 1, addx };
 struct instruction {
