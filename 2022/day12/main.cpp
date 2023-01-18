@@ -1,12 +1,6 @@
 ﻿import common;
 
-struct pos {
-	short x = 0, y = 0;
-
-	pos operator + (pos p) const {
-		return {x + p.x, y + p.y};
-	}
-};
+using pos = kg::pos2d<short>;
 
 #if 1
 constexpr pos S{0,20};
