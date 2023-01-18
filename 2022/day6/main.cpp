@@ -1,6 +1,4 @@
-﻿#include <bit>
-#include <iostream>
-#include <string_view>
+﻿import common;
 
 static constexpr std::string_view input{
 #include "input.txt"

@@ -1,9 +1,4 @@
-﻿#include <vector>
-#include <array>
-#include <iostream>
-#include <algorithm>
-#include <numeric>
-#include <ranges>
+﻿import common;
 
 const std::vector<std::vector<int>> input{
 	#include "input.txt"

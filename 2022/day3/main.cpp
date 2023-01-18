@@ -1,8 +1,4 @@
-﻿#include <array>
-#include <iostream>
-#include <numeric>
-#include <string_view>
-#include <bitset>
+﻿import common;
 
 constexpr auto input = std::to_array<std::string_view>({
 	#include "input.txt"
@@ -32,15 +28,7 @@ constexpr bitset to_bitset(std::string_view sv) {
 
 // Calculate an items priority
 constexpr int calc_item_priority(bitset bs) {
-	// Count the high bits first
-	int prio = std::countr_zero((bs >> 64).to_ullong());
-	if (prio == 64) {
-		// Nothing found in the high bits, so return the count of the low bits
-		return 1 + std::countr_zero(bs.to_ullong());
-	} else {
-		// Item found in high bits, so return it plus the count of the low bits (64)
-		return 1 + 64 + prio;
-	}
+	return 1 + kg::ctz(bs);
 }
 
 // Returns a bitset with all items from both compartments
@@ -58,7 +46,7 @@ constexpr int find_common_item_priority(std::string_view sv) {
 	bitset const comp2 = (bs >> 52);
 
 	bitset const common_item = comp1 & comp2;
-	return calc_item_priority(common_item);
+	return 1 + kg::ctz(common_item);
 }
 
 int main() {

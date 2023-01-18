@@ -1,5 +1,4 @@
-﻿#include <array>
-#include <iostream>
+﻿import common;
 
 struct pair { int a, b; };
 constexpr auto input = std::to_array<pair>({

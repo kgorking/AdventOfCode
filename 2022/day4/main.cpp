@@ -1,17 +1,7 @@
-﻿#include <array>
-#include <iostream>
-#include <numeric>
-#include <string_view>
-#include <bitset>
+﻿import common;
 
-struct range {
-	char first, last;
-
-	[[nodiscard]] constexpr bool contains(range const& other) const { return other.first >= first && other.last <= last; }
-	[[nodiscard]] constexpr bool overlaps(range const& other) const { return first <= other.last && other.first <= last; }
-};
 struct pair {
-	range r1, r2;
+	kg::range<char> r1, r2;
 
 	constexpr bool one_contains_other() const { return r1.contains(r2) || r2.contains(r1); }
 	constexpr bool one_overlaps_other() const { return r1.overlaps(r2) || r2.overlaps(r1); }

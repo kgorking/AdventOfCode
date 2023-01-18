@@ -1,8 +1,4 @@
-﻿#include <array>
-#include <iostream>
-#include <string_view>
-#include <stack>
-#include <queue>
+﻿import common;
 
 struct instruction {
 	char move, from, to;
