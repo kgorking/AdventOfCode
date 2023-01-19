@@ -1,7 +1,4 @@
-﻿#include <iostream>
-#include <string_view>
-#include <vector>
-#include <algorithm>
+﻿import common;
 
 static constexpr std::string_view input{
 #include "input.txt"

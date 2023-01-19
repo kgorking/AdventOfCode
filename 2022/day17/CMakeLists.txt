@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.24)
 
-set(DEST 2022_day13)
+set(DEST 2022_day17)
 
 add_executable (${DEST})
 target_compile_features(${DEST} PRIVATE cxx_std_20)

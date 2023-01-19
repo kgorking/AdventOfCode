@@ -4,7 +4,7 @@ set(DEST 2022_day9)
 
 add_executable (${DEST})
 target_compile_features(${DEST} PRIVATE cxx_std_20)
-target_compile_options(${DEST} PRIVATE /EHsc /nologo /experimental:module /reference common=CMakeFiles\\AdventOfCode.dir\\common.ifc)
+target_compile_options(${DEST} PRIVATE @${CMAKE_SOURCE_DIR}/aoc_compile_options.mod)
 target_link_libraries(${DEST} AdventOfCode)
 
 target_sources(${DEST}

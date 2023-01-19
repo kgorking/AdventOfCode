@@ -18,7 +18,7 @@ target_sources(AdventOfCode
   PUBLIC
     FILE_SET CXX_MODULES FILES
 		"common/common.ixx"
- )
+)
 
 
 # Include sub-projects.

@@ -70,7 +70,7 @@ int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves,
 		int const n_time = time - 1 - shortest_paths[valve][n_valve];
 
 		// Check that the time limit is not crossed
-		if (n_time < 0)
+		if (n_time <= 0)
 			return;
 
 		// Prepare a bitset with the newly opened valve set.
@@ -107,8 +107,7 @@ int find_best_pressure_p2(matrix const& shortest_paths, bitset const closed_valv
 		if (n_time <= 0)
 			return;
 
-		// Prepare a bitset with the newly opened valve set.
-		// This is used to 'open' the bit in the closed valve set
+		// Open the valve by flipping its bit
 		bitset const remaining_valves = closed_valves ^ (bitset{1} << n_valve);
 
 		// Calculate the pressure of the remaining valves in the remaining time
@@ -116,11 +115,13 @@ int find_best_pressure_p2(matrix const& shortest_paths, bitset const closed_valv
 
 		// Calculate the total pressure this valve will
 		// produce in the remaining minutes it is open
-		int const n_pressure = input[n_valve].flow_rate * n_time;
+		int const n_pressure = rec_pressure + input[n_valve].flow_rate * n_time;
 
 		// Update the maximum pressure found
-		results.push_back({n_pressure + rec_pressure, remaining_valves});
-		pressure = std::max(pressure, n_pressure + rec_pressure);
+		if (n_pressure > pressure) {
+			results.push_back({n_pressure, remaining_valves});
+			pressure = n_pressure;
+		}
 	});
 
 	return pressure;
@@ -156,10 +157,11 @@ int main() {
 
 	std::size_t const num_valves = valves.count();
 	int max_pressure_26 = 0;
-	for (auto l = results.begin(); l != results.end() - 1; ++l) {
-		for (auto r = l + 1; r < results.end(); ++r) {
-			if (((l->valves ^ valves) | (r->valves ^ valves)) == valves) {
-				// No overlapping valves
+	for (auto l = results.begin(); l != results.end(); ++l) {
+		for (auto r = l + 1; r != results.end(); ++r) {
+			bitset const closed_valves = l->valves ^ r->valves;
+
+			if (closed_valves == valves) {
 				max_pressure_26 = std::max(max_pressure_26, l->pressure + r->pressure);
 			}
 		}
