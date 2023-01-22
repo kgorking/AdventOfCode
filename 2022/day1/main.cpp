@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 const std::vector<std::vector<int>> input{
 	#include "input.txt"

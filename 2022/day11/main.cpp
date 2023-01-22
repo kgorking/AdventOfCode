@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 struct monkey {
 	std::vector<std::size_t> items;

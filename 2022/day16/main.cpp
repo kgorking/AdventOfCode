@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 struct valve_input {
 	std::string_view name;

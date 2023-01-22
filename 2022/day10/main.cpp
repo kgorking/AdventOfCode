@@ -1,5 +1,5 @@
 ﻿// https://adventofcode.com/2022/day/9
-import common;
+import aoc;
 
 enum code : char { noop = 1, addx };
 struct instruction {

@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 using pos = kg::pos2d<int>;
 using segment = kg::range<pos>;

@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 struct pair {
 	kg::range<char> r1, r2;

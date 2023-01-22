@@ -1,3 +1,6 @@
+export module aoc : bits;
+import std;
+
 // Contains bit- and bitset related stuff
 
 export namespace kg {

@@ -1,5 +1,4 @@
-﻿import common;
-//#include "../common/matrix.h"
+﻿import aoc;
 
 using namespace kg;
 

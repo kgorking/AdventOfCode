@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 struct instruction {
 	char move, from, to;

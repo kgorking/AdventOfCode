@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 constexpr auto input = std::to_array<std::string_view>({
 #include "input.txt"

@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 constexpr std::size_t max_y_rock = 166 + 2;
 constexpr std::size_t sand_spawn_pos = 500;

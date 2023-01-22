@@ -1,5 +1,5 @@
 ﻿// https://adventofcode.com/2022/day/9
-import common;
+import aoc;
 
 enum Dir : char { L, R, U, D };
 struct move {

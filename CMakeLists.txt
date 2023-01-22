@@ -15,10 +15,17 @@ add_library(AdventOfCode OBJECT)
 target_compile_options(AdventOfCode PRIVATE /c /EHsc /nologo)
 
 target_sources(AdventOfCode
+#  PRIVATE
   PUBLIC
     FILE_SET CXX_MODULES FILES
-		"common/common.ixx"
-)
+		"aoc/std.ixx"
+		"aoc/aoc.ixx"
+		"aoc/aoc-bits.ixx"
+		"aoc/aoc-pos2d.ixx"
+		"aoc/aoc-matrix.ixx"
+		"aoc/aoc-graph.ixx"
+		"aoc/aoc-range.ixx"
+ )
 
 
 # Include sub-projects.

@@ -1,5 +1,7 @@
-export namespace kg {
+export module aoc : graph;
+import :matrix;
 
+export namespace kg {
 
 // Given an adjacency matrix, returns a new matrix with the shortest paths between all nodes
 template <typename T, int N>

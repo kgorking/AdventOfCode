@@ -1,3 +1,6 @@
+export module aoc : range;
+import std;
+
 export namespace kg {
 
 template <typename T>

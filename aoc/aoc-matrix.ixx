@@ -1,3 +1,6 @@
+export module aoc : matrix;
+import std;
+
 export namespace kg {
 
 template <typename T, int R, int C = R>

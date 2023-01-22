@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 static constexpr std::string_view input{
 #include "input.txt"

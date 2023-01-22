@@ -1,4 +1,4 @@
-﻿import common;
+﻿import aoc;
 
 struct pair { int a, b; };
 constexpr auto input = std::to_array<pair>({

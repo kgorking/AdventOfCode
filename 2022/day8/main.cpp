@@ -1,5 +1,5 @@
 ﻿// https://adventofcode.com/2022/day/8
-import common;
+import aoc;
 
 static constexpr auto input = std::to_array<std::string_view>({
 #include "input.txt"

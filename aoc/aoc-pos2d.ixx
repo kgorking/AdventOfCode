@@ -1,3 +1,6 @@
+export module aoc : pos2d;
+import std;
+
 export namespace kg {
 
 template <typename T = int>
