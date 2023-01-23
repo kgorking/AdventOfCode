@@ -70,7 +70,7 @@ constexpr std::bitset<N> bit_minus_one(std::bitset<N> bs) {
 	return bs;
 }
 
-// Add two bitset
+// Add two bitsets
 template <int N>
 constexpr std::bitset<N> bit_add(std::bitset<N> l, std::bitset<N> r) {
 	// https://www.geeksforgeeks.org/add-two-numbers-without-using-arithmetic-operators/?ref=lbp
@@ -82,7 +82,7 @@ constexpr std::bitset<N> bit_add(std::bitset<N> l, std::bitset<N> r) {
 	return l;
 }
 
-// Subtracts two bitset
+// Subtracts two bitsets
 template <int N>
 constexpr std::bitset<N> bit_subtract(std::bitset<N> l, std::bitset<N> r) {
 	// https://www.geeksforgeeks.org/subtract-two-numbers-without-using-arithmetic-operators/?ref=lbp
