@@ -7,13 +7,13 @@ struct valve_input {
 };
 
 static const auto input = std::to_array<valve_input>({
-#if 1
+#if 0
 #include "input.txt"
 #else
-#include "example.txt"
+//#include "example.txt"
 // #include "testcase1.txt"
 // #include "testcase2.txt"
-// #include "testcase3.txt"
+ #include "testcase3.txt"
 // #include "testcase4.txt"
 #endif
 });
@@ -95,19 +95,22 @@ int find_best_pressure(matrix const& shortest_paths, bitset const closed_valves,
 // Part 2
 int find_best_pressure_p2(matrix const& shortest_paths, bitset const closed_valves, int const valve, int const time) {
 	// Pressure accumulator
-	int max_pressure = 0;
+	std::atomic_int max_pressure{0};
 
 	// Split the work in two
-	// TODO could be faster, lambda is hit ~5k times
-	auto const half_bits = closed_valves.count() / 2 - 1;
-	kg::bit_subsets_n(closed_valves, half_bits, [&](bitset const some_valves) {
+	// TODO could be faster, lambda is hit ~6k times
+	auto const half_bits = closed_valves.count() / 2;
+	kg::bit_subsets_n_par(closed_valves, half_bits, [&](bitset const some_valves) {
 		auto const rest_valves = some_valves ^ closed_valves;
 
 		int const pressure =
 			find_best_pressure(shortest_paths, some_valves, valve, time) + find_best_pressure(shortest_paths, rest_valves, valve, time);
 
-		if (pressure > max_pressure)
-			max_pressure = pressure;
+		//if (pressure > max_pressure)
+		//	max_pressure = pressure;
+		int max_p = max_pressure;
+		while (pressure > max_p && !max_pressure.compare_exchange_weak(max_p, pressure))
+			;
 	});
 
 	return max_pressure;
@@ -135,6 +138,8 @@ int main() {
 	std::cout << "Part 1: " << max_pressure_30 << '\n';
 
 	// Part 2
-	int max_pressure_26 = find_best_pressure_p2(shortest_paths, valves, start_pos, 26);
-	std::cout << "Part 2: " << max_pressure_26 << '\n';
+	for (int i = 0; i < 100; i += 1) {
+		int max_pressure_26 = find_best_pressure_p2(shortest_paths, valves, start_pos, 26);
+		std::cout << "Part 2: " << max_pressure_26 << '\n';
+	}
 }

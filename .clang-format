@@ -3,7 +3,7 @@ AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: 'Yes'
 #AlignArrayOfStructures: Right
-AlignTrailingComments: True
+#AlignTrailingComments: True
 ColumnLimit: '140'
 IndentWidth: '4'
 IndentWrappedFunctionNames: 'false'

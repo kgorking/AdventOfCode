@@ -1,5 +1,7 @@
 export module aoc : bits;
 import std;
+import :math;
+import :async;
 
 // Contains bit- and bitset related stuff
 
@@ -182,14 +184,39 @@ constexpr void bit_subsets(std::bitset<N> const& bs, auto fn) {
 		fn(subset);
 }
 
-// Generate the X-bits subsets of the set bits in a bitset.
+// Generate the x-bits subsets of the set bits in the bit set.
 // Only calls 'fn' if the subset has X bits set.
-template<int N>
+template <int N>
 constexpr void bit_subsets_n(std::bitset<N> const& bs, int x, auto fn) {
-	for (auto subset = bs; subset.any(); subset = bit_minus_one(subset) & bs) {
-		if (subset.count() == x)
+	int num_subsets = binomial_coefficient(bs.count(), x);
+	for (auto subset = bs; subset.any() && num_subsets; subset = bit_minus_one(subset) & bs) {
+		if (subset.count() == x) {
 			fn(subset);
+			num_subsets -= 1;
+		}
 	}
+}
+
+// Generate the x-bits subsets of the set bits in the bit set.
+// Valid subsets are passed asynchronously to 'fn' if the subset has X bits set.
+template <int N, typename Fn>
+constexpr void bit_subsets_n_par(std::bitset<N> const& bs, int x, Fn &&fn) {
+	int num_subsets = binomial_coefficient(bs.count(), x);
+
+	auto const producer = [=, subset = bs]() mutable {
+		auto ret = std::optional<std::bitset<N>>{};
+		while (subset.any() && num_subsets) {
+			ret = subset;
+			subset = bit_minus_one(subset) & bs;
+			num_subsets -= 1;
+
+			if (subset.count() == x)
+				break;
+		}
+		return ret;
+	};
+
+	spmc(producer, std::forward<Fn>(fn));
 }
 
 } // namespace kg
