@@ -45,8 +45,7 @@ char find_first_value(std::ranges::range auto calibration) {
 }
 
 int merge_and_convert(char l, char r) {
-	char const sz[3] = {l, r, 0};
-	return std::atoi(sz);
+	return (l - '0')*10 + (r - '0');
 }
 
 int extract_calibration_value_p2(int other, std::string_view calibration) {
