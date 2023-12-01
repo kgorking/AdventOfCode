@@ -54,8 +54,6 @@ int main() {
 	std::cout << "Part 1: " << sum1 << '\n';
 
 	// Part 2
-	int const sum2 = std::reduce(input.begin(), input.end(), 0, [](int other, std::string_view calibration) {
-		return other + find_value(calibration);
-	});
+	int const sum2 = std::transform_reduce(input.begin(), input.end(), 0, std::plus{}, find_value);
 	std::cout << "Part 2: " << sum2 << '\n';
 }
