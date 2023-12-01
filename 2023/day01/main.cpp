@@ -10,7 +10,7 @@ constexpr auto input = std::to_array<std::string_view>({
 static constexpr auto values = std::to_array<std::string_view>(
 	{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"});
 
-// Returns the index of the value from `::values` found first/last in `calibration`
+// Returns the character value of `::values` found first/last in `calibration`
 template <bool reverse>
 char find_first_value(std::ranges::range auto calibration) {
 	// Convert the words to searchers
@@ -46,16 +46,14 @@ char find_first_value(std::ranges::range auto calibration) {
 
 int merge_and_convert(char l, char r) {
 	char const sz[3] = {l, r, 0};
-	int val = -1;
-	std::from_chars(sz, sz + 2, val);
-	return val;
+	return std::atoi(sz);
 }
 
 int extract_calibration_value_p2(int other, std::string_view calibration) {
 	auto const l = find_first_value<false>(calibration);
 	auto const r = find_first_value<true>(calibration);
 	
-	return merge_and_convert(l, r) + other;
+	return other + merge_and_convert(l, r);
 }
 
 
@@ -63,7 +61,7 @@ int extract_calibration_value_p1(int other, std::string_view calibration) {
 	auto const l = std::ranges::find_if(calibration, [](char c){ return std::isdigit(c);});
 	auto const r = std::ranges::find_last_if(calibration, [](char c){ return std::isdigit(c);});
 
-	return merge_and_convert(*l, r[0]) + other;
+	return other + merge_and_convert(*l, r[0]);
 }
 
 int main() {
