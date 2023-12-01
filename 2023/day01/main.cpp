@@ -1,6 +1,4 @@
 ﻿import aoc;
-#include <cassert>
-
 using namespace std::string_view_literals;
 
 constexpr auto input = std::to_array<std::string_view>({
@@ -44,7 +42,7 @@ char find_first_value(std::ranges::range auto calibration) {
 	return values[index % 10][0];
 }
 
-int merge_and_convert(char l, char r) {
+int digits_to_int(char l, char r) {
 	return (l - '0')*10 + (r - '0');
 }
 
@@ -52,7 +50,7 @@ int extract_calibration_value_p2(int other, std::string_view calibration) {
 	auto const l = find_first_value<false>(calibration);
 	auto const r = find_first_value<true>(calibration);
 	
-	return other + merge_and_convert(l, r);
+	return other + digits_to_int(l, r);
 }
 
 
@@ -60,7 +58,7 @@ int extract_calibration_value_p1(int other, std::string_view calibration) {
 	auto const l = std::ranges::find_if(calibration, [](char c){ return std::isdigit(c);});
 	auto const r = std::ranges::find_last_if(calibration, [](char c){ return std::isdigit(c);});
 
-	return other + merge_and_convert(*l, r[0]);
+	return other + digits_to_int(*l, r[0]);
 }
 
 int main() {
