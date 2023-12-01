@@ -24,7 +24,7 @@ char find_first_value(std::ranges::range auto calibration) {
 	auto search = [&](auto begin, auto end) {
 		auto min = end;
 		for (int i = 0; i < 20; i++) {
-			auto it = std::search(begin, end, searchers[i]);
+			auto const it = std::search(begin, end, searchers[i]);
 			if (end != it && it < min) {
 				index = i;
 				min = it;
