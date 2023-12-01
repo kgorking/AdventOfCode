@@ -1,4 +1,7 @@
-﻿# Visual Studio 2015/2017 cache/options directory
+﻿# Advent of Code personal inputs
+**/input.txt
+
+# Visual Studio 2015/2017 cache/options directory
 /.vs
 */.vs/
 
