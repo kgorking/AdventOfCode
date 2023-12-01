@@ -21,7 +21,7 @@ char find_first_value(std::ranges::range auto calibration) {
 
 	std::size_t index = values.size();
 
-	auto const search = [&](auto begin, auto end) {
+	auto const find = [&](auto begin, auto end) {
 		auto min = end;
 		for (int i = 0; i < 20; i++) {
 			auto const it = std::search(begin, end, searchers[i]);
@@ -33,9 +33,9 @@ char find_first_value(std::ranges::range auto calibration) {
 	};
 
 	if constexpr (reverse) {
-		search(calibration.rbegin(), calibration.rend());
+		find(calibration.rbegin(), calibration.rend());
 	} else {
-		search(calibration.begin(), calibration.end());
+		find(calibration.begin(), calibration.end());
 	}
 
 	// Return the result as a char
