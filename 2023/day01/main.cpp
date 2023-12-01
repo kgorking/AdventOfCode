@@ -5,7 +5,7 @@ constexpr auto input = std::to_array<std::string_view>({
 #include "input.txt"
 });
 
-static constexpr auto values = std::to_array<std::string_view>(
+constexpr auto values = std::to_array<std::string_view>(
 	{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"});
 
 // Returns the character value of `::values` found first/last in `calibration`
