@@ -5,27 +5,23 @@ constexpr auto input = std::to_array<std::string_view>({
 #include "input.txt"
 });
 
+// The values to search for
+static constexpr auto values = std::to_array<std::string_view>(
+	{"1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"});
+
+// Convert the values to searchers
+static constexpr auto searchers  = values | std::views::transform([](auto phrase) { return std::boyer_moore_searcher(phrase. begin(), phrase. end()); });
+static constexpr auto rsearchers = values | std::views::transform([](auto phrase) { return std::boyer_moore_searcher(phrase.rbegin(), phrase.rend()); });
+
 // Returns the character value of `::values` found first/last in `calibration`
 template <bool reverse>
 char find_first_value(std::string_view calibration) {
-	// The values to search for
-	static constexpr auto values = std::to_array<std::string_view>(
-		{"1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"});
-
-	// Convert the values to searchers
-	static constexpr auto searchers = values | std::views::transform([](auto phrase) {
-										  if constexpr (reverse)
-											  return std::boyer_moore_searcher(phrase.rbegin(), phrase.rend());
-										  else
-											  return std::boyer_moore_searcher(phrase.begin(), phrase.end());
-									  });
-
 	std::size_t index = values.size();
 
-	auto const find = [&index](auto begin, auto end) {
+	auto const find = [&index](auto const& begin, auto const& end, auto const& search) {
 		auto min = end;
 		for (std::size_t i = 0; i < searchers.size(); i++) {
-			auto const it = std::search(begin, end, searchers[i]);
+			auto const it = std::search(begin, end, search[i]);
 			if (end != it && it < min) {
 				index = i;
 				min = it;
@@ -34,9 +30,9 @@ char find_first_value(std::string_view calibration) {
 	};
 
 	if constexpr (reverse) {
-		find(calibration.rbegin(), calibration.rend());
+		find(calibration.rbegin(), calibration.rend(), rsearchers);
 	} else {
-		find(calibration.begin(), calibration.end());
+		find(calibration.begin(), calibration.end(), searchers);
 	}
 
 	// Return the result as a char
