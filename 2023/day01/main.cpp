@@ -17,7 +17,7 @@ int digits_to_int(char l, char r) {
 	return (l - '0')*10 + (r - '0');
 }
 
-// Returns the character value of `::values` found first/last in `calibration`
+// Returns the combined character value of `::values` found first/last in `calibration`
 int find_value(std::string_view calibration) {
 	std::size_t  index = values.size();
 	std::size_t rindex = values.size();
