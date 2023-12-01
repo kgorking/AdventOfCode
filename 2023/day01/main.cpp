@@ -5,14 +5,14 @@ constexpr auto input = std::to_array<std::string_view>({
 #include "input.txt"
 });
 
-static constexpr auto values = std::to_array<std::string_view>(
+constexpr auto values = std::to_array<std::string_view>(
 	{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"});
 
 // Returns the character value of `::values` found first/last in `calibration`
 template <bool reverse>
 char find_first_value(std::ranges::range auto calibration) {
 	// Convert the words to searchers
-	static constexpr auto searchers = values | std::views::transform([](auto phrase) {
+	constexpr auto searchers = values | std::views::transform([](auto phrase) {
 										  if constexpr (reverse)
 											  return std::boyer_moore_searcher(phrase.rbegin(), phrase.rend());
 										  else
