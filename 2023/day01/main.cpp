@@ -7,7 +7,7 @@ constexpr auto input = std::to_array<std::string_view>({
 
 // Returns the character value of `::values` found first/last in `calibration`
 template <bool reverse>
-char find_first_value(std::ranges::range auto calibration) {
+char find_first_value(std::string_view calibration) {
 	// The values to search for
 	static constexpr auto values = std::to_array<std::string_view>(
 		{"1", "2", "3", "4", "5", "6", "7", "8", "9", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"});
@@ -24,7 +24,7 @@ char find_first_value(std::ranges::range auto calibration) {
 
 	auto const find = [&index](auto begin, auto end) {
 		auto min = end;
-		for (int i = 0; i < searchers.size(); i++) {
+		for (std::size_t i = 0; i < searchers.size(); i++) {
 			auto const it = std::search(begin, end, searchers[i]);
 			if (end != it && it < min) {
 				index = i;
