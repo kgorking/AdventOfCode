@@ -13,56 +13,49 @@ static constexpr auto values = std::to_array<std::string_view>(
 static constexpr auto searchers  = values | std::views::transform([](auto phrase) { return std::boyer_moore_searcher(phrase. begin(), phrase. end()); });
 static constexpr auto rsearchers = values | std::views::transform([](auto phrase) { return std::boyer_moore_searcher(phrase.rbegin(), phrase.rend()); });
 
-// Returns the character value of `::values` found first/last in `calibration`
-template <bool reverse>
-char find_first_value(std::string_view calibration) {
-	std::size_t index = values.size();
-
-	auto const find = [&index](auto const& begin, auto const& end, auto const& search) {
-		auto min = end;
-		for (std::size_t i = 0; i < searchers.size(); i++) {
-			auto const it = std::search(begin, end, search[i]);
-			if (end != it && it < min) {
-				index = i;
-				min = it;
-			}
-		}
-	};
-
-	if constexpr (reverse) {
-		find(calibration.rbegin(), calibration.rend(), rsearchers);
-	} else {
-		find(calibration.begin(), calibration.end(), searchers);
-	}
-
-	// Return the result as a char
-	return values[index % 9][0];
-}
-
 int digits_to_int(char l, char r) {
 	return (l - '0')*10 + (r - '0');
 }
 
-int extract_calibration_value_p2(int other, std::string_view calibration) {
-	auto const l = find_first_value<false>(calibration);
-	auto const r = find_first_value<true>(calibration);
-	
-	return other + digits_to_int(l, r);
-}
+// Returns the character value of `::values` found first/last in `calibration`
+int find_value(std::string_view calibration) {
+	std::size_t  index = values.size();
+	std::size_t rindex = values.size();
 
-int extract_calibration_value_p1(int other, std::string_view calibration) {
-	auto const l = std::ranges::find_if(calibration, [](char c){ return std::isdigit(c);});
-	auto const r = std::ranges::find_last_if(calibration, [](char c){ return std::isdigit(c);});
+	auto  min = calibration. end();
+	auto rmin = calibration.rend();
+	for (std::size_t i = 0; i < values.size(); i++) {
+		auto const it  = std::search(calibration. begin(), calibration. end(),  searchers[i]);
+		auto const rit = std::search(calibration.rbegin(), calibration.rend(), rsearchers[i]);
 
-	return other + digits_to_int(*l, r[0]);
+		if (calibration.end() != it && it < min) {
+			index = i;
+			min = it;
+		}
+
+		if (calibration.rend() != rit && rit < rmin) {
+			rindex = i;
+			rmin = rit;
+		}
+	}
+
+	// Return the combined result
+	return digits_to_int(values[index % 9][0], values[rindex % 9][0]);
 }
 
 int main() {
 	// Part 1
-	int const sum1 = std::accumulate(input.begin(), input.end(), 0, extract_calibration_value_p1);
+	int const sum1 = std::reduce(input.begin(), input.end(), 0, [](int other, std::string_view calibration) {
+		auto const l = std::ranges::find_if     (calibration, [](char c) { return std::isdigit(c); });
+		auto const r = std::ranges::find_last_if(calibration, [](char c) { return std::isdigit(c); });
+
+		return other + digits_to_int(*l, r[0]);
+	});
 	std::cout << "Part 1: " << sum1 << '\n';
 
 	// Part 2
-	int const sum2 = std::accumulate(input.begin(), input.end(), 0, extract_calibration_value_p2);
+	int const sum2 = std::reduce(input.begin(), input.end(), 0, [](int other, std::string_view calibration) {
+		return other + find_value(calibration);
+	});
 	std::cout << "Part 2: " << sum2 << '\n';
 }
