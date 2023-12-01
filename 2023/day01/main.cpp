@@ -17,8 +17,16 @@ int digits_to_int(char l, char r) {
 	return (l - '0')*10 + (r - '0');
 }
 
-// Returns the combined character value of `::values` found first/last in `calibration`
-int find_value(std::string_view calibration) {
+// Returns the combined character value of digits found first and last in `calibration`
+int find_value_p1(std::string_view calibration) {
+	auto const l = std::ranges::find_if(calibration, [](char c) { return std::isdigit(c); });
+	auto const r = std::ranges::find_last_if(calibration, [](char c) { return std::isdigit(c); });
+
+	return digits_to_int(*l, r[0]);
+}
+
+// Returns the combined character value of `::values` found first and last in `calibration`
+int find_value_p2(std::string_view calibration) {
 	std::size_t  index = values.size();
 	std::size_t rindex = values.size();
 
@@ -39,21 +47,15 @@ int find_value(std::string_view calibration) {
 		}
 	}
 
-	// Return the combined result
 	return digits_to_int(values[index % 9][0], values[rindex % 9][0]);
 }
 
 int main() {
 	// Part 1
-	int const sum1 = std::reduce(input.begin(), input.end(), 0, [](int other, std::string_view calibration) {
-		auto const l = std::ranges::find_if     (calibration, [](char c) { return std::isdigit(c); });
-		auto const r = std::ranges::find_last_if(calibration, [](char c) { return std::isdigit(c); });
-
-		return other + digits_to_int(*l, r[0]);
-	});
+	int const sum1 = std::transform_reduce(input.begin(), input.end(), 0, std::plus{}, find_value_p1);
 	std::cout << "Part 1: " << sum1 << '\n';
 
 	// Part 2
-	int const sum2 = std::transform_reduce(input.begin(), input.end(), 0, std::plus{}, find_value);
+	int const sum2 = std::transform_reduce(input.begin(), input.end(), 0, std::plus{}, find_value_p2);
 	std::cout << "Part 2: " << sum2 << '\n';
 }
