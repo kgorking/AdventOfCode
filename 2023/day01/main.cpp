@@ -53,7 +53,6 @@ int extract_calibration_value_p2(int other, std::string_view calibration) {
 	return other + digits_to_int(l, r);
 }
 
-
 int extract_calibration_value_p1(int other, std::string_view calibration) {
 	auto const l = std::ranges::find_if(calibration, [](char c){ return std::isdigit(c);});
 	auto const r = std::ranges::find_last_if(calibration, [](char c){ return std::isdigit(c);});
