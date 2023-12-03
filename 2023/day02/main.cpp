@@ -28,9 +28,7 @@ int part1() {
 	int sum = 0;
 	int game_idx = 1;
 	for (std::vector<set> const& game : input) {
-		bool ok = true;
-		for (set const& s : game)
-			ok = ok && s.valid();
+		bool const ok = std::ranges::all_of(game, &set::valid);
 		sum += ok * game_idx;
 		game_idx += 1;
 	}
