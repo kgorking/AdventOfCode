@@ -2,12 +2,7 @@
 
 using namespace std::string_view_literals;
 constexpr auto input = std::to_array<std::string_view>({
-#if 0
-	"467..114.."sv, "...*......"sv, "..35..633."sv, "......#..."sv, "617*......"sv, ".....+.58."sv, "..592....."sv, "......755."sv,
-		"...$.*...."sv, ".664.598.."sv
-#else
 #include "input.txt"
-#endif
 });
 
 const auto preproccessed = []() {
