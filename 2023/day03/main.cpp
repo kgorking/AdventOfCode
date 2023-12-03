@@ -38,10 +38,11 @@ const auto preproccessed = []() {
 	return arr;
 }();
 
-int part1() {
-	// look for symbols
+std::pair<int,int> solve() {
+	// look for symbols and gears
 	int line_nr = 0;
-	int sum = 0;
+	int sum_p1 = 0, sum_p2 = 0;
+
 	for (std::string_view const line : input) {
 		int offset = 0;
 		while (true) {
@@ -51,7 +52,10 @@ int part1() {
 
 			std::vector<int> const& vec = preproccessed[line_nr].at(index);
 			for (int v : vec)
-				sum += v;
+				sum_p1 += v;
+
+			if ('*' == line[index] && 2 == vec.size())
+				sum_p2 += (vec[0] * vec[1]);
 
 			offset = index + 1;
 		}
@@ -59,34 +63,11 @@ int part1() {
 		line_nr += 1;
 	}
 
-	return sum;
-}
-
-int part2() {
-	// look for gears
-	int line_nr = 0;
-	int sum = 0;
-	for (std::string_view const line : input) {
-		int offset = 0;
-		while (true) {
-			std::size_t const index = line.find('*', offset);
-			if (index == std::string_view::npos)
-				break;
-
-			std::vector<int> const& vec = preproccessed[line_nr].at(index);
-			if (vec.size() == 2)
-				sum += (vec[0] * vec[1]);
-
-			offset = index + 1;
-		}
-
-		line_nr += 1;
-	}
-
-	return sum;
+	return {sum_p1, sum_p2};
 }
 
 int main() {
-	std::cout << "Part 1: " << part1() << '\n';
-	std::cout << "Part 2: " << part2() << '\n';
+	auto [p1, p2] = solve();
+	std::cout << "Part 1: " << p1 << '\n';
+	std::cout << "Part 2: " << p2 << '\n';
 }
