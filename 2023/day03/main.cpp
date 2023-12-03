@@ -49,8 +49,10 @@ int part1() {
 			if (index == std::string_view::npos)
 				break;
 
-			for (int v : preproccessed[line_nr].at(index))
+			std::vector<int> const& vec = preproccessed[line_nr].at(index);
+			for (int v : vec)
 				sum += v;
+
 			offset = index + 1;
 		}
 
@@ -71,7 +73,7 @@ int part2() {
 			if (index == std::string_view::npos)
 				break;
 
-			auto const& vec = preproccessed[line_nr].at(index);
+			std::vector<int> const& vec = preproccessed[line_nr].at(index);
 			if (vec.size() == 2)
 				sum += (vec[0] * vec[1]);
 
