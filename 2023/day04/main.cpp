@@ -1,10 +1,9 @@
 ﻿import aoc;
 
-//using card = std::pair<std::array<char, 5>, std::array<char, 8>>;
 using card = std::pair<std::array<char, 10>, std::array<char, 25>>;
 
-/*constexpr*/ auto input = std::to_array<card>({
-#include "input.txt"
+auto input = std::to_array<card>({
+	#include "input.txt"
 });
 
 int part1() {
