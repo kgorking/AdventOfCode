@@ -21,8 +21,8 @@ int part1() {
 }
 
 int part2() {
-	std::array<int, input.size()> scratchcard_count;
-	scratchcard_count.fill(1);
+	auto scratchers = std::array<int, input.size()>{};
+	scratchers.fill(1);
 
 	auto const xform = [&, card_index = 0](card& c, int count) mutable {
 		// Find the amount or winning numbers
@@ -31,16 +31,16 @@ int part2() {
 		auto winners = std::distance(out.begin(), set_result.out);
 
 		// Add out newly won cards to the pile
-		while (winners > 0 && (card_index + winners) < scratchcard_count.size()) {
-			scratchcard_count[card_index + winners] += count;
+		while (winners > 0 && (card_index + winners) < scratchers.size()) {
+			scratchers[card_index + winners] += count;
 			winners -= 1;
 		}
 
 		// Return the current number of cards and advance the index
-		return scratchcard_count[card_index++];
+		return scratchers[card_index++];
 	};
 
-	return std::transform_reduce(input.begin(), input.end(), scratchcard_count.begin(), 0, std::plus<>{}, xform);
+	return std::transform_reduce(input.begin(), input.end(), scratchers.begin(), 0, std::plus<>{}, xform);
 }
 
 int main() {
