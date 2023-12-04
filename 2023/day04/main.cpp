@@ -8,12 +8,10 @@ auto input = std::to_array<card>({
 
 int part1() {
 	auto const xform = [](card& c) {
-		// Find the number or winning numbers
+		// Find the winning numbers and calculate the points
 		card::first_type out;
 		auto const set_result = std::ranges::set_intersection(c.first, c.second, out.begin());
 		auto const winners = std::distance(out.begin(), set_result.out);
-
-		// Calculate the points
 		return std::pow(2, winners - 1);
 	};
 
@@ -24,12 +22,12 @@ int part2() {
 	auto scratchers = kg::array_of<input.size()>(1);
 
 	auto const xform = [&, card_index = 0](card& c, int count) mutable {
-		// Find the amount or winning numbers
+		// Find the winning numbers
 		card::first_type out;
 		auto const set_result = std::ranges::set_intersection(c.first, c.second, out.begin());
 		auto winners = std::distance(out.begin(), set_result.out);
 
-		// Add out newly won cards to the pile
+		// Add our newly won cards to the pile
 		while (winners > 0 && (card_index + winners) < scratchers.size()) {
 			scratchers[card_index + winners] += count;
 			winners -= 1;
@@ -43,9 +41,8 @@ int part2() {
 }
 
 int main() {
-	// Pre-process
+	// Pre-process: sort the two sets
 	for (card& c : input) {
-		// Sort the two sets
 		std::ranges::sort(c.first);
 		std::ranges::sort(c.second);
 	}
