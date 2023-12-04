@@ -21,8 +21,7 @@ int part1() {
 }
 
 int part2() {
-	auto scratchers = std::array<int, input.size()>{};
-	scratchers.fill(1);
+	auto scratchers = kg::array_of<input.size()>(1);
 
 	auto const xform = [&, card_index = 0](card& c, int count) mutable {
 		// Find the amount or winning numbers
