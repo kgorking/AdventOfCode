@@ -52,9 +52,6 @@ int main() {
 		std::ranges::sort(c.second);
 	}
 
-	// Part 1
 	std::cout << "Part 1: " << part1() << '\n';
-
-	// Part 2
 	std::cout << "Part 2: " << part2() << '\n';
 }
