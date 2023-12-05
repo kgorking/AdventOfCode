@@ -4,42 +4,37 @@ struct range_t {
 	unsigned dest, src, len;
 };
 
-using ranges = std::vector<range_t>;
+using ranges_t = std::vector<range_t>;
 using interval_map = std::map<unsigned, unsigned>;
 using interval_maps_t = std::array<interval_map, 7>;
 
 template <int N>
 struct almanac_t {
 	std::array<unsigned, N> seeds;
-	std::array<ranges, 7> maps;
+	std::array<ranges_t, 7> maps;
 };
 
-const auto almanac = almanac_t<4>{
+const auto almanac = almanac_t<20>{
 #include "input.txt"
 };
-
-auto find(interval_map const& map, unsigned v) {
-	return std::prev(map.upper_bound(v));
-}
-
-unsigned calc_offset(interval_map::const_iterator it, unsigned v) {
-	unsigned offset = it->second - it->first;
-	return v + offset;
-}
 
 unsigned lookup(interval_map const& map, unsigned v) {
 	if (v <= map.begin()->first)
 		return v;
-	return calc_offset(find(map, v), v);
+	auto const it = std::prev(map.upper_bound(v));
+	unsigned offset = it->second - it->first;
+	return v + offset;
 }
 
 auto build_interval_maps() {
 	interval_maps_t interval_maps;
 
+	// Fill the input ranges from the 'almanac' into the maps
 	for (std::size_t i = 0; i < almanac.maps.size(); i++) {
 		auto& intervals = interval_maps[i];
+
 		for (range_t const& range : almanac.maps[i]) {
-			auto const end = range.src + range.len;
+			auto const end = range.src + range.len - 1;
 
 			intervals[range.src] = range.dest;
 			if (!intervals.contains(end))
@@ -47,15 +42,22 @@ auto build_interval_maps() {
 		}
 	}
 
-	// Propagate range barriers upwards
+	// Propagate range intervals upwards. This will result in the top-most
+	// map having ~2500 entries, but each additional entry corresponds to
+	// a change in a map below it. Instead of iterating millions of seeds,
+	// I can just check the positions in the interval map where something changes.
 	for (auto i = ptrdiff_t(almanac.maps.size()) - 2; i >= 0; i--) {
 		auto& map = interval_maps[i];
 		auto const& map_below = interval_maps[i + 1];
 
-		for (auto const& [val, _] : map_below) {
-			if (!map.contains(val)) {
-				unsigned const split_val = lookup(map, val);
-				map[val] = split_val;
+		for (auto const& [first, last] : map_below) {
+			if (!map.contains(first)) {
+				unsigned const split_val = lookup(map, first);
+				map[first] = split_val;
+			}
+			if (!map.contains(last - 1)) {
+				unsigned const split_val = lookup(map, last - 1);
+				map[last - 1] = split_val;
 			}
 		}
 	}
@@ -79,14 +81,11 @@ unsigned part2(interval_maps_t const& maps) {
 	unsigned min = std::numeric_limits<unsigned>::max();
 
 	for (auto const view : almanac.seeds | std::views::chunk(2)) {
-		unsigned const first = view[0]; // seed
-		unsigned const last = view[0] + view[1] - 1;
+		auto const first_seed = maps[0].upper_bound(view[0]);
+		auto const last_seed = maps[0].upper_bound(view[0] + view[1] - 1);
 
-		auto const begin = std::prev(maps[0].upper_bound(first));
-		auto const end = maps[0].upper_bound(last);
-
-		for (auto it = begin; it != end; ++it) {
-			unsigned val = std::max(first, it->first);
+		for (auto it = first_seed; it != last_seed; ++it) {
+			unsigned val = it->first;
 			for (size_t i = 0; i < maps.size(); i++) {
 				val = lookup(maps[i], val);
 			}
@@ -94,8 +93,6 @@ unsigned part2(interval_maps_t const& maps) {
 		}
 	}
 
-	//   662197086
-	// < 199168760
 	return min;
 }
 
