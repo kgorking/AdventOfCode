@@ -37,7 +37,7 @@ unsigned lookup(interval_maps_t const& maps, unsigned const v) {
 auto build_interval_maps() {
 	interval_maps_t interval_maps;
 
-	// Fill the input ranges from the 'almanac' into the maps
+	// Convert the input ranges from the 'almanac' into intervals
 	for (std::size_t i = 0; i < almanac.maps.size(); i++) {
 		auto& intervals = interval_maps[i];
 
