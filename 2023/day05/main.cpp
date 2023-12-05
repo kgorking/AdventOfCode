@@ -61,14 +61,10 @@ auto build_interval_maps() {
 		auto const& map_below = interval_maps[i + 1];
 
 		for (auto const& [first, last] : map_below) {
-			if (!map.contains(first)) {
-				unsigned const split_val = lookup(map, first);
-				map[first] = split_val;
-			}
-			if (!map.contains(last - 1)) {
-				unsigned const split_val = lookup(map, last - 1);
-				map[last - 1] = split_val;
-			}
+			if (!map.contains(first))
+				map[first] = lookup(map, first);
+			if (!map.contains(last - 1))
+				map[last - 1] = lookup(map, last - 1);
 		}
 	}
 
