@@ -60,9 +60,9 @@ auto build_interval_maps() {
 		auto& map = interval_maps[i];
 		auto const& map_below = interval_maps[i + 1];
 
-		for (auto const& [first, last] : map_below) {
-			if (!map.contains(first)) map[first] = lookup(map, first);
-			if (!map.contains(last))  map[last]  = lookup(map, last);
+		for (auto const& [first_below, last_below] : map_below) {
+			if (!map.contains(first_below)) map[first_below] = lookup(map, first_below);
+			if (!map.contains(last_below))  map[last_below]  = lookup(map, last_below);
 		}
 	}
 
