@@ -26,6 +26,14 @@ unsigned lookup(interval_map const& map, unsigned v) {
 	return v + offset;
 }
 
+unsigned lookup(interval_maps_t const& maps, unsigned const v) {
+	unsigned result = v;
+	for (size_t i = 0; i < maps.size(); i++) {
+		result = lookup(maps[i], result);
+	}
+	return result;
+}
+
 auto build_interval_maps() {
 	interval_maps_t interval_maps;
 
@@ -68,11 +76,8 @@ auto build_interval_maps() {
 unsigned part1(interval_maps_t const& maps) {
 	unsigned min = std::numeric_limits<unsigned>::max();
 
-	for (unsigned val : almanac.seeds) {
-		for (size_t i = 0; i < maps.size(); i++)
-			val = lookup(maps[i], val);
-		min = std::min(min, val);
-	}
+	for (unsigned val : almanac.seeds)
+		min = std::min(min, lookup(maps, val));
 
 	return min;
 }
@@ -84,13 +89,8 @@ unsigned part2(interval_maps_t const& maps) {
 		auto const first_seed = maps[0].upper_bound(view[0]);
 		auto const last_seed = maps[0].upper_bound(view[0] + view[1] - 1);
 
-		for (auto it = first_seed; it != last_seed; ++it) {
-			unsigned val = it->first;
-			for (size_t i = 0; i < maps.size(); i++) {
-				val = lookup(maps[i], val);
-			}
-			min = std::min(min, val);
-		}
+		for (auto it = first_seed; it != last_seed; ++it)
+			min = std::min(min, lookup(maps, it->first));
 	}
 
 	return min;
