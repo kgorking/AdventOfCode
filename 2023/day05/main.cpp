@@ -5,8 +5,8 @@ struct range_t {
 };
 
 using ranges_t = std::vector<range_t>;
-using interval_map = std::map<unsigned, unsigned>;
-using interval_maps_t = std::array<interval_map, 7>;
+using interval_map_t = std::map<unsigned, unsigned>;
+using interval_maps_t = std::array<interval_map_t, 7>;
 
 template <int N>
 struct almanac_t {
@@ -18,7 +18,7 @@ const auto almanac = almanac_t<20>{
 #include "input.txt"
 };
 
-unsigned lookup(interval_map const& map, unsigned v) {
+unsigned lookup(interval_map_t const& map, unsigned v) {
 	if (v <= map.begin()->first)
 		return v;
 	auto const it = std::prev(map.upper_bound(v));
@@ -50,7 +50,7 @@ auto build_interval_maps() {
 		}
 	}
 
-	// Propagate range intervals upwards. This will result in the top-most
+	// Propagate range interval boundaries upwards. This will result in the top-most
 	// map having ~2500 entries, but each additional entry corresponds to
 	// a change in a map below it. Instead of iterating millions of seeds,
 	// I can just check the positions in the interval map where something changes.
