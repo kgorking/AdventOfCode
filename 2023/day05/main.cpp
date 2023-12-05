@@ -46,7 +46,7 @@ auto build_interval_maps() {
 			intervals[range.src] = range.dest;
 
 			// start of next range
-			auto const end = range.src + range.len;
+			auto const end = range.src + range.len - 1;
 			if (!intervals.contains(end))
 				intervals[end] = end;
 		}
@@ -61,10 +61,8 @@ auto build_interval_maps() {
 		auto const& map_below = interval_maps[i + 1];
 
 		for (auto const& [first, last] : map_below) {
-			if (!map.contains(first))
-				map[first] = lookup(map, first);
-			if (!map.contains(last - 1))
-				map[last - 1] = lookup(map, last - 1);
+			if (!map.contains(first)) map[first] = lookup(map, first);
+			if (!map.contains(last))  map[last]  = lookup(map, last);
 		}
 	}
 
