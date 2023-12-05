@@ -28,8 +28,8 @@ unsigned lookup(interval_map_t const& map, unsigned v) {
 
 unsigned lookup(interval_maps_t const& maps, unsigned const v) {
 	unsigned result = v;
-	for (size_t i = 0; i < maps.size(); i++) {
-		result = lookup(maps[i], result);
+	for (auto const&map : maps) {
+		result = lookup(map, result);
 	}
 	return result;
 }
@@ -42,9 +42,11 @@ auto build_interval_maps() {
 		auto& intervals = interval_maps[i];
 
 		for (range_t const& range : almanac.maps[i]) {
-			auto const end = range.src + range.len - 1;
-
+			// start of range
 			intervals[range.src] = range.dest;
+
+			// start of next range
+			auto const end = range.src + range.len;
 			if (!intervals.contains(end))
 				intervals[end] = end;
 		}
@@ -54,7 +56,7 @@ auto build_interval_maps() {
 	// map having ~2500 entries, but each additional entry corresponds to
 	// a change in a map below it. Instead of iterating millions of seeds,
 	// I can just check the positions in the interval map where something changes.
-	for (auto i = ptrdiff_t(almanac.maps.size()) - 2; i >= 0; i--) {
+	for (auto i = ptrdiff_t(interval_maps.size()) - 2; i >= 0; i--) {
 		auto& map = interval_maps[i];
 		auto const& map_below = interval_maps[i + 1];
 
