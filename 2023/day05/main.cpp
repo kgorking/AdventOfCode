@@ -56,6 +56,7 @@ auto build_interval_maps() {
 	// map having ~2500 entries, but each additional entry corresponds to
 	// a change in a map below it. Instead of iterating millions of seeds,
 	// I can just check the positions in the interval map where something changes.
+	// TODO fix merge, lookup is wrong?
 	for (auto i = ptrdiff_t(interval_maps.size()) - 2; i >= 0; i--) {
 		auto& map = interval_maps[i];
 		auto const& map_below = interval_maps[i + 1];
