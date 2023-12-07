@@ -78,8 +78,9 @@ int card_value(card c) {
 	}
 }
 
+// Compare strength of two hands
 template <bool P2>
-bool compare(hand_and_bid hb1, hand_and_bid hb2) {
+bool compare(hand_and_bid const& hb1, hand_and_bid const& hb2) {
 	// Compare strength if possible
 	int const str1 = P2 ? hb1.strength_p2 : hb1.strength_p1;
 	int const str2 = P2 ? hb2.strength_p2 : hb2.strength_p1;
@@ -95,6 +96,7 @@ bool compare(hand_and_bid hb1, hand_and_bid hb2) {
 	return card_value<P2>(hb1.hand[offset]) < card_value<P2>(hb2.hand[offset]);
 }
 
+// Solves the input. Order it by hand strength and then add up the winnings
 template <bool P2>
 int solve(auto& input) {
 	std::ranges::sort(input, compare<P2>);
@@ -105,10 +107,10 @@ int solve(auto& input) {
 
 int main() {
 	auto input = std::to_array<hand_and_bid>({
-#include "input.txt"
+		#include "input.txt"
 	});
 
-	// Pre-determine the types
+	// Pre-determine the types for faster sorting
 	for (hand_and_bid& hb : input) {
 		hb.strength_p1 = strength<false>(hb);
 		hb.strength_p2 = strength<true>(hb);
