@@ -14,9 +14,8 @@ std::pair<int, int> types(hand const& h) {
 	// Count the different cards and how many of them there are
 	int max_val = 0;
 	std::map<card, int> map;
-	for (card c : h) {
+	for (card c : h)
 		max_val = std::max(max_val, ++map[c]);
-	}
 
 	// Determine the type from the number of cards and their counts
 	// (The following lookups are a switch statement flattened into lookup tables)
