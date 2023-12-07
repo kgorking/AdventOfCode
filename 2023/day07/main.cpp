@@ -35,8 +35,8 @@ int strength(hand_and_bid const& hb) {
 	case 3:
 		// Two pair (3)
 		if (2 == *std::ranges::max_element(map | std::views::values)) {
-			// *AABB -> full house
-			// **AAB -> four of a kind
+			// *AABB -> full house (5)
+			// **AAB -> four of a kind (6)
 			return 3 + (jokers ? jokers + 1 : 0);
 		}
 
