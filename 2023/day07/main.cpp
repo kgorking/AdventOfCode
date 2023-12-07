@@ -6,11 +6,11 @@ using hand = std::basic_string_view<card>;
 struct hand_and_bid {
 	hand hand;
 	int bid;
-	int strength[2] = {0, 0};
+	int type[2] = {0, 0};
 };
 
-// Determine the strength of a hand, including with jokers
-std::pair<int, int> strengths(hand const& h) {
+// Determine the type of a hand, including with jokers
+std::pair<int, int> types(hand const& h) {
 	// Count the different cards and how many of them there are
 	int max_val = 0;
 	std::map<card, int> map;
@@ -44,9 +44,9 @@ int card_value(card c) {
 // Compare two hands
 template <bool P2>
 bool compare(hand_and_bid const& hb1, hand_and_bid const& hb2) {
-	// Compare strength if possible
-	if (hb1.strength[P2] != hb2.strength[P2])
-		return hb1.strength[P2] < hb2.strength[P2];
+	// Compare type if possible
+	if (hb1.type[P2] != hb2.type[P2])
+		return hb1.type[P2] < hb2.type[P2];
 
 	// Use the card values for comparison
 	auto const [it1, it2] = std::ranges::mismatch(hb1.hand, hb2.hand);
@@ -54,7 +54,7 @@ bool compare(hand_and_bid const& hb1, hand_and_bid const& hb2) {
 }
 
 // Solves the input.
-// Order it by hand strength and then add up the winnings
+// Order it by hand type and then add up the winnings
 template <bool P2>
 int solve(auto& input) {
 	std::ranges::sort(input, compare<P2>);
@@ -68,9 +68,9 @@ int main() {
 		#include "input.txt"
 	});
 
-	// Pre-determine the hand strengths for faster sorting
+	// Pre-determine the hand types for faster sorting
 	for (hand_and_bid& hb : input) {
-		std::tie(hb.strength[false], hb.strength[true]) = strengths(hb.hand);
+		std::tie(hb.type[false], hb.type[true]) = types(hb.hand);
 	}
 
 	std::cout << "Part 1: " << solve<false>(input) << '\n';
