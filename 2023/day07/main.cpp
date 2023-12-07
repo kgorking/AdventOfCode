@@ -9,7 +9,7 @@ struct hand_and_bid {
 	int type[2] = {0, 0};
 };
 
-// Determine the type of a hand, including with jokers
+// Determine the type of a hand, with- and without with jokers
 std::pair<int, int> types(hand const& h) {
 	// Count the different cards and how many of them there are
 	auto [histogram, max_val] = kg::histogram(h);
