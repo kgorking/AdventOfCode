@@ -77,7 +77,7 @@ int card_value(card c) {
 	}
 }
 
-// Compare strength of two hands
+// Compare two hands
 template <bool P2>
 bool compare(hand_and_bid const& hb1, hand_and_bid const& hb2) {
 	// Compare strength if possible
