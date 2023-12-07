@@ -40,8 +40,7 @@ int strength(hand_and_bid const& hb) {
 // Convert a card into a comparable value
 template <bool P2>
 int card_value(card c) {
-	auto const index = std::string_view{"123456789TJQKA"}.find_first_of(c);
-	return (P2 && index == 10) ? 0 : index;
+	return std::string_view{"J23456789TJQKA"}.find_first_of(c, !P2);
 }
 
 // Compare two hands
