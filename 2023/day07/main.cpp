@@ -70,7 +70,7 @@ int main() {
 		#include "input.txt"
 	});
 
-	// Pre-determine the types for faster sorting
+	// Pre-determine the hand strengths for faster sorting
 	for (hand_and_bid& hb : input) {
 		hb.strength[false] = strength<false>(hb);
 		hb.strength[true] = strength<true>(hb);
