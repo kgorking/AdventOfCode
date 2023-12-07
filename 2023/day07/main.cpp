@@ -70,7 +70,7 @@ int main() {
 
 	// Pre-determine the hand types for faster sorting
 	for (hand_and_bid& hb : input) {
-		std::tie(hb.type[false], hb.type[true]) = types(hb.hand);
+		std::tie(hb.type[0], hb.type[1]) = types(hb.hand);
 	}
 
 	std::cout << "Part 1: " << solve<false>(input) << '\n';
