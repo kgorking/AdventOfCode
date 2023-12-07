@@ -40,14 +40,8 @@ int strength(hand_and_bid const& hb) {
 // Convert a card into a comparable value
 template <bool P2>
 int card_value(card c) {
-	switch (c) {
-	case 'A': return 14;
-	case 'K': return 13;
-	case 'Q': return 12;
-	case 'J': return P2 ? 1 : 11;
-	case 'T': return 10;
-	default:  return c - '0';
-	}
+	auto const index = std::string_view{"123456789TJQKA"}.find_first_of(c);
+	return (P2 && index == 10) ? 0 : index;
 }
 
 // Compare two hands
