@@ -24,43 +24,43 @@ int strength(hand_and_bid const& hb) {
 
 	// Determine the type, and shift it if jokers are present
 	switch (map.size()) {
-	case 5: { // high card
-		// if one card is joker, it becomes a pair
+	case 5: { // high card (1)
+		// if one card is joker, it becomes a pair (2)
 		return 1 + jokers;
 	}
-	case 4: { // one pair
-		// JJXYZ -> three of a kind
-		// JXXYZ -> three of a kind
+	case 4: { // one pair (2)
+		// JJXYZ -> three of a kind (4)
+		// JXXYZ -> three of a kind (4)
 		return 2 + (jokers ? 2 : 0);
 	}
 	case 3: {
-		// two pair
+		// two pair (3)
 		if (2 == *std::ranges::max_element(map | std::views::values)) {
 			// JXXYY -> full house
 			// JJXXY -> four of a kind
 			return 3 + (jokers ? jokers + 1 : 0);
 		}
 
-		// three of a kind
-		// JJJXY -> four of a kind
-		// JXXXY -> four of a kind
+		// three of a kind (4)
+		// JJJXY -> four of a kind (6)
+		// JXXXY -> four of a kind (6)
 		return 4 + (jokers ? 2 : 0);
 	}
 	case 2: {
-		// full house
+		// full house (5)
 		if (3 == *std::ranges::max_element(map | std::views::values)) {
-			// JJJXX -> five of a kind
-			// JJXXX -> five of a kind
+			// JJJXX -> five of a kind (7)
+			// JJXXX -> five of a kind (7)
 			return 5 + (jokers ? 2 : 0);
 		}
 
-		// four of a kind
-		// JXXXX -> five of a kind
-		// JJJJX -> five of a kind
+		// four of a kind (6)
+		// JXXXX -> five of a kind (7)
+		// JJJJX -> five of a kind (7)
 		return 6 + (jokers ? 1 : 0);
 	}
 	default: // case 1:
-		// five of a kind
+		// five of a kind (7)
 		return 7;
 	}
 }
