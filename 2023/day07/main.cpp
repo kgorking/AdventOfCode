@@ -13,55 +13,28 @@ struct hand_and_bid {
 template <bool P2>
 int strength(hand_and_bid const& hb) {
 	// Count the different cards and how many of them there are
-	std::map<card, unsigned char> map;
+	int max_val = 0;
+	std::map<card, int> map;
 	for (card c : hb.hand) {
 		map[c] += 1;
+		max_val = std::max(max_val, map[c]);
 	}
 
-	// Count potential jokers for part 2
-	int const jokers = (P2 && map.contains('J')) ? map['J'] : 0;
+	// Determine the type from the number of cards and their counts
+	// (The following lookups are a switch statement flattened into lookup tables)
+	int const type_lookup[5] = {6, 5 - (3 == max_val), 3 - (2 == max_val), 1, 0};
+	int type = type_lookup[map.size() - 1];
 
-	// Determine the type, and shift it if jokers(*) are present
-	switch (map.size()) {
-	case 5:
-		// High card (1)
-		// *ABCD -> pair (2)
-		return 1 + (jokers ? 1 : 0);
-	case 4:
-		// One pair (2)
-		// **ABC -> three of a kind (4)
-		// *AABC -> three of a kind (4)
-		return 2 + (jokers ? 2 : 0);
-	case 3:
-		// Two pair (3)
-		if (2 == *std::ranges::max_element(map | std::views::values)) {
-			// *AABB -> full house (5)
-			// **AAB -> four of a kind (6)
-			return 3 + (jokers ? jokers + 1 : 0);
+	// Consider potential jokers for part 2
+	if constexpr (P2) {
+		int const num_jokers = map['J'];
+		if (num_jokers > 0) {
+			int const joker_offsets[7] = {1, 2, num_jokers + 1, 2, 2, 1, 0};
+			type += joker_offsets[type];
 		}
-
-		// Three of a kind (4)
-		// ***AB -> four of a kind (6)
-		// *AAAB -> four of a kind (6)
-		return 4 + (jokers ? 2 : 0);
-	case 2:
-		// Full house (5)
-		if (3 == *std::ranges::max_element(map | std::views::values)) {
-			// ***AA -> five of a kind (7)
-			// **AAA -> five of a kind (7)
-			return 5 + (jokers ? 2 : 0);
-		}
-
-		// Four of a kind (6)
-		// *AAAA -> five of a kind (7)
-		// ****A -> five of a kind (7)
-		return 6 + (jokers ? 1 : 0);
-	case 1:
-		// Five of a kind (7)
-		return 7;
 	}
 
-	std::unreachable();
+	return type;
 }
 
 // Convert a card into a comparable value
