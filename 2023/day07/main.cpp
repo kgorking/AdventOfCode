@@ -59,9 +59,9 @@ int strength(hand_and_bid const& hb) {
 	case 1:
 		// Five of a kind (7)
 		return 7;
-	default:
-		throw;
 	}
+
+	std::unreachable();
 }
 
 // Convert a card into a comparable value
