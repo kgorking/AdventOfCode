@@ -51,13 +51,9 @@ bool compare(hand_and_bid const& hb1, hand_and_bid const& hb2) {
 	if (hb1.strength[P2] != hb2.strength[P2])
 		return hb1.strength[P2] < hb2.strength[P2];
 
-	// Ignore identical cards
-	int offset = 0;
-	while (hb1.hand[offset] == hb2.hand[offset])
-		offset += 1;
-
 	// Use the card values for comparison
-	return card_value<P2>(hb1.hand[offset]) < card_value<P2>(hb2.hand[offset]);
+	auto const [it1, it2] = std::ranges::mismatch(hb1.hand, hb2.hand);
+	return card_value<P2>(*it1) < card_value<P2>(*it2);
 }
 
 // Solves the input.
