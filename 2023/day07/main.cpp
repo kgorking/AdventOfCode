@@ -9,13 +9,12 @@ struct hand_and_bid {
 	int strength[2] = {0, 0};
 };
 
-// Determine the strength of a hand. Considers jokers if P2 is true
-template <bool P2>
-int strength(hand_and_bid const& hb) {
+// Determine the strength of a hand, including with jokers
+std::pair<int, int> strengths(hand const& h) {
 	// Count the different cards and how many of them there are
 	int max_val = 0;
 	std::map<card, int> map;
-	for (card c : hb.hand) {
+	for (card c : h) {
 		map[c] += 1;
 		max_val = std::max(max_val, map[c]);
 	}
@@ -23,18 +22,17 @@ int strength(hand_and_bid const& hb) {
 	// Determine the type from the number of cards and their counts
 	// (The following lookups are a switch statement flattened into lookup tables)
 	int const type_lookup[5] = {6, 5 - (3 == max_val), 3 - (2 == max_val), 1, 0};
-	int type = type_lookup[map.size() - 1];
+	int const type_p1 = type_lookup[map.size() - 1];
 
 	// Consider potential jokers for part 2
-	if constexpr (P2) {
-		int const num_jokers = map['J'];
-		if (num_jokers > 0) {
-			int const joker_offsets[7] = {1, 2, num_jokers + 1, 2, 2, 1, 0};
-			type += joker_offsets[type];
-		}
+	int type_p2 = type_p1;
+	int const num_jokers = map['J'];
+	if (num_jokers > 0) {
+		int const joker_offsets[7] = {1, 2, num_jokers + 1, 2, 2, 1, 0};
+		type_p2 += joker_offsets[type_p1];
 	}
 
-	return type;
+	return {type_p1, type_p2};
 }
 
 // Convert a card into a comparable value
@@ -72,8 +70,7 @@ int main() {
 
 	// Pre-determine the hand strengths for faster sorting
 	for (hand_and_bid& hb : input) {
-		hb.strength[false] = strength<false>(hb);
-		hb.strength[true] = strength<true>(hb);
+		std::tie(hb.strength[false], hb.strength[true]) = strengths(hb.hand);
 	}
 
 	std::cout << "Part 1: " << solve<false>(input) << '\n';
