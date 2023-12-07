@@ -12,19 +12,16 @@ struct hand_and_bid {
 // Determine the type of a hand, including with jokers
 std::pair<int, int> types(hand const& h) {
 	// Count the different cards and how many of them there are
-	int max_val = 0;
-	std::map<card, int> map;
-	for (card c : h)
-		max_val = std::max(max_val, ++map[c]);
+	auto [histogram, max_val] = kg::histogram(h);
 
 	// Determine the type from the number of cards and their counts
 	// (The following lookups are a switch statement flattened into lookup tables)
 	int const type_lookup[5] = {6, 5 - (3 == max_val), 3 - (2 == max_val), 1, 0};
-	int const type_p1 = type_lookup[map.size() - 1];
+	int const type_p1 = type_lookup[histogram.size() - 1];
 
 	// Consider potential jokers for part 2
 	int type_p2 = type_p1;
-	int const num_jokers = map['J'];
+	int const num_jokers = histogram['J'];
 	if (num_jokers > 0) {
 		int const joker_offsets[7] = {1, 2, num_jokers + 1, 2, 2, 1, 0};
 		type_p2 += joker_offsets[type_p1];

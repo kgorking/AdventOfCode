@@ -18,6 +18,7 @@ target_sources(AdventOfCode
 		"aoc/aoc-bits.ixx"
 		"aoc/aoc-pos2d.ixx"
 		"aoc/aoc-matrix.ixx"
+		"aoc/aoc-numeric.ixx"
 		"aoc/aoc-graph.ixx"
 		"aoc/aoc-range.ixx"
 		"aoc/aoc-math.ixx"
