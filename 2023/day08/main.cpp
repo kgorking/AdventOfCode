@@ -24,7 +24,7 @@ auto solve(bool p2) {
 	auto start_nodes = input.nodes | std::views::keys | std::views::filter(is_start_node);
 
 	using namespace kg::short_hand;
-	auto lcm = [](auto... a) { return std::lcm(a...); };
+	auto lcm = std::lcm<std::size_t, std::size_t>;
 	return start_nodes * distance / lcm; // std::transform_reduce
 }
 
