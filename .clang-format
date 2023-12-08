@@ -1,6 +1,6 @@
 AccessModifierOffset: '-4'
 AllowShortFunctionsOnASingleLine: Empty
-AllowShortLambdasOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: All
 AlwaysBreakTemplateDeclarations: 'Yes'
 #AlignArrayOfStructures: Right
 #AlignTrailingComments: True

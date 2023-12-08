@@ -1,70 +1,35 @@
 ﻿import aoc;
 
-struct node {
-	std::string_view id;
-	std::string_view lr[2];
-};
+using node_map = std::map<std::string_view, std::array<std::string_view,2>>;
 
-template <int N>
 struct input_t {
 	std::string_view directions;
-	std::array<node, N> nodes;
+	node_map nodes;
 };
 
-// Pre-process the data. Convert from logN to constant lookups
-template <bool Part2>
-auto preprocess() {
-	#include "input.txt"
+#include "input.txt"
 
-	// Assign index to name
-	std::map<std::string_view, int> name_to_index;
-	for (int i = 0; i < input.nodes.size(); i++) {
-		auto const id = input.nodes[i].id;
-		// end-nodes have negative index
-		name_to_index[id] = (id.back() == 'Z') ? -i : +i;
-	}
-
-	// Find starting indicies
-	std::vector<short> start;
-	if constexpr (!Part2) {
-		start.push_back(name_to_index["AAA"]);
-	}
-
-	// Convert left/right names to indexes
-	std::array<short[2], input.nodes.size()> lr;
-	for (int i = 0; auto const& node : input.nodes) {
-		lr[i][0] = name_to_index[node.lr[0]];
-		lr[i][1] = name_to_index[node.lr[1]];
-		i += 1;
-
-		if constexpr (Part2) {
-			if (node.id.back() == 'A') {
-				start.push_back(name_to_index[node.id]);
-			}
-		}
-	}
-
-	return std::make_tuple(start, input.directions, lr);
-}
-
-auto solve(auto const& input) {
-	auto const& [starts, directions, lookup] = input;
-
-	auto distance = [&](short node) {
+auto solve(bool p2) {
+	auto distance = [&](std::string_view node) {
 		std::size_t steps = 0;
-		while (node >= 0) {
-			char const c = directions[steps];
-			node = lookup[node][c == 'R'];
+		while (node.back() != 'Z') {
+			char const c = input.directions[steps % input.directions.size()];
+			node = input.nodes.at(node)[c == 'R'];
 			steps += 1;
 		}
 		return steps;
 	};
 
+	auto is_start_node = [p2](auto n) { return (!p2) ? n == "AAA" : n.back() == 'A'; };
+	auto start_nodes = input.nodes 
+		| std::views::keys
+		| std::views::filter(is_start_node);
+
 	auto const lcm = [](auto... a) { return std::lcm(a...); };
-	return std::transform_reduce(starts.begin(), starts.end(), std::size_t{1}, lcm, distance);
+	return std::transform_reduce(start_nodes.begin(), start_nodes.end(), std::size_t{1}, lcm, distance);
 }
 
 int main() {
-	std::cout << "Part 1: " << solve(preprocess<false>()) << '\n';
-	std::cout << "Part 2: " << solve(preprocess<true>()) << '\n';
+	std::cout << "Part 1: " << solve(false) << '\n';
+	std::cout << "Part 2: " << solve(true) << '\n';
 }
