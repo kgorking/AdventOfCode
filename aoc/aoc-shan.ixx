@@ -1,16 +1,17 @@
 export module aoc:shan;
 import std;
 
+// short-hand algorithm notation
+
 export namespace kg::short_hand {
 
-auto operator*(std::ranges::input_range auto const& l, auto&& fn) {
+auto operator*(std::ranges::input_range auto l, auto&& fn) {
 	return std::views::transform(l, fn);
 }
 
-auto operator+(std::ranges::input_range auto const& l, auto init) {
-	return std::accumulate(l.begin(), l.begin(), init);
+auto operator/(std::ranges::view auto l, auto&& fn) {
+	auto init = *l.begin();
+	return std::reduce(std::next(l.begin()), l.end(), init, fn);
 }
 
-// operator *
-// operator +
 } // namespace kg::short_hand

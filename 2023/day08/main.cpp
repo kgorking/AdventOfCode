@@ -23,8 +23,9 @@ auto solve(bool p2) {
 	auto is_start_node = [p2](auto n) { return (!p2) ? n == "AAA" : n.back() == 'A'; };
 	auto start_nodes = input.nodes | std::views::keys | std::views::filter(is_start_node);
 
-	auto const lcm = [](auto... a) { return std::lcm(a...); };
-	return std::transform_reduce(start_nodes.begin(), start_nodes.end(), std::size_t{1}, lcm, distance);
+	using namespace kg::short_hand;
+	auto lcm = [](auto... a) { return std::lcm(a...); };
+	return start_nodes * distance / lcm; // std::transform_reduce
 }
 
 int main() {
