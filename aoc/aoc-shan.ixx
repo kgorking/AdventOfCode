@@ -1,13 +1,10 @@
 export module aoc:shan;
+import std;
 
 // TODO
 export
-namespace kg {
-auto L(auto& fn) {
-	return [&](auto... args) {
-		return fn(args...);
-	};
-}
+namespace kg::short_hand {
+
 // operator *
 // operator +
 }

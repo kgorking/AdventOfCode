@@ -50,18 +50,18 @@ auto preprocess() {
 auto solve(auto const& input) {
 	auto const& [starts, directions, lookup] = input;
 
-	auto find_node_length = [&](short node) {
+	auto distance = [&](short node) {
 		std::size_t steps = 0;
 		while (node >= 0) {
-			char const c = directions[steps % directions.size()];
+			char const c = directions[steps];
 			node = lookup[node][c == 'R'];
 			steps += 1;
 		}
 		return steps;
 	};
 
-	auto const lcm = kg::L(std::lcm<std::size_t,std::size_t>);
-	return std::transform_reduce(starts.begin(), starts.end(), std::size_t{1}, lcm, find_node_length);
+	auto const lcm = [](auto... a) { return std::lcm(a...); };
+	return std::transform_reduce(starts.begin(), starts.end(), std::size_t{1}, lcm, distance);
 }
 
 int main() {
