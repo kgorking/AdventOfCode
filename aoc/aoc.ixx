@@ -10,6 +10,7 @@ export import :matrix;
 export import :numeric;
 export import :pos2d;
 export import :range;
+export import :shan;
 //export import :tls_split;
 
 #include "min_spanning_tree.h"
