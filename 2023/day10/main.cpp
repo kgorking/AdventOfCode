@@ -30,8 +30,7 @@ pos2d advance_position(pos2d p, dir d) {
 }
 
 dir dir_from_tile(pos2d p, dir prev_dir) {
-	char const tile = input[p.y][p.x];
-	switch (tile) {
+	switch (input[p.y][p.x]) {
 	case '|': return (prev_dir == down) ? down : up;
 	case '-': return (prev_dir == right) ? right : left;
 	case 'L': return (prev_dir == down) ? right : up;
