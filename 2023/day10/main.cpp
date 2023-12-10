@@ -53,11 +53,10 @@ dir dir_from_tile(pos2d p, dir prev_dir) {
 }
 
 auto solve() {
+	int area = 0;
+	int pos_count = 0;
 	pos2d pos = find_start_position(), last_pos = pos;
 	dir next_dir = dir_from_tile(pos, none);
-
-	int pos_count = 0;
-	int area = 0;
 
 	do {
 		pos = advance_position(pos, next_dir);
