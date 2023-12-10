@@ -39,13 +39,13 @@ dir dir_from_tile(pos2d p, dir prev_dir) {
 	case '7': return (prev_dir == up) ? left : down;
 	case 'F': return (prev_dir == up) ? right : down;
 	case 'S':
-		if (p.y - 1 > 0 && "|7F"sv.contains(input[p.y - 1][p.x]) && prev_dir != up) 
+		if (p.y - 1 > 0 && "|7F"sv.contains(input[p.y - 1][p.x])) 
 			return up;
-		if (p.x + 1 < input.size() && "|JL"sv.contains(input[p.y + 1][p.x]) && prev_dir != down)
+		if (p.x + 1 < input.size() && "|JL"sv.contains(input[p.y + 1][p.x]))
 			return down;
-		if (p.x - 1 > 0 && "-FL"sv.contains(input[p.y][p.x - 1]) && prev_dir != left)
+		if (p.x - 1 > 0 && "-FL"sv.contains(input[p.y][p.x - 1]))
 			return left;
-		if (p.x + 1 < input[0].size() && "-J7"sv.contains(input[p.y][p.x + 1]) && prev_dir != right)
+		if (p.x + 1 < input[0].size() && "-J7"sv.contains(input[p.y][p.x + 1]))
 			return right;
 	default:
 		throw;
