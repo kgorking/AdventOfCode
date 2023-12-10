@@ -25,7 +25,7 @@ bool is_start_position(pos2d p) {
 }
 
 pos2d advance_position(pos2d p, dir d) {
-	pos2d const offsets[] = {{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}};
+	constexpr pos2d offsets[] = {{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}};
 	return p + offsets[d];
 }
 
@@ -53,13 +53,12 @@ dir dir_from_tile(pos2d p, dir prev_dir) {
 }
 
 auto solve() {
-	pos2d pos = find_start_position();
+	pos2d pos = find_start_position(), last_pos = pos;
 	dir next_dir = dir_from_tile(pos, none);
 
-	pos2d last_pos = pos;
 	int pos_count = 0;
-
 	int area = 0;
+
 	do {
 		pos = advance_position(pos, next_dir);
 		next_dir = dir_from_tile(pos, next_dir);
@@ -70,9 +69,7 @@ auto solve() {
 
 	area = std::abs(area) / 2;
 	auto const max_dist = pos_count / 2;
-
-	// Pick's theorem
-	return std::make_pair(max_dist, area - max_dist + 1);
+	return std::make_pair(max_dist, area - max_dist + 1); // Pick's theorem, good shit
 }
 
 int main() {
