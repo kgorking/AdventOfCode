@@ -20,10 +20,6 @@ pos2d find_start_position() {
 	return {x, y};
 }
 
-bool is_start_position(pos2d p) {
-	return 'S' == input[p.y][p.x];
-}
-
 pos2d advance_position(pos2d p, dir d) {
 	constexpr pos2d offsets[] = {{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}};
 	return p + offsets[d];
@@ -63,7 +59,7 @@ auto solve() {
 		area += (last_pos.x + pos.x) * (last_pos.y - pos.y);
 		last_pos = pos;
 		pos_count += 1;
-	} while (!is_start_position(pos));
+	} while ('S' != input[pos.y][pos.x]);
 
 	area = std::abs(area) / 2;
 	auto const max_dist = pos_count / 2;
