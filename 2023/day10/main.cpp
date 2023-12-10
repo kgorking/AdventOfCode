@@ -56,21 +56,20 @@ auto solve() {
 	pos2d pos = find_start_position();
 	dir next_dir = dir_from_tile(pos, none);
 
-	std::vector<pos2d> verts;
-	verts.push_back(pos);
+	pos2d last_pos = pos;
+	int pos_count = 0;
 
 	int area = 0;
 	do {
 		pos = advance_position(pos, next_dir);
 		next_dir = dir_from_tile(pos, next_dir);
-
-		area += (verts.back().x + pos.x) * (verts.back().y - pos.y);
-
-		verts.push_back(pos);
+		area += (last_pos.x + pos.x) * (last_pos.y - pos.y);
+		last_pos = pos;
+		pos_count += 1;
 	} while (!is_start_position(pos));
 
 	area = std::abs(area) / 2;
-	auto const max_dist = std::ssize(verts) / 2;
+	auto const max_dist = pos_count / 2;
 
 	// Pick's theorem
 	return std::make_pair(max_dist, area - max_dist + 1);
