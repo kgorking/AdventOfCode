@@ -1,6 +1,6 @@
 ﻿import aoc;
 
-constexpr auto input = std::to_array<std::string_view>({
+auto input = std::to_array<std::string_view>({
 #include "input.txt"
 });
 
@@ -63,49 +63,33 @@ dir dir_from_tile(pos2d p, dir prev_dir) {
 }
 
 int test1() {
-	pos2d pos1 = find_start_position();
-	pos2d pos2 = pos1;
-	dir next_dir1 = dir_from_tile(pos1, none);
-	dir next_dir2 = dir_from_tile(pos2, next_dir1);
+	pos2d pos = find_start_position();
+	dir next_dir = dir_from_tile(pos, none);
 
-	std::vector<pos2d> path_a, path_b;
+	int counter = 0;
 
 	do {
-		//std::cout << "*^v<>"[next_dir1];
-		path_a.push_back(pos1);
-		path_b.push_back(pos2);
+		counter++;
+		pos = advance_position(pos, next_dir);
+		next_dir = dir_from_tile(pos, next_dir);
+	} while (!is_start_position(pos));
 
-		pos1 = advance_position(pos1, next_dir1);
-		pos2 = advance_position(pos2, next_dir2);
-		next_dir1 = dir_from_tile(pos1, next_dir1);
-		next_dir2 = dir_from_tile(pos2, next_dir2);
-	} while (!is_start_position(pos1));
-
-	auto it = std::ranges::mismatch(path_a, path_b | std::views::reverse);
-	return path_a.size() / 2;
+	return counter / 2;
 }
 
 int test2() {
-	pos2d pos1 = find_start_position();
-	pos2d pos2 = pos1;
-	dir next_dir1 = dir_from_tile(pos1, none);
-	dir next_dir2 = dir_from_tile(pos2, next_dir1);
+	pos2d pos = find_start_position();
+	dir next_dir = dir_from_tile(pos, none);
 
-	std::vector<pos2d> path_a, path_b;
+	int counter = 0;
 
 	do {
-		//std::cout << "*^v<>"[next_dir1];
-		path_a.push_back(pos1);
-		path_b.push_back(pos2);
+		//input[pos.y][pos.x] = counter++;
+		pos = advance_position(pos, next_dir);
+		next_dir = dir_from_tile(pos, next_dir);
+	} while (!is_start_position(pos));
 
-		pos1 = advance_position(pos1, next_dir1);
-		pos2 = advance_position(pos2, next_dir2);
-		next_dir1 = dir_from_tile(pos1, next_dir1);
-		next_dir2 = dir_from_tile(pos2, next_dir2);
-	} while (!is_start_position(pos1));
-
-	auto it = std::ranges::mismatch(path_a, path_b | std::views::reverse);
-	return path_a.size() / 2;
+	return counter / 2;
 }
 
 int part1() {
