@@ -5,7 +5,7 @@ import std;
 
 export namespace kg::short_hand {
 
-auto operator*(std::ranges::input_range auto l, auto&& fn) {
+auto operator*(std::ranges::range auto l, auto&& fn) {
 	return std::views::transform(l, fn);
 }
 
