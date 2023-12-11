@@ -39,3 +39,15 @@ auto solve(auto const& input, i64 expansion) {
 
 	return sum_shortest_path;
 }
+
+constexpr auto part1(auto const& input) {
+	return solve(input, 2);
+}
+
+constexpr auto part2(auto const& input) {
+	return solve(input, 1'000'000);
+}
+
+constexpr auto solve(auto const& input) {
+	return std::make_pair(part1(input), part2(input));
+}
