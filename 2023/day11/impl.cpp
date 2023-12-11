@@ -5,13 +5,13 @@ using pos2d = kg::pos2d<i64>;
 constexpr auto expected_sample() { return std::make_tuple(374, 1030, 8410); }
 constexpr auto expected_input() { return std::make_pair(10885634, 707505470642); }
 
-auto solve(auto const& input, i64 expansion) {
+constexpr auto solve(auto const& input, i64 expansion) {
 	// Initialize vectors to the expansion factor
 	std::vector<i64> actual_x(input[0].size(), expansion);
 	std::vector<i64> actual_y(input.size(), expansion);
 
-	// Find galaxies. 
-	// Set entries in actual_y/actual_x to one where galaxies are found
+	// Find galaxies.
+	// Set entries in actual_y/actual_x to '1' where galaxies are found
 	std::vector<pos2d> galaxies;
 	for (i64 y = 0; y < input.size(); y += 1) {
 		for (auto x = input[y].find('#'); x != input[y].npos; x = input[y].find('#', x + 1)) {
