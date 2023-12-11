@@ -1,5 +1,8 @@
 ﻿import aoc;
 
+constexpr auto expected_sample() { return std::make_pair(70, 8); }
+constexpr auto expected_input() { return std::make_pair(6714, 429); }
+
 using namespace std::string_view_literals;
 using pos2d = kg::pos2d<>;
 
@@ -60,4 +63,12 @@ auto solve(auto const& input) {
 	area = std::abs(area) / 2;
 	auto const max_dist = pos_count / 2;
 	return std::make_pair(max_dist, area - max_dist + 1); // Pick's theorem, good shit
+}
+
+constexpr auto part1(auto const& input) {
+	return solve(input).first;
+}
+
+constexpr auto part2(auto const& input) {
+	return solve(input).second;
 }
