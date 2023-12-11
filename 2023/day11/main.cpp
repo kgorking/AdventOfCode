@@ -23,24 +23,28 @@ TEST_CASE("validate") {
 
 	SECTION("sample input for part 1 & 2") {
 		auto const [p1, p2] = solve(sample_input);
-		REQUIRE(p1 == 0);
-		REQUIRE(p2 == 0);
+		auto const [e1, e2] = expected_sample();
+		REQUIRE(p1 == e1);
+		REQUIRE(p2 == e2);
 	}
 
 	SECTION("actual input") {
-		auto const [p1, p2] = solve(input);
+		using result_t = decltype(solve(input));
+		result_t result;
+		#ifdef _DEBUG
+			result = solve(std::move(input));
+		#else
+			BENCHMARK("Part 1+2") {
+				result = solve(std::move(input));
+				return result;
+			};
+		#endif
+		auto const [p1, p2] = result;
 		std::cout << "Part 1: " << p1 << '\n';
 		std::cout << "Part 2: " << p2 << '\n';
-		REQUIRE(p1 == 0);
-		REQUIRE(p2 == 0);
+
+		auto const [e1, e2] = expected_input();
+		REQUIRE(p1 == e1);
+		REQUIRE(p2 == e2);
 	}
-}
-
-TEST_CASE("benchmark") {
-	auto input = get_input();
-
-	BENCHMARK("Part 1+2") {
-		auto const [p1, p2] = solve(std::move(input));
-		return p1 | p2;
-	};
 }

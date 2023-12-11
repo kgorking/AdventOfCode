@@ -1,4 +1,4 @@
-export module aoc : pos2d;
+﻿export module aoc : pos2d;
 import std;
 
 export namespace kg {
@@ -21,6 +21,12 @@ struct pos2d {
 		x += b * ((dx > 0) - (dx < 0));
 		y += b * ((dy > 0) - (dy < 0));
 		return b;
+	}
+
+	// Move this point towards 'p', only moving along one axis at the time.
+	// Returns number of steps taken
+	[[nodiscard]] constexpr int steps_to(pos2d const p) {
+		return std::abs(x - p.x) + std::abs(y - p.y);
 	}
 
 	auto operator<=>(pos2d const&) const noexcept = default;
