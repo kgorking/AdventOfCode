@@ -1,16 +1,11 @@
 ﻿import aoc;
 
-// using history = std::array<std::int64_t, 6>;
-using history = std::array<std::int64_t, 21>;
-
-constexpr auto dataset = std::to_array<history>({
-#include "input.txt"
-});
-
-auto solve() {
+auto solve(auto const& input) {
 	std::int64_t total_history[2] = {0, 0};
 
-	for (history const& h : dataset) {
+	using history = decltype(input[0]);
+
+	for (history const& h : input) {
 		auto values = h;
 		auto vbegin = values.begin();
 		auto front_history = history{h.front()};
@@ -37,8 +32,26 @@ auto solve() {
 	return std::make_pair(total_history[0], total_history[1]);
 }
 
-int main() {
-	auto const [p1, p2] = solve();
-	std::cout << "Part 1: " << p1 << '\n';
-	std::cout << "Part 2: " << p2 << '\n';
+constexpr auto part1(auto const& input) {
+	return solve(input).first;
 }
+
+constexpr auto part2(auto const& input) {
+	return solve(input).second;
+}
+
+constexpr auto expected_sample() { return std::make_pair(114, 2); }
+constexpr auto expected_input() { return std::make_pair(1696140818, 1152); }
+
+constexpr auto get_sample_input() {
+	return std::to_array<std::array<std::int64_t, 6>>({
+		#include "sample_input.txt"
+	});
+}
+
+constexpr auto get_actual_input() {
+	return std::to_array<std::array<std::int64_t, 21>>({
+		#include "input.txt"
+	});
+}
+

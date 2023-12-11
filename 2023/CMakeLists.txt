@@ -7,10 +7,7 @@ macro(add_day)
 	add_test(${ARGV0} ${ARGV0})
 
 	target_compile_options(${ARGV0} PRIVATE /EHsc /nologo /experimental:module /reference std=CMakeFiles\\AdventOfCode.dir\\std.ifc)
-	target_compile_definitions(${ARGV0} PRIVATE
-		AOC_IMPL_H="./${ARGV0}/impl.cpp"
-		AOC_SAMPLE_INPUT="./${ARGV0}/sample_input.txt"
-		AOC_INPUT="./${ARGV0}/input.txt")
+	target_compile_definitions(${ARGV0} PRIVATE AOC_IMPL_H="./${ARGV0}/impl.cpp")
 	target_link_libraries(${ARGV0} PRIVATE AdventOfCode Catch2::Catch2WithMain)
 endmacro()
 
@@ -22,8 +19,8 @@ add_subdirectory ("day04")
 add_subdirectory ("day05")
 add_subdirectory ("day06")
 add_subdirectory ("day07")
-add_subdirectory ("day08")
-add_subdirectory ("day09")
+add_day ("day08")
+add_day ("day09")
 add_day ("day10")
 add_day ("day11")
 add_day ("day12")

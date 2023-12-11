@@ -37,7 +37,7 @@ target_sources(AdventOfCode
 		"aoc/aoc-math.ixx"
 		"aoc/aoc-tlssplit.ixx"
 		"aoc/aoc-async.ixx"
-		"aoc/aoc-array.ixx" "aoc/aoc-shan.ixx")
+		"aoc/aoc-array.ixx" )
 
 
 # Include sub-projects.

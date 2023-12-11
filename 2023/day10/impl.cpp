@@ -5,8 +5,19 @@ constexpr auto expected_input() { return std::make_pair(6714, 429); }
 
 using namespace std::string_view_literals;
 using pos2d = kg::pos2d<>;
-
 enum dir { none, up, down, left, right };
+
+constexpr auto get_sample_input() {
+	return std::to_array<std::string_view>({
+		#include "sample_input.txt"
+	});
+}
+
+constexpr auto get_actual_input() {
+	return std::to_array<std::string_view>({
+		#include "input.txt"
+	});
+}
 
 pos2d find_start_position(auto const& input) {
 	int x = 0, y = 0;
