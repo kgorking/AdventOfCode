@@ -44,9 +44,9 @@ TEST_CASE("validate input for part 1 & 2") {
 
 #ifdef NDEBUG
 TEST_CASE("Benchmark") {
-	auto const input = get_input();
 	BENCHMARK("Benchmark") {
-		return part2(input);
+		auto constexpr input = get_input();
+		return solve(input);
 	};
 }
 #endif

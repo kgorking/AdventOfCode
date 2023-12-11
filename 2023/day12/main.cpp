@@ -40,9 +40,9 @@ TEST_CASE("Validate") {
 
 #ifdef NDEBUG
 TEST_CASE("Benchmark") {
-	auto constexpr input = get_input();
 	BENCHMARK("Benchmark") {
-		return part2(input);
+		auto constexpr input = get_input();
+		return solve(input);
 	};
 }
 #endif
