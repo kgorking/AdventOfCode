@@ -22,25 +22,20 @@ TEST_CASE("validate") {
 	auto const sample_input = get_sample_input();
 
 	SECTION("sample input for part 1 & 2") {
-		auto const [p1, p2] = solve(sample_input);
-		REQUIRE(p1 == 0);
-		REQUIRE(p2 == 0);
+		auto const result = solve(sample_input);
+		REQUIRE(result == expected_sample());
 	}
 
 	SECTION("actual input") {
-		auto const [p1, p2] = solve(input);
+		using result_t = decltype(solve(input));
+		result_t result;
+		BENCHMARK("Part 1+2") {
+			result = solve(std::move(input));
+			return result;
+		};
+		auto const [p1, p2] = result;
 		std::cout << "Part 1: " << p1 << '\n';
 		std::cout << "Part 2: " << p2 << '\n';
-		REQUIRE(p1 == 0);
-		REQUIRE(p2 == 0);
+		REQUIRE(result == expected_input());
 	}
-}
-
-TEST_CASE("benchmark") {
-	auto input = get_input();
-
-	BENCHMARK("Part 1+2") {
-		auto const [p1, p2] = solve(std::move(input));
-		return p1 | p2;
-	};
 }

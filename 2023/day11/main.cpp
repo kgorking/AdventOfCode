@@ -17,34 +17,34 @@ constexpr auto get_input() {
 
 #include "impl.cpp"
 
-TEST_CASE("validate") {
+TEST_CASE("validate input for part 1 & 2") {
 	auto const input = get_input();
 	auto const sample_input = get_sample_input();
 
-	SECTION("sample input for part 1 & 2") {
-		auto const [p1, p2] = solve(sample_input);
-		auto const [e1, e2] = expected_sample();
-		REQUIRE(p1 == e1);
-		REQUIRE(p2 == e2);
-	}
+	auto const sample_1 = solve(sample_input, 1);
+	auto const sample_2 = solve(sample_input, 10);
+	auto const sample_3 = solve(sample_input, 100);
+	auto const [expected_1, expected_2, expected_3] = expected_sample();
+	CHECK(expected_1 == sample_1);
+	CHECK(expected_2 == sample_2);
+	REQUIRE(expected_3 == sample_3);
 
 	SECTION("actual input") {
-		using result_t = decltype(solve(input));
-		result_t result;
+		auto const part_1 = solve(std::move(input), 1);
+		auto part_2 = part_1;
 		#ifdef _DEBUG
-			result = solve(std::move(input));
+			part_2 = solve(std::move(input), 1'000'000);
 		#else
-			BENCHMARK("Part 1+2") {
-				result = solve(std::move(input));
+			BENCHMARK("Part 2") {
+				part_2 = solve(std::move(input), 1'000'000);
 				return result;
 			};
 		#endif
-		auto const [p1, p2] = result;
-		std::cout << "Part 1: " << p1 << '\n';
-		std::cout << "Part 2: " << p2 << '\n';
+		std::cout << "Part 1: " << part_1 << '\n';
+		std::cout << "Part 2: " << part_2 << '\n';
 
-		auto const [e1, e2] = expected_input();
-		REQUIRE(p1 == e1);
-		REQUIRE(p2 == e2);
+		auto const [expected_part_1, expected_part_2] = expected_input();
+		REQUIRE(expected_part_1 == part_1);
+		REQUIRE(expected_part_2 == part_2);
 	}
 }

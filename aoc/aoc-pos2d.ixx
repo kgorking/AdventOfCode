@@ -11,6 +11,10 @@ struct pos2d {
 		return {x + p.x, y + p.y};
 	}
 
+	[[nodiscard]] constexpr pos2d operator*(T t) const {
+		return {x * t, y * t};
+	}
+
 	// Move this point towards 'p'
 	[[nodiscard]] constexpr bool follow(pos2d const p) {
 		int const dx = (p.x - x);
@@ -23,9 +27,8 @@ struct pos2d {
 		return b;
 	}
 
-	// Move this point towards 'p', only moving along one axis at the time.
-	// Returns number of steps taken
-	[[nodiscard]] constexpr int steps_to(pos2d const p) {
+	// Returns number of steps it takes to move to `p`
+	[[nodiscard]] constexpr int steps_to(pos2d const p) const {
 		return std::abs(x - p.x) + std::abs(y - p.y);
 	}
 
