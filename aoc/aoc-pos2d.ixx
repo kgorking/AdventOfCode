@@ -29,7 +29,8 @@ struct pos2d {
 
 	// Returns number of steps it takes to move to `p`
 	[[nodiscard]] constexpr int steps_to(pos2d const p) const {
-		return std::abs(x - p.x) + std::abs(y - p.y);
+		auto abs = [](auto v) { return (v < 0) ? -v : +v; };
+		return abs(x - p.x) + abs(y - p.y);
 	}
 
 	auto operator<=>(pos2d const&) const noexcept = default;
