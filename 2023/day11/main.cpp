@@ -3,50 +3,42 @@
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-constexpr auto get_sample_input() {
-	return std::to_array<std::string_view>({
-#include "sample_input.txt"
-	});
-}
-
-constexpr auto get_input() {
-	return std::to_array<std::string_view>({
-#include "input.txt"
-	});
-}
-
 #include "impl.cpp"
 
-TEST_CASE("validate input for part 1 & 2") {
+constexpr auto sample_input = std::to_array<std::string_view>({
+	#include "sample_input.txt"
+});
 
-	SECTION("sample input for part 1 & 2") {
-		auto const sample_input = get_sample_input();
-		auto const sample_1 = solve(sample_input, 2);
-		auto const sample_2 = solve(sample_input, 10);
-		auto const sample_3 = solve(sample_input, 100);
-		auto const [expected_1, expected_2, expected_3] = expected_sample();
-		CHECK(expected_1 == sample_1);
-		CHECK(expected_2 == sample_2);
-		REQUIRE(expected_3 == sample_3);
-	}
+constexpr auto actual_input = std::to_array<std::string_view>({
+	#include "input.txt"
+});
 
-	SECTION("actual input") {
-		auto const input = get_input();
-		auto const [part_1, part_2] = solve(input);
+TEST_CASE("Sample input") {
+	auto const [sample_1, sample_2] = solve(sample_input);
+	std::cout << std::format("\nSample Part 1: {}\nSample Part 2: {}\n", sample_1, sample_2);
 
-		std::cout << std::format("\nPart 1: {}\nPart 2: {}\n", part_1, part_2);
-
-		auto const [expected_part_1, expected_part_2] = expected_input();
-		REQUIRE(expected_part_1 == part_1);
-		REQUIRE(expected_part_2 == part_2);
-	}
+	auto const [expected_1, expected_2] = expected_sample();
+	CHECK  (expected_1 == sample_1);
+	REQUIRE(expected_2 == sample_2);
 }
 
-#ifdef NDEBUG
+TEST_CASE("Actual input") {
+	auto const [part_1, part_2] = solve(actual_input);
+	std::cout << std::format("\nPart 1: {}\nPart 2: {}\n", part_1, part_2);
+
+	auto const [expected_part_1, expected_part_2] = expected_input();
+	CHECK  (expected_part_1 == part_1);
+	REQUIRE(expected_part_2 == part_2);
+}
+
 TEST_CASE("Benchmark") {
-	BENCHMARK("Benchmark") {
-		const auto input = get_input();
-		return solve(input);
+	BENCHMARK("Part 1") {
+		return part1(actual_input);
+	};
+	BENCHMARK("Part 2") {
+		return part2(actual_input);
+	};
+	BENCHMARK("All") {
+		return solve(actual_input);
 	};
 }
-#endif

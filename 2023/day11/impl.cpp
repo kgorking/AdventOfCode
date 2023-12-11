@@ -2,7 +2,7 @@ import aoc;
 using i64 = std::int64_t;
 using pos2d = kg::pos2d<i64>;
 
-constexpr auto expected_sample() { return std::make_tuple(374, 1030, 8410); }
+constexpr auto expected_sample() { return std::make_pair(374, 82000210); }
 constexpr auto expected_input() { return std::make_pair(10885634, 707505470642); }
 
 constexpr auto solve(auto const& input, i64 expansion) {
