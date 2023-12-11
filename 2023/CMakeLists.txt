@@ -2,6 +2,19 @@
 
 project (AoC_2023 CXX)
 
+macro(add_day)
+	add_executable (${ARGV0} "main.cpp")
+	add_test(${ARGV0} ${ARGV0})
+
+	target_compile_options(${ARGV0} PRIVATE /EHsc /nologo /experimental:module /reference std=CMakeFiles\\AdventOfCode.dir\\std.ifc)
+	target_compile_definitions(${ARGV0} PRIVATE
+		AOC_IMPL_H="./${ARGV0}/impl.cpp"
+		AOC_SAMPLE_INPUT="./${ARGV0}/sample_input.txt"
+		AOC_INPUT="./${ARGV0}/input.txt")
+	target_link_libraries(${ARGV0} PRIVATE AdventOfCode Catch2::Catch2WithMain)
+endmacro()
+
+
 add_subdirectory ("day01")
 add_subdirectory ("day02")
 add_subdirectory ("day03")
@@ -12,8 +25,9 @@ add_subdirectory ("day07")
 add_subdirectory ("day08")
 add_subdirectory ("day09")
 add_subdirectory ("day10")
-add_subdirectory ("day11")
-add_subdirectory ("day12")
+#add_subdirectory ("day11")
+add_day(day11)
+add_day(day12)
 add_subdirectory ("day13")
 add_subdirectory ("day14")
 add_subdirectory ("day15")

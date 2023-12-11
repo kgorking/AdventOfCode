@@ -1,16 +1,16 @@
 ﻿import aoc;
-#include "../../aoc/catch2_macro_guards.h"
+#include "../aoc/catch2_macro_guards.h"
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include "impl.cpp"
+#include AOC_IMPL_H
 
 constexpr auto sample_input = std::to_array<std::string_view>({
-	#include "sample_input.txt"
+	#include AOC_SAMPLE_INPUT
 });
 
 constexpr auto actual_input = std::to_array<std::string_view>({
-	#include "input.txt"
+	#include AOC_INPUT
 });
 
 TEST_CASE("Sample input") {
