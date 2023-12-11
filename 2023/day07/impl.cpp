@@ -51,23 +51,46 @@ bool compare(hand_and_bid const& hb1, hand_and_bid const& hb2) {
 // Solves the input.
 // Order it by hand type and then add up the winnings
 template <bool P2>
-int solve(auto& input) {
+int solve_part(auto& input) {
 	std::ranges::sort(input, compare<P2>);
-	return std::transform_reduce(input.begin(), input.end(), 0, std::plus<>{}, [rank = 1](hand_and_bid const& hb) mutable {
-		return hb.bid * rank++;
-	});
+	return std::transform_reduce(input.begin(), input.end(), 0, std::plus<>{},
+								 [rank = 1](hand_and_bid const& hb) mutable { return hb.bid * rank++; });
 }
 
-int main() {
-	auto input = std::to_array<hand_and_bid>({
-		#include "input.txt"
-	});
+auto part1(auto&& input) {
+	return solve_part<false>(input);
+}
+auto part2(auto&& input) {
+	return solve_part<true>(input);
+}
 
-	// Pre-determine the hand types for faster sorting
+auto solve(auto&& input) {
+	return std::make_pair(part1(input), part2(input));
+}
+
+auto get_sample_input() {
+	auto input = std::to_array<hand_and_bid>({
+#include "sample_input.txt"
+	});
 	for (hand_and_bid& hb : input) {
 		std::tie(hb.type[0], hb.type[1]) = types(hb.hand);
 	}
+	return input;
+}
 
-	std::cout << "Part 1: " << solve<false>(input) << '\n';
-	std::cout << "Part 2: " << solve<true>(input) << '\n';
+auto get_actual_input() {
+	auto input = std::to_array<hand_and_bid>({
+#include "input.txt"
+	});
+	for (hand_and_bid& hb : input) {
+		std::tie(hb.type[0], hb.type[1]) = types(hb.hand);
+	}
+	return input;
+}
+
+constexpr auto expected_sample() {
+	return std::make_pair(6440, 5905);
+}
+constexpr auto expected_input() {
+	return std::make_pair(253910319, 254083736);
 }
