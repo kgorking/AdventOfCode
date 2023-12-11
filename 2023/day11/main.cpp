@@ -21,7 +21,7 @@ TEST_CASE("validate input for part 1 & 2") {
 	auto const input = get_input();
 	auto const sample_input = get_sample_input();
 
-	auto const sample_1 = solve(sample_input, 1);
+	auto const sample_1 = solve(sample_input, 2);
 	auto const sample_2 = solve(sample_input, 10);
 	auto const sample_3 = solve(sample_input, 100);
 	auto const [expected_1, expected_2, expected_3] = expected_sample();
