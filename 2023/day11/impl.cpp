@@ -9,8 +9,8 @@ auto solve(auto const& input, i64 scale) {
 	std::vector<i64> x_offset(input[0].size(), 1);
 	std::vector<i64> y_offset(input.size(), 1);
 
-	// Find galaxies. Set entries in y_offset/x_offset to zero
-	// where galaxies are found
+	// Find galaxies. 
+	// Set entries in y_offset/x_offset to zero where galaxies are found
 	std::vector<pos2d> galaxies;
 	for (i64 y = 0; y < input.size(); y += 1) {
 		for (auto x = input[y].find('#'); x != input[y].npos; x = input[y].find('#', x + 1)) {
@@ -22,13 +22,15 @@ auto solve(auto const& input, i64 scale) {
 
 	// Creates offsets.
 	// Any remaining one's in these vectors indicate empty rows/columns.
+	// from: 0010010010
+	//   to: 0011122233
 	std::inclusive_scan(x_offset.begin(), x_offset.end(), x_offset.begin());
 	std::inclusive_scan(y_offset.begin(), y_offset.end(), y_offset.begin());
 
 	// Correct galaxy positions
 	for (pos2d& p : galaxies) {
 		p.x += x_offset[p.x] * scale;
-		p.y += x_offset[p.y] * scale;
+		p.y += y_offset[p.y] * scale;
 	}
 
 	i64 sum_shortest_path = 0;
