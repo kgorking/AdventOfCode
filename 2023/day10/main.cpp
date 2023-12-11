@@ -1,73 +1,42 @@
 ﻿import aoc;
+#include "../../aoc/catch2_macro_guards.h"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/benchmark/catch_benchmark.hpp>
 
-constexpr auto input = std::to_array<std::string_view>({
-#include "input.txt"
-});
+constexpr auto get_sample_input() {
+	return std::to_array<std::string_view>({
+		#include "sample_input.txt"
+	});
+}
 
-using namespace std::string_view_literals;
-using pos2d = kg::pos2d<>;
+constexpr auto get_input() {
+	return std::to_array<std::string_view>({
+#		include "input.txt"
+	});
+}
 
-enum dir { none, up, down, left, right };
+#include "impl.cpp"
 
-pos2d find_start_position() {
-	int x = 0, y = 0;
-	for (std::string_view line : input) {
-		x = line.find('S');
-		if (x != line.npos)
-			break;
-		y++;
+TEST_CASE("validate") {
+	auto const input = get_input();
+	auto const sample_input = get_sample_input();
+
+	SECTION("sample input for part 1 & 2") {
+		auto const [p1, p2] = solve(sample_input);
+		REQUIRE(p1 == 70);
+		REQUIRE(p2 == 8);
 	}
-	return {x, y};
-}
 
-pos2d advance_position(pos2d p, dir d) {
-	constexpr pos2d offsets[] = {{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}};
-	return p + offsets[d];
-}
+	SECTION("actual input") {
+		auto const [p1, p2] = solve(input);
+		std::cout << "Part 1: " << p1 << '\n';
+		std::cout << "Part 2: " << p2 << '\n';
+		REQUIRE(p1 == 6714);
+		REQUIRE(p2 == 429);
 
-dir dir_from_tile(pos2d p, dir prev_dir) {
-	switch (input[p.y][p.x]) {
-	case '|': return (prev_dir == down) ? down : up;
-	case '-': return (prev_dir == right) ? right : left;
-	case 'L': return (prev_dir == down) ? right : up;
-	case 'J': return (prev_dir == down) ? left : up;
-	case '7': return (prev_dir == up) ? left : down;
-	case 'F': return (prev_dir == up) ? right : down;
-	case 'S':
-		if (p.y - 1 > 0 && "|7F"sv.contains(input[p.y - 1][p.x])) 
-			return up;
-		if (p.x + 1 < input.size() && "|JL"sv.contains(input[p.y + 1][p.x]))
-			return down;
-		if (p.x - 1 > 0 && "-FL"sv.contains(input[p.y][p.x - 1]))
-			return left;
-		if (p.x + 1 < input[0].size() && "-J7"sv.contains(input[p.y][p.x + 1]))
-			return right;
-	default:
-		throw;
+		BENCHMARK("Part 1+2") {
+			auto const [p1, p2] = solve(std::move(input));
+			return p1 | p2;
+		};
 	}
-}
-
-auto solve() {
-	int area = 0;
-	int pos_count = 0;
-	pos2d pos = find_start_position(), last_pos = pos;
-	dir next_dir = dir_from_tile(pos, none);
-
-	do {
-		pos = advance_position(pos, next_dir);
-		next_dir = dir_from_tile(pos, next_dir);
-		area += (last_pos.x + pos.x) * (last_pos.y - pos.y);
-		last_pos = pos;
-		pos_count += 1;
-	} while ('S' != input[pos.y][pos.x]);
-
-	area = std::abs(area) / 2;
-	auto const max_dist = pos_count / 2;
-	return std::make_pair(max_dist, area - max_dist + 1); // Pick's theorem, good shit
-}
-
-int main() {
-	auto const [p1, p2] = solve();
-	std::cout << "Part 1: " << p1 << '\n';
-	std::cout << "Part 2: " << p2 << '\n';
 }
