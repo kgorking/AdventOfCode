@@ -1,23 +1,8 @@
 ﻿import aoc;
 
-constexpr auto expected_sample() { return std::make_pair(70, 8); }
-constexpr auto expected_input() { return std::make_pair(6714, 429); }
-
 using namespace std::string_view_literals;
 using pos2d = kg::pos2d<>;
 enum dir { none, up, down, left, right };
-
-constexpr auto get_sample_input() {
-	return std::to_array<std::string_view>({
-		#include "sample_input.txt"
-	});
-}
-
-constexpr auto get_actual_input() {
-	return std::to_array<std::string_view>({
-		#include "input.txt"
-	});
-}
 
 pos2d find_start_position(auto const& input) {
 	int x = 0, y = 0;
@@ -83,3 +68,12 @@ constexpr auto part1(auto const& input) {
 constexpr auto part2(auto const& input) {
 	return solve(input).second;
 }
+
+constexpr auto expected_sample = std::make_pair(70, 8);
+constexpr auto expected_input = std::make_pair(6714, 429);
+constexpr auto sample_input = std::to_array<std::string_view>({
+	#include "sample_input.txt"
+});
+constexpr auto actual_input = std::to_array<std::string_view>({
+	#include "input.txt"
+});

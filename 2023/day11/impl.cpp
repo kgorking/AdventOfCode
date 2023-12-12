@@ -2,9 +2,6 @@ import aoc;
 using i64 = std::int64_t;
 using pos2d = kg::pos2d<i64>;
 
-constexpr auto expected_sample() { return std::make_pair(374, 82000210); }
-constexpr auto expected_input() { return std::make_pair(10885634, 707505470642); }
-
 constexpr auto solve(auto const& input, i64 expansion) {
 	// Initialize vectors to the expansion factor
 	std::vector<i64> actual_x(input[0].size(), expansion);
@@ -52,14 +49,11 @@ constexpr auto solve(auto const& input) {
 	return std::make_pair(part1(input), part2(input));
 }
 
-constexpr auto get_sample_input() {
-	return std::to_array<std::string_view>({
+constexpr auto expected_sample = std::make_pair(374, 82000210);
+constexpr auto expected_input = std::make_pair(10885634, 707505470642);
+constexpr auto sample_input = std::to_array<std::string_view>({
 		#include "sample_input.txt"
 	});
-}
-
-constexpr auto get_actual_input() {
-	return std::to_array<std::string_view>({
+constexpr auto actual_input = std::to_array<std::string_view>({
 		#include "input.txt"
 	});
-}

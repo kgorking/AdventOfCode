@@ -40,18 +40,12 @@ constexpr auto part2(auto const& input) {
 	return solve(input).second;
 }
 
-constexpr auto expected_sample() { return std::make_pair(114, 2); }
-constexpr auto expected_input() { return std::make_pair(1696140818, 1152); }
-
-constexpr auto get_sample_input() {
-	return std::to_array<std::array<std::int64_t, 6>>({
+constexpr auto expected_sample = std::make_pair(114, 2);
+constexpr auto expected_input = std::make_pair(1696140818, 1152);
+constexpr auto sample_input = std::to_array<std::array<std::int64_t, 6>>({
 		#include "sample_input.txt"
 	});
-}
-
-constexpr auto get_actual_input() {
-	return std::to_array<std::array<std::int64_t, 21>>({
+constexpr auto actual_input = std::to_array<std::array<std::int64_t, 21>>({
 		#include "input.txt"
 	});
-}
 

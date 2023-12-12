@@ -1,9 +1,18 @@
 import aoc;
 
-constexpr auto expected_sample() { return std::make_pair(0, 0); }
-constexpr auto expected_input() { return std::make_pair(0, 0); }
+constexpr char operational = '.';
+constexpr char damaged = '#';
+constexpr char unknown = '?';
+
+struct input_t {
+	std::string_view record;
+	std::vector<char> groups;
+};
 
 constexpr auto part1(auto const& input) {
+	// prune
+	// backtrack
+
 	return 0;
 }
 
@@ -15,14 +24,11 @@ auto solve(auto const& input) {
 	return std::make_pair(part1(input), part2(input));
 }
 
-constexpr auto get_sample_input() {
-	return std::to_array<std::string_view>({
-#include "sample_input.txt"
-	});
-}
-
-constexpr auto get_actual_input() {
-	return std::to_array<std::string_view>({
-#include "input.txt"
-	});
-}
+constexpr auto expected_sample = std::make_pair(0, 0);
+constexpr auto expected_input = std::make_pair(0, 0);
+const auto sample_input = std::to_array<input_t>({
+	#include "sample_input.txt"
+});
+const auto actual_input = std::to_array<input_t>({
+	#include "input.txt"
+});

@@ -1,4 +1,4 @@
-const auto input = input_t{
+input_t{
 "LR",
 node_map{
 {"11A", {"11B", "XXX"}},

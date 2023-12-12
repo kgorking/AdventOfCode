@@ -47,15 +47,11 @@ auto solve(auto const& input) {
 	return std::make_pair(part1(input), part2(input));
 }
 
-const auto get_sample_input() {
+constexpr auto expected_sample = std::make_pair(1, 6);
+constexpr auto expected_input = std::make_pair(20221, 14616363770447);
+const auto sample_input = 
 	#include "sample_input.txt"
-	return input;
-}
 
-const auto get_actual_input() {
+const auto actual_input = 
 	#include "input.txt"
-	return input;
-}
 
-constexpr auto expected_sample() { return std::make_pair(1, 6); }
-constexpr auto expected_input() { return std::make_pair(20221, 14616363770447); }
