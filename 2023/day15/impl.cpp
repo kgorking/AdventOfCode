@@ -12,7 +12,7 @@ constexpr auto actual_input = std::to_array<std::string_view>({
 struct hash {
 	constexpr unsigned char operator()(std::string_view sv) const {
 		unsigned char value = 0;
-		for (char c : sv)
+		for (unsigned char c : sv)
 			value = (value + c) * 17; //%256 is implicit due to the type
 		return value;
 	}
