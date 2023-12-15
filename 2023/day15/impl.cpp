@@ -7,7 +7,7 @@ struct hash {
 	}
 };
 
-constexpr auto part1(auto const& input) { // array of std::string_view
+auto part1(auto const& input) { // array of std::string_view
 	return std::transform_reduce(input.begin(), input.end(), 0, std::plus<>{}, hash{});
 }
 
@@ -33,8 +33,4 @@ auto part2(auto const& input) { // array of std::string_view
 			std::for_each(boxes.begin(i), boxes.end(i), [&](auto const pair) { focusing_power += (1 + i) * lens_slot-- * pair.second; });
 
 	return focusing_power;
-}
-
-auto solve(auto const& input) {
-	return std::make_pair(part1(input), part2(input));
 }
