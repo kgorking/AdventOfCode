@@ -18,8 +18,7 @@ constexpr auto part1(auto const& input) {
 }
 
 constexpr auto part2(auto const& input) {
-	using hashmap = std::unordered_map<std::string_view, int, hash>;
-	hashmap boxes;
+	auto boxes = std::unordered_map<std::string_view, int, hash>{};
 
 	for (auto op : input) {
 		if (op.back() == '-') {
