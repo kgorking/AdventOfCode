@@ -46,7 +46,7 @@ constexpr auto part2(auto const& input) {
 	return focusing_power;
 }
 
-auto solve(auto const& input) {
+constexpr auto solve(auto const& input) {
 	return std::make_pair(part1(input), part2(input));
 }
 
