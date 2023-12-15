@@ -14,7 +14,7 @@ TEST_CASE("Sample input") {
 	std::cout << std::format("\nSample Part 1: {}\nSample Part 2: {}\n", sample_1, sample_2);
 
 	auto const [expected_1, expected_2] = expected_sample;
-	CHECK  (expected_1 == sample_1);
+	REQUIRE(expected_1 == sample_1);
 	REQUIRE(expected_2 == sample_2);
 }
 
@@ -25,13 +25,10 @@ TEST_CASE("Actual input") {
 	std::cout << std::format("\nPart 1: {}\nPart 2: {}\n", part_1, part_2);
 
 	auto const [expected_part_1, expected_part_2] = expected_input;
-	CHECK  (expected_part_1 == part_1);
+	REQUIRE(expected_part_1 == part_1);
 	REQUIRE(expected_part_2 == part_2);
-}
 
-TEST_CASE("Benchmark") {
-	if (aoc_dev_mode)
-		return;
+	// Benchmarks are only run if tests pass
 	BENCHMARK("Part 1") {
 		return part1(actual_input);
 	};
