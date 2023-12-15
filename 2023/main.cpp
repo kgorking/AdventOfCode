@@ -5,6 +5,8 @@
 
 #include AOC_IMPL_H
 
+bool aoc_dev_mode = false;
+
 TEST_CASE("Sample input") {
 	auto const [sample_1, sample_2] = solve(sample_input);
 	std::cout << std::format("\nSample Part 1: {}\nSample Part 2: {}\n", sample_1, sample_2);
@@ -15,6 +17,8 @@ TEST_CASE("Sample input") {
 }
 
 TEST_CASE("Actual input") {
+	if (aoc_dev_mode)
+		return;
 	auto const [part_1, part_2] = solve(actual_input);
 	std::cout << std::format("\nPart 1: {}\nPart 2: {}\n", part_1, part_2);
 
@@ -24,6 +28,8 @@ TEST_CASE("Actual input") {
 }
 
 TEST_CASE("Benchmark") {
+	if (aoc_dev_mode)
+		return;
 	BENCHMARK("Part 1") {
 		return part1(actual_input);
 	};

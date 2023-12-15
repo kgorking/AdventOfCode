@@ -6,6 +6,15 @@ import :async;
 // Contains bit- and bitset related stuff
 
 export namespace kg {
+
+// TODO
+template <int N>
+std::bitset<N> to_bitset(std::string_view sv, char one) {
+	return std::bitset<N>(sv.data(), N, char{0}, one);
+}
+
+// 
+
 // count leading zeroes in a bitset
 template <int N>
 constexpr int clz(std::bitset<N> x) noexcept {
