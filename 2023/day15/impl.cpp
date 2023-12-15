@@ -20,6 +20,7 @@ constexpr auto part1(auto const& input) {
 constexpr auto part2(auto const& input) {
 	auto boxes = std::unordered_map<std::string_view, unsigned char, hash>{};
 
+	// Build hashmap
 	for (auto op : input) {
 		if (op.back() == '-') {
 			op.remove_suffix(1);
@@ -31,6 +32,7 @@ constexpr auto part2(auto const& input) {
 		}
 	}
 
+	// Calculate focusing power
 	int focusing_power = 0;
 	for (int i = 0; i < boxes.bucket_count(); i++) {
 		if (boxes.bucket_size(i)) {
