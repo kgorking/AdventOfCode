@@ -13,7 +13,7 @@ constexpr auto part1(auto const& input) { // array of std::string_view
 
 auto part2(auto const& input) { // array of std::string_view
 	auto boxes = std::unordered_map<std::string_view, u8, hash>{};
-	std::ranges::fold_left;
+
 	// Build hash map
 	for (std::string_view op : input) {
 		if (op.back() == '-') {
