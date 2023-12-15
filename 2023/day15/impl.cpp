@@ -3,11 +3,8 @@ import aoc;
 struct hash {
 	constexpr unsigned char operator()(std::string_view sv) const {
 		unsigned char value = 0;
-		for (char c : sv) {
-			value += c;
-			value *= 17;
-			//value %= 256; // implicit due to the type
-		}
+		for (char c : sv)
+			value = (value + c) * 17; //%256 is implicit due to the type
 		return value;
 	}
 };
@@ -34,14 +31,9 @@ auto part2(auto const& input) {
 
 	// Calculate focusing power
 	int focusing_power = 0;
-	for (int i = 0; i < boxes.bucket_count(); i++) {
-		int lens_slot = boxes.bucket_size(i);
-		if (lens_slot > 0) {
-			std::for_each(boxes.begin(i), boxes.end(i), [&](auto const pair) {
-				focusing_power += (1 + i) * lens_slot-- * pair.second;
-			});
-		}
-	}
+	for (int i = 0; i < boxes.bucket_count(); i++)
+		if (int lens_slot = boxes.bucket_size(i); lens_slot > 0)
+			std::for_each(boxes.begin(i), boxes.end(i), [&](auto const pair) { focusing_power += (1 + i) * lens_slot-- * pair.second; });
 
 	return focusing_power;
 }
