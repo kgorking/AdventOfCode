@@ -39,7 +39,6 @@ TEST_CASE("Actual input") {
 		return part2(actual_input);
 	};
 	BENCHMARK("All") {
-		return part1(actual_input);
-		return part2(actual_input);
+		return part1(actual_input) + part2(actual_input);
 	};
 }
