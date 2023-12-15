@@ -20,7 +20,7 @@ auto part2(auto const& input) { // array of std::string_view
 			op.remove_suffix(1);
 			boxes.erase(op);
 		} else { // '=X'
-			int const val = op.back() - '0';
+			u8 const val = op.back() - '0';
 			op.remove_suffix(2);
 			boxes[op] = val;
 		}
