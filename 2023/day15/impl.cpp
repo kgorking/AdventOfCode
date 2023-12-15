@@ -35,8 +35,8 @@ constexpr auto part2(auto const& input) {
 	// Calculate focusing power
 	int focusing_power = 0;
 	for (int i = 0; i < boxes.bucket_count(); i++) {
-		if (boxes.bucket_size(i)) {
-			int lens_slot = boxes.bucket_size(i);
+		int lens_slot = boxes.bucket_size(i);
+		if (lens_slot > 0) {
 			std::for_each(boxes.begin(i), boxes.end(i), [&](auto const pair) {
 				focusing_power += (1 + i) * lens_slot-- * pair.second;
 			});
