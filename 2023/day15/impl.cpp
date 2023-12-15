@@ -42,7 +42,8 @@ constexpr auto part2(auto const& input) {
 
 		int lens_slot = boxes.bucket_size(i);
 		while (first != end) {
-			focusing_power += (1 + i) * lens_slot-- * first->second;
+			focusing_power += (1 + i) * lens_slot * first->second;
+			--lens_slot;
 			++first;
 		}
 	}
