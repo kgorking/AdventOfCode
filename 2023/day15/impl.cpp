@@ -1,8 +1,8 @@
 import aoc;
 
 struct hash {
-	constexpr int operator()(std::string_view sv) const {
-		int value = 0;
+	constexpr unsigned char operator()(std::string_view sv) const {
+		unsigned char value = 0;
 		for (char c : sv) {
 			value += c;
 			value *= 17;
@@ -18,7 +18,7 @@ constexpr auto part1(auto const& input) {
 }
 
 constexpr auto part2(auto const& input) {
-	auto boxes = std::unordered_map<std::string_view, int, hash>{};
+	auto boxes = std::unordered_map<std::string_view, unsigned char, hash>{};
 
 	for (auto op : input) {
 		if (op.back() == '-') {
