@@ -4,6 +4,8 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include AOC_IMPL_H
+#include AOC_SAMPLE_H
+#include AOC_INPUT_H
 
 bool aoc_dev_mode = false;
 

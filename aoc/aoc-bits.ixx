@@ -10,7 +10,10 @@ export namespace kg {
 // TODO
 template <int N>
 std::bitset<N> to_bitset(std::string_view sv, char one) {
-	return std::bitset<N>(sv.data(), N, char{0}, one);
+	std::bitset<N> bs;
+	for (int i = 0; char c : sv)
+		bs[i++] = (c == one) ? 1 : 0;
+	return bs;
 }
 
 // 

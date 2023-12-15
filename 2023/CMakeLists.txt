@@ -8,7 +8,11 @@ macro(add_day)
 
 	target_compile_options(${ARGV0} PRIVATE /Zi /EHsc /nologo /experimental:module /reference std=CMakeFiles\\AdventOfCode.dir\\std.ifc)
 	target_link_options(${ARGV0} PRIVATE /INCREMENTAL /PROFILE)
-	target_compile_definitions(${ARGV0} PRIVATE AOC_IMPL_H="./${ARGV0}/impl.cpp")
+	target_compile_definitions(${ARGV0} PRIVATE
+		AOC_IMPL_H="./${ARGV0}/impl.cpp"
+		AOC_SAMPLE_H="./${ARGV0}/sample_input.txt"
+		AOC_INPUT_H="./${ARGV0}/input.txt"
+	)
 	target_link_libraries(${ARGV0} PRIVATE AdventOfCode Catch2::Catch2WithMain)
 	#catch_discover_tests(${ARGV0})
 endmacro()

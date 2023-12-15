@@ -1,14 +1,5 @@
 import aoc;
 
-constexpr auto expected_sample = std::make_pair(1320, 145);
-constexpr auto expected_input = std::make_pair(514639, 279470);
-constexpr auto sample_input = std::to_array<std::string_view>({
-#include "sample_input.txt"
-});
-constexpr auto actual_input = std::to_array<std::string_view>({
-#include "input.txt"
-});
-
 struct hash {
 	constexpr unsigned char operator()(std::string_view sv) const {
 		unsigned char value = 0;
