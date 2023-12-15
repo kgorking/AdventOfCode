@@ -3,7 +3,7 @@ using u8 = unsigned char;
 
 struct hash {
 	constexpr u8 operator()(std::string_view sv) const {
-		return std::accumulate(sv.begin(), sv.end(), u8{0}, [](u8 acc, u8 c) { return (acc + c) * 17; }); // %256 is implicit
+		return std::ranges::fold_left(sv, u8{0}, [](u8 acc, u8 c) { return (acc + c) * 17; }); // %256 is implicit
 	}
 };
 
@@ -13,7 +13,7 @@ constexpr auto part1(auto const& input) { // array of std::string_view
 
 auto part2(auto const& input) { // array of std::string_view
 	auto boxes = std::unordered_map<std::string_view, u8, hash>{};
-
+	std::ranges::fold_left;
 	// Build hash map
 	for (std::string_view op : input) {
 		if (op.back() == '-') {
