@@ -1,1 +1,4 @@
-"sample input goes here"
+constexpr auto expected_sample = std::make_pair(0, 0);
+constexpr auto sample_input = std::to_array<std::string_view>({
+	"sample input goes here"
+});

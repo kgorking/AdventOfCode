@@ -67,26 +67,3 @@ auto part2(auto&& input) {
 auto solve(auto&& input) {
 	return std::make_pair(part1(input), part2(input));
 }
-
-constexpr auto expected_sample = std::make_pair(6440, 5905);
-constexpr auto expected_input = std::make_pair(253910319, 254083736);
-auto sample_input = []() {
-	auto input = std::to_array<hand_and_bid>({
-#include "sample_input.txt"
-	});
-	for (hand_and_bid& hb : input) {
-		std::tie(hb.type[0], hb.type[1]) = types(hb.hand);
-	}
-	return input;
-}();
-
-auto actual_input = []() {
-	auto input = std::to_array<hand_and_bid>({
-#include "input.txt"
-	});
-	for (hand_and_bid& hb : input) {
-		std::tie(hb.type[0], hb.type[1]) = types(hb.hand);
-	}
-	return input;
-}();
-

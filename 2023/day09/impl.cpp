@@ -39,13 +39,3 @@ constexpr auto part1(auto const& input) {
 constexpr auto part2(auto const& input) {
 	return solve(input).second;
 }
-
-constexpr auto expected_sample = std::make_pair(114, 2);
-constexpr auto expected_input = std::make_pair(1696140818, 1152);
-constexpr auto sample_input = std::to_array<std::array<std::int64_t, 6>>({
-		#include "sample_input.txt"
-	});
-constexpr auto actual_input = std::to_array<std::array<std::int64_t, 21>>({
-		#include "input.txt"
-	});
-

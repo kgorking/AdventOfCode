@@ -1,5 +1,14 @@
-{"32T3K", 765},
-{"T55J5", 684},
-{"KK677", 28},
-{"KTJJT", 220},
-{"QQQJA", 483}
+constexpr auto expected_sample = std::make_pair(6440, 5905);
+auto sample_input = []() {
+	auto input = std::to_array<hand_and_bid>({
+		{"32T3K", 765},
+		{"T55J5", 684},
+		{"KK677", 28},
+		{"KTJJT", 220},
+		{"QQQJA", 483}
+	});
+	for (hand_and_bid& hb : input) {
+		std::tie(hb.type[0], hb.type[1]) = types(hb.hand);
+	}
+	return input;
+}();

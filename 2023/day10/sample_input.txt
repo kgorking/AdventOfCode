@@ -1,3 +1,5 @@
+constexpr auto expected_sample = std::make_pair(70, 8);
+constexpr auto sample_input = std::to_array<std::string_view>({
 #if 0
 ".....",
 ".S-7.",
@@ -32,3 +34,4 @@
 "....FJL-7.||.||||...",
 "....L---J.LJ.LJLJ...",
 #endif
+});

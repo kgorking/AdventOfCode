@@ -1,3 +1,5 @@
+constexpr auto expected_sample = std::make_pair(374, 82000210);
+constexpr auto sample_input = std::to_array<std::string_view>({
 "...#......",
 ".......#..",
 "#.........",
@@ -8,3 +10,4 @@
 "..........",
 ".......#..",
 "#...#.....",
+});
