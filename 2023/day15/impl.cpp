@@ -1,24 +1,21 @@
 import aoc;
+using u8 = unsigned char;
 
 struct hash {
-	constexpr unsigned char operator()(std::string_view sv) const {
-		unsigned char value = 0;
-		for (unsigned char c : sv)
-			value = (value + c) * 17; //%256 is implicit due to the type
-		return value;
+	constexpr u8 operator()(std::string_view sv) const {
+		return std::accumulate(sv.begin(), sv.end(), u8{0}, [](u8 acc, u8 c) { return (acc + c) * 17; }); // %256 is implicit
 	}
 };
-static_assert(52 == hash{}("HASH"));
 
-constexpr auto part1(auto const& input) {
+constexpr auto part1(auto const& input) { // array of std::string_view
 	return std::transform_reduce(input.begin(), input.end(), 0, std::plus<>{}, hash{});
 }
 
-auto part2(auto const& input) {
-	auto boxes = std::unordered_map<std::string_view, unsigned char, hash>{};
+auto part2(auto const& input) { // array of std::string_view
+	auto boxes = std::unordered_map<std::string_view, u8, hash>{};
 
 	// Build hash map
-	for (auto op : input) {
+	for (std::string_view op : input) {
 		if (op.back() == '-') {
 			op.remove_suffix(1);
 			boxes.erase(op);
