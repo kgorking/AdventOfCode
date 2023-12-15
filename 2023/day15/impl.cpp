@@ -33,7 +33,7 @@ constexpr auto part2(auto const& input) {
 	}
 
 	int focusing_power = 0;
-	for (int i = 0; i < 256 && i < boxes.bucket_count(); i++) {
+	for (int i = 0; i < boxes.bucket_count(); i++) {
 		if (0 == boxes.bucket_size(i))
 			continue;
 
