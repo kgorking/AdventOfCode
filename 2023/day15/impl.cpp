@@ -17,10 +17,10 @@ constexpr auto part1(auto const& input) {
 	return std::transform_reduce(input.begin(), input.end(), 0, std::plus<>{}, hash{});
 }
 
-constexpr auto part2(auto const& input) {
+auto part2(auto const& input) {
 	auto boxes = std::unordered_map<std::string_view, unsigned char, hash>{};
 
-	// Build hashmap
+	// Build hash map
 	for (auto op : input) {
 		if (op.back() == '-') {
 			op.remove_suffix(1);
@@ -46,7 +46,7 @@ constexpr auto part2(auto const& input) {
 	return focusing_power;
 }
 
-constexpr auto solve(auto const& input) {
+auto solve(auto const& input) {
 	return std::make_pair(part1(input), part2(input));
 }
 
