@@ -6,7 +6,7 @@ struct hash {
 		for (char c : sv) {
 			value += c;
 			value *= 17;
-			value %= 256;
+			//value %= 256; // implicit due to the type
 		}
 		return value;
 	}
