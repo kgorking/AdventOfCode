@@ -35,9 +35,9 @@ constexpr auto part2(auto const& input) {
 	for (int i = 0; i < boxes.bucket_count(); i++) {
 		if (boxes.bucket_size(i)) {
 			int lens_slot = boxes.bucket_size(i);
-			for (auto const [_, power] : std::ranges::subrange(boxes.begin(i), boxes.end(i))) {
-				focusing_power += (1 + i) * lens_slot-- * power;
-			}
+			std::for_each(boxes.begin(i), boxes.end(i), [&](auto const pair) {
+				focusing_power += (1 + i) * lens_slot-- * pair.second;
+			});
 		}
 	}
 
