@@ -10,7 +10,6 @@
 bool aoc_dev_mode = false;
 
 TEST_CASE("Sample input") {
-	//auto const [sample_1, sample_2] = solve(sample_input);
 	auto const sample_1 = part1(sample_input);
 	auto const sample_2 = part2(sample_input);
 	std::cout << std::format("\nSample Part 1: {}\nSample Part 2: {}\n", sample_1, sample_2);
@@ -31,7 +30,8 @@ TEST_CASE("Actual input") {
 	REQUIRE(expected_part_1 == part_1);
 	REQUIRE(expected_part_2 == part_2);
 
-	// Benchmarks are only run if tests pass
+	// Benchmarks are only run if tests pass nad in relase mode
+	#ifndef _DEBUG
 	BENCHMARK("Part 1") {
 		return part1(actual_input);
 	};
@@ -41,4 +41,5 @@ TEST_CASE("Actual input") {
 	BENCHMARK("All") {
 		return part1(actual_input) + part2(actual_input);
 	};
+	#endif
 }
