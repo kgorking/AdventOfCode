@@ -1,6 +1,6 @@
 import aoc;
 
-using pos2d = kg::pos2d<>;
+using pos2d = kg::pos2d<char>;
 enum direction { none, up, down, left, right };
 constexpr auto offsets = std::to_array<pos2d>({{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}});
 
@@ -20,7 +20,7 @@ auto to_index = [](char c) {
 	case '-': return 4;
 	}
 };
-auto to_bit = [](char d) { return 1 << (d - 1); };
+auto to_bit = [](char d) { return 1 << d; };
 auto advance_position = [](pos2d p, char d) { return p + offsets[d]; };
 
 constexpr int count_energized(auto const& input, pos2d start, direction dir) {
@@ -34,7 +34,6 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 	};
 
 	push_stack(start, dir);
-
 	while (!stack.empty()) {
 		auto const [pos, dir] = stack.top();
 		stack.pop();
@@ -42,9 +41,11 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 		// Mark the direction as visited
 		energized[pos.y][pos.x] |= to_bit(dir);
 
+		// Get a new direction from the current tile and direction
 		char const index = to_index(input[pos.y][pos.x]);
 		int const new_dir = lookup[index][dir];
 
+		// Visit the new position(s)
 		push_stack(advance_position(pos, new_dir & 0xF), new_dir & 0xF);
 		if (new_dir >> 4)
 			push_stack(advance_position(pos, new_dir >> 4), new_dir >> 4);
