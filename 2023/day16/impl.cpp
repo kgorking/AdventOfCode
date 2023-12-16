@@ -5,11 +5,11 @@ enum direction { none, up, down, left, right };
 constexpr auto offsets = std::to_array<pos2d>({{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}});
 
 // Convert a tile and direction to a new direction         none,	up,					down,				left,				right
-constexpr auto lookup = kg::matrix_t<int, 5, 5>{{/* '.' */ {none,	up,					down,				left,				right},
-												 /* '/' */ {none,	right,				left,				down,				up},
-												 /* '\' */ {none,	left,				right,				up,					down},
-												 /* '|' */ {none,	up,					down,				up | down << 4,		up | down << 4},
-												 /* '-' */ {none,	left | right << 4,	left | right << 4,	left,				right}}};
+constexpr auto lookup = kg::matrix_t<char, 5, 5>{{/* '.' */ {none,	up,					down,				left,				right},
+												  /* '/' */ {none,	right,				left,				down,				up},
+												  /* '\' */ {none,	left,				right,				up,					down},
+												  /* '|' */ {none,	up,					down,				up | down << 4,		up | down << 4},
+												  /* '-' */ {none,	left | right << 4,	left | right << 4,	left,				right}}};
 
 auto to_index = [](char c) {
 	switch (c) {
