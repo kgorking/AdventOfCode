@@ -22,6 +22,7 @@ auto to_index = [](char c) {
 };
 auto to_bit = [](char d) { return 1 << d; };
 auto advance_position = [](pos2d p, char d) { return p + offsets[d]; };
+auto valid_pos = [](auto const& input, pos2d p) { return p.x >= 0 && p.x < input[0].size() && p.y >= 0 && p.y < input.size(); };
 
 constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 	auto energized = kg::make_dmatrix<char>(input.size(), input[0].size());
@@ -29,16 +30,29 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 
 	// Push a position + direction on the stack if it's valid
 	auto push_stack = [&](pos2d p, char dir) {
-		if (p.x >= 0 && p.x < input[0].size() && p.y >= 0 && p.y < input.size() && !(energized[p.y][p.x] & to_bit(dir)))
-			stack.push({p, dir});
+		if (valid_pos(input, p)) {
+			if (!(energized[p.y][p.x] & to_bit(dir)))
+				stack.push({p, dir});
+		}
 	};
 
 	push_stack(start, dir);
+	loop:
 	while (!stack.empty()) {
-		auto const [pos, dir] = stack.top();
+		auto [pos, dir] = stack.top();
 		stack.pop();
 
-		// Mark the direction as visited
+		// Skip empty space
+		while ('.' == input[pos.y][pos.x]) {
+			// Mark the direction as visited
+			energized[pos.y][pos.x] |= to_bit(dir);
+
+			// Move to next tile
+			pos = advance_position(pos, dir);
+			if (!valid_pos(input, pos))
+				goto loop;
+		}
+
 		energized[pos.y][pos.x] |= to_bit(dir);
 
 		// Get a new direction from the current tile and direction
