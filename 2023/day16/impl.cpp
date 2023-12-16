@@ -36,9 +36,9 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 
 		char const index = to_index(input[pos.y][pos.x]);
 		int const new_dir = lookup[index][dir];
-		push_stack(advance_position(pos, new_dir & 0xF), new_dir & 0xF);
 
-		if (new_dir & 0xF0)
+		push_stack(advance_position(pos, new_dir & 0xF), new_dir & 0xF);
+		if (new_dir >> 4)
 			push_stack(advance_position(pos, new_dir >> 4), new_dir >> 4);
 	}
 
