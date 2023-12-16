@@ -1,5 +1,4 @@
 import aoc;
-#include <cassert>
 
 using pos2d = kg::pos2d<>;
 enum direction { none, up, down, left, right };
@@ -43,11 +42,8 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 			push_stack(advance_position(pos, new_dir >> 4), new_dir >> 4);
 	}
 
-	int sum = 0;
-	for (auto const& vec : energized) {
-		sum += std::ranges::fold_left(vec, 0, [](auto acc, auto v) { return acc + (v > 0); });
-	}
-	return sum;
+	auto count = [](auto const& vec) { return std::ranges::count_if(vec, [](char v) { return v > 0; }); };
+	return *std::ranges::fold_left_first(energized | std::views::transform(count), std::plus<>{});
 }
 
 constexpr auto part1(auto const& input) {
