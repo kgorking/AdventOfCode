@@ -30,19 +30,12 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 
 	// Push a position + direction on the stack if it's valid
 	auto push_stack = [&](pos2d p, char dir) {
-		if (valid_pos(input, p)) {
-			if (!(energized[p.y][p.x] & to_bit(dir)))
-				stack.push({p, dir});
-		}
+		if (valid_pos(input, p) && !(energized[p.y][p.x] & to_bit(dir)))
+			stack.push({p, dir});
 	};
 
-	push_stack(start, dir);
-	loop:
-	while (!stack.empty()) {
-		auto [pos, dir] = stack.top();
-		stack.pop();
-
-		// Skip empty space
+	// Skip empty space
+	auto skip_empty_space = [&](pos2d& pos, char dir) {
 		while ('.' == input[pos.y][pos.x]) {
 			// Mark the direction as visited
 			energized[pos.y][pos.x] |= to_bit(dir);
@@ -50,8 +43,18 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 			// Move to next tile
 			pos = advance_position(pos, dir);
 			if (!valid_pos(input, pos))
-				goto loop;
+				return false;
 		}
+		return true;
+	};
+
+	push_stack(start, dir);
+	while (!stack.empty()) {
+		auto [pos, dir] = stack.top();
+		stack.pop();
+
+		if (!skip_empty_space(pos, dir))
+			continue;
 
 		energized[pos.y][pos.x] |= to_bit(dir);
 
@@ -89,5 +92,5 @@ constexpr auto part2(auto const& input) {
 
 	auto count = [&input](auto pair) { return count_energized(input, pair.first, pair.second); };
 	auto max = [](int a, int b) { return (a > b) ? a : b; };
-	return std::transform_reduce(/*std::execution::par_unseq,*/ starts.begin(), starts.end(), 0, max, count);
+	return std::transform_reduce(std::execution::par_unseq, starts.begin(), starts.end(), 0, max, count);
 }
