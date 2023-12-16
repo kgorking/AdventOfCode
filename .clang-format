@@ -1,12 +1,21 @@
 AccessModifierOffset: '-4'
+
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: All
+
 AlwaysBreakTemplateDeclarations: 'Yes'
+
+AllowShortCaseLabelsOnASingleLine: Yes
+#AlignConsecutiveShortCaseStatements: True
+
 #AlignArrayOfStructures: Right
 #AlignTrailingComments: True
+
 ColumnLimit: '140'
+
+UseTab: Always
+TabWidth: '4'
 IndentWidth: '4'
 IndentWrappedFunctionNames: 'false'
-TabWidth: '4'
-UseTab: Always
+
 PointerAlignment : Left
