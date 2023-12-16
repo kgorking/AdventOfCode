@@ -7,6 +7,14 @@ template <typename T, int R, int C = R>
 	requires(R > 0 && C > 0)
 using matrix_t = std::array<std::array<T, C>, R>;
 
+template <typename T>
+auto make_dmatrix(int R, int C = R) {
+	auto mat = std::vector<std::vector<T>>(R);
+	for (auto& vec : mat)
+		vec.resize(C);
+	return mat;
+};
+
 template <typename T, int R>
 using vector_t = matrix_t<T, R, 1>;
 
