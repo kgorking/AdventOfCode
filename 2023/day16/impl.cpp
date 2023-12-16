@@ -11,7 +11,15 @@ constexpr auto lookup = kg::matrix_t<int, 5, 5>{{/* '.' */ {none,	up,					down,	
 												 /* '|' */ {none,	up,					down,				up | down << 4,		up | down << 4},
 												 /* '-' */ {none,	left | right << 4,	left | right << 4,	left,				right}}};
 
-auto to_index = [](char c) { return std::string_view{R"(./\|-)"}.find(c); };
+auto to_index = [](char c) {
+	switch (c) {
+	case '.': return 0;
+	case '/': return 1;
+	case '\\': return 2;
+	case '|': return 3;
+	case '-': return 4;
+	}
+};
 auto to_bit = [](char d) { return 1 << (d - 1); };
 auto advance_position = [](pos2d p, char d) { return p + offsets[d]; };
 
@@ -66,5 +74,5 @@ constexpr auto part2(auto const& input) {
 
 	auto count = [&input](auto pair) { return count_energized(input, pair.first, pair.second); };
 	auto max = [](int a, int b) { return (a > b) ? a : b; };
-	return std::transform_reduce(std::execution::par_unseq, starts.begin(), starts.end(), 0, max, count);
+	return std::transform_reduce(/*std::execution::par_unseq,*/ starts.begin(), starts.end(), 0, max, count);
 }
