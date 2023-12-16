@@ -4,7 +4,7 @@ using pos2d = kg::pos2d<char>;
 enum direction { none, up, down, left, right };
 constexpr auto offsets = std::to_array<pos2d>({{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}});
 
-// Convert a tile and direction to a new direction         none,	up,					down,				left,				right
+// Convert a tile and direction to a new direction *******   none,	up,					down,				left,				right
 constexpr auto lookup = kg::matrix_t<char, 5, 5>{{/* '.' */ {none,	up,					down,				left,				right},
 												  /* '/' */ {none,	right,				left,				down,				up},
 												  /* '\' */ {none,	left,				right,				up,					down},
