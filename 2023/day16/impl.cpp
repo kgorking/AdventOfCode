@@ -48,14 +48,17 @@ constexpr int count_energized(auto const& input, pos2d start, direction dir) {
 		return true;
 	};
 
+	// Start the beam propagation
 	push_stack(start, dir);
 	while (!stack.empty()) {
 		auto [pos, dir] = stack.top();
 		stack.pop();
 
+		// Ignore empty space. Returns false if an invalid position is found
 		if (!skip_empty_space(pos, dir))
 			continue;
 
+		// Mark the direction as visited
 		energized[pos.y][pos.x] |= to_bit(dir);
 
 		// Get a new direction from the current tile and direction
