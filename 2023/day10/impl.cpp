@@ -2,7 +2,7 @@
 
 using namespace std::string_view_literals;
 using pos2d = kg::pos2d<>;
-enum dir { none, up, down, left, right };
+enum direction { none, up, down, left, right };
 
 pos2d find_start_position(auto const& input) {
 	int x = 0, y = 0;
@@ -15,12 +15,12 @@ pos2d find_start_position(auto const& input) {
 	return {x, y};
 }
 
-pos2d advance_position(pos2d p, dir d) {
+pos2d advance_position(pos2d p, direction d) {
 	constexpr pos2d offsets[] = {{0, 0}, {0, -1}, {0, +1}, {-1, 0}, {+1, 0}};
 	return p + offsets[d];
 }
 
-dir dir_from_tile(auto const& input, pos2d p, dir prev_dir) {
+direction dir_from_tile(auto const& input, pos2d p, direction prev_dir) {
 	switch (input[p.y][p.x]) {
 	case '|': return (prev_dir == down) ? down : up;
 	case '-': return (prev_dir == right) ? right : left;
@@ -46,7 +46,7 @@ auto solve(auto const& input) {
 	int area = 0;
 	int pos_count = 0;
 	pos2d pos = find_start_position(input), last_pos = pos;
-	dir next_dir = dir_from_tile(input, pos, none);
+	direction next_dir = dir_from_tile(input, pos, none);
 
 	do {
 		pos = advance_position(pos, next_dir);
