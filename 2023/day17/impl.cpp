@@ -39,11 +39,10 @@ auto find_path(auto const& terrain, pos2d const start_pos, pos2d const end_pos, 
 		auto const [neg_cost, p, dir] = queue.top();
 		queue.pop();
 
-		if (p == end_pos) {
+		if (p == end_pos)
 			return -neg_cost;
-		}
 
-		// Mark as visited
+		// Mark direction as visited
 		if (visited[p.y][p.x] & (1 << dir))
 			continue;
 		visited[p.y][p.x] |= (1 << dir);
@@ -51,7 +50,7 @@ auto find_path(auto const& terrain, pos2d const start_pos, pos2d const end_pos, 
 		for (std::size_t i = 0; i < offsets.size(); i++) {
 			direction const adj_dir = (direction)i;
 
-			// Can't move backwards
+			// Ignore forwards/backwards movement
 			if (dir == adj_dir || offsets[dir] + offsets[adj_dir] == pos2d{0, 0})
 				continue;
 
@@ -65,7 +64,7 @@ auto find_path(auto const& terrain, pos2d const start_pos, pos2d const end_pos, 
 				// Add neighbour to the stack
 				int const adj_heat = terrain[adj_pos.y][adj_pos.x] - '0';
 				cost -= adj_heat;
-				if (step >= mmin)
+				if (step >= mmin && !(visited[adj_pos.y][adj_pos.x] & (1 << adj_dir)))
 					queue.push({cost, adj_pos, adj_dir});
 			}
 		}
