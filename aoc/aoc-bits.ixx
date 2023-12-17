@@ -196,6 +196,14 @@ constexpr void bit_subsets(std::bitset<N> const& bs, auto fn) {
 		fn(subset);
 }
 
+// Generate the subsets of the set bits in a bitset.
+// O(2^n), where n is number of set bits
+template<int N>
+constexpr void bit_subsets(std::integral auto const bs, auto fn) {
+	for (auto subset = bs; subset.any(); subset = (subset - 1) & bs)
+		fn(subset);
+}
+
 // Generate the x-bits subsets of the set bits in the bit set.
 // Only calls 'fn' if the subset has X bits set.
 template <int N>
