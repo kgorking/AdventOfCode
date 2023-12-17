@@ -13,16 +13,6 @@ struct state {
 	}
 };
 
-auto to_char(direction d) {
-	switch (d) {
-	case up: return '^';
-	case down: return 'v';
-	case left: return '<';
-	case right: return '>';
-	default: throw;
-	}
-}
-
 auto find_path(auto const& terrain, pos2d const start_pos, pos2d const end_pos, int mmin, int mmax) {
 	constexpr size_t width = 141;
 	constexpr size_t height = 141;
