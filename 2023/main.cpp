@@ -3,12 +3,10 @@
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include AOC_IMPL_H
-#include AOC_SAMPLE_H
-#include AOC_INPUT_H
-
 bool aoc_dev_mode = false;
+#include AOC_IMPL_H
 
+#include AOC_SAMPLE_H
 TEST_CASE("Sample input") {
 	auto const sample_1 = part1(sample_input);
 	auto const sample_2 = part2(sample_input);
@@ -19,6 +17,7 @@ TEST_CASE("Sample input") {
 	REQUIRE(expected_2 == sample_2);
 }
 
+#include AOC_INPUT_H
 TEST_CASE("Actual input") {
 	if (aoc_dev_mode)
 		return;

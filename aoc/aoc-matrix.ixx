@@ -30,6 +30,16 @@ constexpr matrix_t<T, N> mat_identity() {
 	return ident;
 }
 
+// Returns a matrix filled with maximum values
+template <typename T, int N, int M = N>
+	requires(N > 0 && M > 0)
+constexpr matrix_t<T, N, M> mat_max() {
+	matrix_t<T, N, M> max;
+	for (int i = 0; i < N; i++)
+		max[i].fill(std::numeric_limits<T>::max());
+	return max;
+}
+
 // Multiplies two matrices A and B
 template <typename T, int N, int RA, int CB>
 constexpr auto mat_multiply(matrix_t<T, RA, N> const& a, matrix_t<T, N, CB> const& b) {
