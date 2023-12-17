@@ -8,7 +8,9 @@ struct state {
 	int cost;
 	pos2d p;
 	direction d;
-	auto operator<=>(state const&) const = default;
+	bool operator<(state const& s) const {
+		return cost < s.cost;
+	}
 };
 
 auto to_char(direction d) {
@@ -53,19 +55,18 @@ auto find_path(auto const& terrain, pos2d const start_pos, pos2d const end_pos, 
 			if (dir == adj_dir || offsets[dir] + offsets[adj_dir] == pos2d{0, 0})
 				continue;
 
-			int cost = -neg_cost;
+			int cost = neg_cost;
 			for (int step = 1; step <= mmax; step++) {
 				// Check that a position is in bounds
 				pos2d const adj_pos = p + offsets[i] * step;
 				if (adj_pos.x < 0 || adj_pos.x >= terrain[0].size() || adj_pos.y < 0 || adj_pos.y >= terrain.size())
 					break;
 
-
 				// Add neighbour to the stack
 				int const adj_heat = terrain[adj_pos.y][adj_pos.x] - '0';
-				cost += adj_heat;
+				cost -= adj_heat;
 				if (step >= mmin)
-					queue.push({-cost, adj_pos, adj_dir});
+					queue.push({cost, adj_pos, adj_dir});
 			}
 		}
 	}
@@ -74,7 +75,7 @@ auto find_path(auto const& terrain, pos2d const start_pos, pos2d const end_pos, 
 }
 
 constexpr auto part1(auto const& input) {
-	return find_path(input, {0, 0}, pos2d(input.size() - 1, input[0].size() - 1), 1, 3);
+	return find_path(input, {0, 0}, pos2d(input.size() - 1, input[0].size() - 1), 0, 3);
 }
 
 constexpr auto part2(auto const& input) {
