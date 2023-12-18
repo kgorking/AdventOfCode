@@ -1,4 +1,17 @@
-constexpr auto expected_sample = std::make_pair(0, 0);
-constexpr auto sample_input = std::to_array<std::string_view>({
-	"sample input goes here"
+constexpr auto expected_sample = std::make_pair(62, 952408144115);
+constexpr auto sample_input = std::to_array<dig>({
+	{R, 6, 0x70c710},
+	{D, 5, 0x0dc571},
+	{L, 2, 0x5713f0},
+	{D, 2, 0xd2c081},
+	{R, 2, 0x59c680},
+	{D, 2, 0x411b91},
+	{L, 5, 0x8ceee2},
+	{U, 2, 0xcaa173},
+	{L, 1, 0x1b58a2},
+	{U, 2, 0xcaa171},
+	{R, 2, 0x7807d2},
+	{U, 3, 0xa77fa3},
+	{L, 2, 0x015232},
+	{U, 2, 0x7a21e3}
 });
