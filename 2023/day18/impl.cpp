@@ -29,8 +29,8 @@ constexpr auto part2(auto const& input) {
 	i64 edge_length = 0;
 	pos prev{0, 0};
 	for (auto d : input) {
-		int const count = (d.color & 0xFFFFF0) >> 4;
-		int const dir = d.color & 0x00000F;
+		int const count = d.color >> 4;
+		int const dir = d.color & 0xF;
 		pos const next = prev + offsets[dir] * count;
 		area += (prev.x + next.x) * (prev.y - next.y);
 		edge_length += count;
