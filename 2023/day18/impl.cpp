@@ -3,7 +3,7 @@ import aoc;
 using i64 = std::int64_t;
 using pos = kg::pos2d<i64>;
 enum direction : unsigned char { R, D, L, U };
-constexpr auto offsets = std::to_array<pos>({{+1, 0}, {0, +1}, {-1, 0}, {0, -1}});
+constexpr pos offsets[] = {{+1, 0}, {0, +1}, {-1, 0}, {0, -1}};
 
 struct dig {
 	unsigned dir : 4;
