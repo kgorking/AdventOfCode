@@ -13,13 +13,12 @@ struct dig {
 
 struct edge {
 	pos a, b;
-	int color;
 };
 
 i64 area_incl_edges(std::vector<edge> const& edges) {
 	i64 area = 0;
 	i64 edge_length = 0;
-	for (auto const [last_pos, pos, _] : edges) {
+	for (auto const [last_pos, pos] : edges) {
 		area += (last_pos.x + pos.x) * (last_pos.y - pos.y);
 		edge_length += last_pos.steps_to(pos);
 	}
@@ -32,7 +31,7 @@ constexpr auto part1(auto const& input) { // array of 'dig'
 	pos prev{0, 0};
 	for (auto d : input) {
 		pos const next = prev + offsets[d.dir] * d.count;
-		poly.emplace_back(prev, next, d.color);
+		poly.emplace_back(prev, next);
 		prev = next;
 	}
 
@@ -47,7 +46,7 @@ constexpr auto part2(auto const& input) {
 		int const count = (d.color & 0xFFFFF0) >> 4;
 		int const dir = d.color & 0x00000F;
 		pos const next = prev + offsets[dir] * count;
-		poly.emplace_back(prev, next, d.color);
+		poly.emplace_back(prev, next);
 		prev = next;
 	}
 
