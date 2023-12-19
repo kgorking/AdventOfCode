@@ -18,7 +18,7 @@ struct the_rules {
 		int i = 0;
 		for (auto const r : init)
 			rules[i++] = r;
-		// remaining rules just go to 'fallback'
+		// remaining categories just go to 'fallback'
 		rules[i].dest = fallback;
 	}
 	rule rules[4];
