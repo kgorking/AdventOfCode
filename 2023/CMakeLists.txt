@@ -7,7 +7,7 @@ macro(add_day)
 	add_test(${ARGV0} ${ARGV0})
 
 	target_compile_options(${ARGV0} PRIVATE /ZI /EHsc /nologo /experimental:module) #// /reference std=CMakeFiles\\AdventOfCode.dir\\std.ifc)
-	target_link_options(${ARGV0} PRIVATE /INCREMENTAL /PROFILE /EDITANDCONTINUE)
+	target_link_options(${ARGV0} PRIVATE /INCREMENTAL /EDITANDCONTINUE)
 	target_compile_definitions(${ARGV0} PRIVATE
 		AOC_IMPL_H="./${ARGV0}/impl.cpp"
 		AOC_SAMPLE_H="./${ARGV0}/sample_input.txt"

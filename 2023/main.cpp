@@ -13,7 +13,7 @@ TEST_CASE("Sample input") {
 	std::cout << std::format("\nSample Part 1: {}\nSample Part 2: {}\n", part_1, part_2);
 
 	auto const [expected_part_1, expected_part_2] = expected_sample;
-	REQUIRE(part_1 == expected_part_1);
+	CHECK  (part_1 == expected_part_1);
 	REQUIRE(part_2 == expected_part_2);
 }
 

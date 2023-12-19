@@ -1,18 +1,18 @@
-constexpr auto expected_sample = std::make_pair(19114, 0);
+constexpr auto expected_sample = std::make_pair(19114, 167409079868000);
 const auto sample_input = input_t{
 
 {
-{ "px", RULE { return a<2006?"qkq":m>2090?"A":"rfg"; } },
-{ "pv", RULE { return a>1716?"R":"A"; } },
-{ "lnx", RULE { return m>1548?"A":"A"; } },
-{ "rfg", RULE { return s<537?"gd":x>2440?"R":"A"; } },
-{ "qs", RULE { return s>3448?"A":"lnx"; } },
-{ "qkq", RULE { return x<1416?"A":"crn"; } },
-{ "crn", RULE { return x>2662?"A":"R"; } },
-{ "in", RULE { return s<1351?"px":"qqz"; } },
-{ "qqz", RULE { return s>2770?"qs":m<1801?"hdj":"R"; } },
-{ "gd", RULE { return a>3333?"R":"R"; } },
-{ "hdj", RULE { return m>838?"A":"pv"; } },
+{ "px", {{{a,-2006,"qkq"}, {m, +2090, "A"}}, "rfg"}},
+{ "pv", {{{a,+1716,"R"}},"A"}},
+{ "lnx", {{{m,+1548,"A"}},"A"}},
+{ "rfg", {{{s,-537,"gd"},{x,+2440,"R"}},"A"}},
+{ "qs", {{{s,+3448,"A"}},"lnx"}},
+{ "qkq", {{{x,-1416,"A"}},"crn"}},
+{ "crn", {{{x,+2662,"A"}},"R"}},
+{ "in", {{{s,-1351,"px"}},"qqz"}},
+{ "qqz", {{{s,+2770,"qs"},{m,-1801,"hdj"}},"R"}},
+{ "gd", {{{a,+3333,"R"}},"R"}},
+{ "hdj", {{{m,+838,"A"}},"pv"}}
 },
 
 {
