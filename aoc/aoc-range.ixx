@@ -7,6 +7,9 @@ template <typename T>
 struct range {
 	T first, last;
 
+	[[nodiscard]] constexpr T size() const {
+		return (last - first) + 1;
+	}
 	[[nodiscard]] constexpr bool contains(T const& t) const {
 		return t >= first && t <= last;
 	}
@@ -32,6 +35,13 @@ struct range {
 		T const last{std::max(r1.last, r2.last)};
 
 		return range{first, last};
+	}
+
+	// Splits a range into [first, split_pos-1], [split_pos, last]
+	[[nodiscard]] constexpr static std::pair<range,range> split(range const& r, T split_pos) {
+		if (!r.contains(split_pos) || r.first == split_pos)
+			throw std::invalid_argument("splitting position must be in range");
+		return {{r.first, split_pos - 1}, {split_pos, r.last}};
 	}
 
 	auto operator<=>(range const&) const noexcept = default;
