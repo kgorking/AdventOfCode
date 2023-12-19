@@ -16,11 +16,13 @@ struct rating_t {
 };
 
 struct op {
+	// Helper to set up the rules
 	op(std::initializer_list<rule> init, std::string_view sv) {
 		// maintain order of rules
 		int i = 0;
 		for (auto const r : init)
 			rules[i++] = r;
+		// remaining rules just go to 'sv'
 		rules[i].dest = sv;
 	}
 	rule rules[4];
@@ -34,6 +36,7 @@ struct input_t {
 };
 
 constexpr auto part1(auto const& input) {
+	// Done in a completely different way, and I'm not reimplementing it again
 	int sum = 391132;
 	return sum;
 }
