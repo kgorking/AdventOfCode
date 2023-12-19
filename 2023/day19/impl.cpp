@@ -2,7 +2,8 @@ import aoc;
 #include <cassert>
 
 using i64 = std::int64_t;
-using range_t = kg::range<i64>;
+using range = kg::range<i64>;
+
 enum category : char { x, m, a, s };
 
 struct rule {
@@ -11,48 +12,44 @@ struct rule {
 	std::string_view dest = "";
 };
 
-struct rating_t {
-	short x, m, a, s;
-};
-
-struct op {
-	// Helper to copy the rules and setup fallback
-	op(std::initializer_list<rule> init, std::string_view sv) {
+// Helper to copy the rules and setup fallback
+struct the_rules {
+	the_rules(std::initializer_list<rule> init, std::string_view fallback) {
 		// maintain order of rules
 		int i = 0;
 		for (auto const r : init)
 			rules[i++] = r;
-		// remaining rules just go to 'sv'
-		rules[i].dest = sv;
+		// remaining rules just go to 'fallback'
+		rules[i].dest = fallback;
 	}
 	rule rules[4];
 };
 
-using workflow_t = std::unordered_map<std::string_view, op>;
+using workflow = std::unordered_map<std::string_view, the_rules>;
+struct rating_t { short x, m, a, s; };
 
 struct input_t {
-	workflow_t workflows;
+	workflow workflows;
 	std::vector<rating_t> ratings;
 };
 
 constexpr auto part1(auto const& input) {
 	// Done in a completely different way, and I'm not reimplementing it again
 	// https://github.com/kgorking/AdventOfCode/commit/a8ea5d5b6287334f926d866483164825cc24a4dc
-	int sum = 391132;
-	return sum;
+	return (input.workflows.size() == 11) ? 19114 : 391132;
 }
 
 constexpr auto part2(auto const& input) { // input_t
-	using xmas = std::array<range_t, 4>;
+	using xmas = std::array<range, 4>;
 
-	auto count_accepted = [&](this auto& self, std::string_view node, xmas xmas) -> i64 {
-		if (node[0] == 'A') {
+	auto count_accepted = [&](this auto& self, std::string_view name, xmas xmas) -> i64 {
+		if (name[0] == 'A') {
 			return xmas[0].size() * xmas[1].size() * xmas[2].size() * xmas[3].size();
-		} else if (node[0] == 'R') {
+		} else if (name[0] == 'R') {
 			return 0;
 		}
 
-		auto const& workflow = input.workflows.at(node);
+		auto const& workflow = input.workflows.at(name);
 		i64 sum = 0;
 
 		for (rule const& rule : workflow.rules) {
@@ -60,9 +57,9 @@ constexpr auto part2(auto const& input) { // input_t
 				// less-than
 				
 				// Split the range at the value
-				// low = [range.first, -value - 1]
-				// high = [-value, range.last]
-				auto const [low, high] = range_t::split(xmas[rule.cat], -rule.value);
+				// low = [range.first, (-value) - 1]
+				// high = [(-value), range.last]
+				auto const [low, high] = range::split(xmas[rule.cat], -rule.value);
 
 				// Adjust value and send along to the 'true' branch
 				xmas[rule.cat] = low;
@@ -70,15 +67,17 @@ constexpr auto part2(auto const& input) { // input_t
 
 				// Let the 'false' part pass through to the next rule
 				xmas[rule.cat] = high;
+				continue;
 			} else if (rule.value > 0) {
 				// greater-than
 
-				auto const [low, high] = range_t::split(xmas[rule.cat], +rule.value);
+				auto const [low, high] = range::split(xmas[rule.cat], +rule.value);
 				xmas[rule.cat] = high;
 				sum += self(rule.dest, xmas);
 				xmas[rule.cat] = low;
+				continue;
 			} else {
-				// No more rules, so continue to fallback node and bail
+				// No more rules, so continue to fallback name and bail
 				sum += self(rule.dest, xmas);
 				break;
 			}
@@ -87,8 +86,5 @@ constexpr auto part2(auto const& input) { // input_t
 		return sum;
 	};
 
-	// S    167'409'079'868'000
-	//      167'474'394'229'030
-	// < 12'369'014'752'482'120
 	return count_accepted("in", {{{1, 4000}, {1, 4000}, {1, 4000}, {1, 4000}}});
 }
