@@ -8,7 +8,7 @@ enum category : char { x, m, a, s };
 
 struct rule {
 	category cat;
-	short value = 0; // value<0 = less-than, value>0 = greater-than, 0 = pass-through to 'dest'
+	short value = 0; // <0 = less-than, >0 = greater-than, 0 = pass-through to 'dest'
 	std::string_view dest = "";
 };
 
@@ -74,7 +74,7 @@ constexpr auto part2(input_t const& input) {
 			} else if (rule.value > 0) {
 				// greater-than
 
-				auto const [low, high] = range::split(xmas[rule.cat], +rule.value);
+				auto const [low, high] = range::split(xmas[rule.cat], +rule.value + 1);
 				xmas[rule.cat] = high;
 				sum += self(rule.dest, xmas);
 				xmas[rule.cat] = low;
