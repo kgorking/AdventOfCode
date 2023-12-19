@@ -44,8 +44,10 @@ constexpr auto part2(input_t const& input) {
 
 	auto count_accepted = [&](this auto& self, std::string_view name, xmas xmas) -> i64 {
 		if (name[0] == 'A') {
+			// Calculate accepted values
 			return xmas[0].size() * xmas[1].size() * xmas[2].size() * xmas[3].size();
 		} else if (name[0] == 'R') {
+			// You get nothing
 			return 0;
 		}
 
@@ -61,13 +63,14 @@ constexpr auto part2(input_t const& input) {
 				// high = [(-value), range.last]
 				auto const [low, high] = range::split(xmas[rule.cat], -rule.value);
 
-				// Adjust value and send along to the 'true' branch
+				// Adjust value and recurse
 				xmas[rule.cat] = low;
 				sum += self(rule.dest, xmas);
 
-				// Let the 'false' part pass through to the next rule
+				// Adjust value and pass it through to the next rule
 				xmas[rule.cat] = high;
 				continue;
+
 			} else if (rule.value > 0) {
 				// greater-than
 
@@ -76,8 +79,9 @@ constexpr auto part2(input_t const& input) {
 				sum += self(rule.dest, xmas);
 				xmas[rule.cat] = low;
 				continue;
+
 			} else {
-				// No more rules, so continue to fallback name and bail
+				// No more rules, so continue to fallback and bail
 				sum += self(rule.dest, xmas);
 				break;
 			}
