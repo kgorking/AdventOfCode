@@ -50,10 +50,9 @@ constexpr auto part2(input_t const& input) {
 			return 0;
 		}
 
-		auto const& workflow = input.workflows.at(name);
 		i64 sum = 0;
 
-		for (rule const& rule : workflow.rules) {
+		for (rule const& rule : input.workflows.at(name).rules) {
 			if (rule.value < 0) {
 				// less-than
 				
