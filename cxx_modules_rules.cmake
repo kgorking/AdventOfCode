@@ -13,7 +13,7 @@ elseif(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.26")
 elseif(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.25")
 	set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "3c375311-a3c9-4396-a187-3227ef642046")
 else()
-	message(FATAL_ERROR "Unknown module uuid for CMake version '${CMAKE_VERSION}'")
+	message(FATAL_ERROR "Unsupported CMake version '${CMAKE_VERSION}'. Please upgrade to version 3.28+")
 	#set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "9629ab6c-6c0e-423f-bb9d-cc5ac4a22041") # ?
 	#set(CMAKE_EXPERIMENTAL_CXX_MODULE_CMAKE_API "17be90bd-a850-44e0-be50-448de847d652") # ?
 endif()
