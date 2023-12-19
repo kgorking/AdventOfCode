@@ -33,13 +33,13 @@ struct input_t {
 	std::vector<rating_t> ratings;
 };
 
-constexpr auto part1(auto const& input) {
+constexpr auto part1(input_t const& input) {
 	// Done in a completely different way, and I'm not reimplementing it again
 	// https://github.com/kgorking/AdventOfCode/commit/a8ea5d5b6287334f926d866483164825cc24a4dc
 	return (input.workflows.size() == 11) ? 19114 : 391132;
 }
 
-constexpr auto part2(auto const& input) { // input_t
+constexpr auto part2(input_t const& input) {
 	using xmas = std::array<range, 4>;
 
 	auto count_accepted = [&](this auto& self, std::string_view name, xmas xmas) -> i64 {
