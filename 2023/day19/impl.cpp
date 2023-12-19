@@ -1,5 +1,4 @@
 import aoc;
-#include <cassert>
 
 using i64 = std::int64_t;
 using range = kg::range<i64>;
