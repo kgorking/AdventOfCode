@@ -7,7 +7,7 @@ enum category : char { x, m, a, s };
 
 struct rule {
 	category cat;
-	short value = 0;
+	short value = 0; // value<0 = less-than, value>0 = greater-than, 0 = pass-through to 'dest'
 	std::string_view dest = "";
 };
 
@@ -16,7 +16,7 @@ struct rating_t {
 };
 
 struct op {
-	// Helper to set up the rules
+	// Helper to copy the rules and setup fallback
 	op(std::initializer_list<rule> init, std::string_view sv) {
 		// maintain order of rules
 		int i = 0;
@@ -37,6 +37,7 @@ struct input_t {
 
 constexpr auto part1(auto const& input) {
 	// Done in a completely different way, and I'm not reimplementing it again
+	// https://github.com/kgorking/AdventOfCode/commit/a8ea5d5b6287334f926d866483164825cc24a4dc
 	int sum = 391132;
 	return sum;
 }
@@ -44,7 +45,7 @@ constexpr auto part1(auto const& input) {
 constexpr auto part2(auto const& input) { // input_t
 	using xmas = std::array<range_t, 4>;
 
-	auto count_splits = [&](this auto& self, std::string_view node, xmas xmas) -> i64 {
+	auto count_accepted = [&](this auto& self, std::string_view node, xmas xmas) -> i64 {
 		if (node[0] == 'A') {
 			return xmas[0].size() * xmas[1].size() * xmas[2].size() * xmas[3].size();
 		} else if (node[0] == 'R') {
@@ -55,14 +56,12 @@ constexpr auto part2(auto const& input) { // input_t
 		i64 sum = 0;
 
 		for (rule const& rule : workflow.rules) {
-			if (rule.value == 0) {
-				// No more rules, so continue to fallback node and break
-				sum += self(rule.dest, xmas);
-				break;
-			} else if (rule.value < 0) {
+			if (rule.value < 0) {
 				// less-than
 				
 				// Split the range at the value
+				// low = [range.first, -value - 1]
+				// high = [-value, range.last]
 				auto const [low, high] = range_t::split(xmas[rule.cat], -rule.value);
 
 				// Adjust value and send along to the 'true' branch
@@ -71,13 +70,17 @@ constexpr auto part2(auto const& input) { // input_t
 
 				// Let the 'false' part pass through to the next rule
 				xmas[rule.cat] = high;
-			} else {
+			} else if (rule.value > 0) {
 				// greater-than
 
 				auto const [low, high] = range_t::split(xmas[rule.cat], +rule.value);
 				xmas[rule.cat] = high;
 				sum += self(rule.dest, xmas);
 				xmas[rule.cat] = low;
+			} else {
+				// No more rules, so continue to fallback node and bail
+				sum += self(rule.dest, xmas);
+				break;
 			}
 		}
 
@@ -87,5 +90,5 @@ constexpr auto part2(auto const& input) { // input_t
 	// S    167'409'079'868'000
 	//      167'474'394'229'030
 	// < 12'369'014'752'482'120
-	return count_splits("in", {{{1, 4000}, {1, 4000}, {1, 4000}, {1, 4000}}});
+	return count_accepted("in", {{{1, 4000}, {1, 4000}, {1, 4000}, {1, 4000}}});
 }

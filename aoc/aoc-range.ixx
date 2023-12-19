@@ -39,7 +39,7 @@ struct range {
 
 	// Splits a range into [first, split_pos-1], [split_pos, last]
 	[[nodiscard]] constexpr static std::pair<range,range> split(range const& r, T split_pos) {
-		if (!r.contains(split_pos) || r.first == split_pos)
+		if (!r.contains(split_pos) || r.first == split_pos || r.last == split_pos)
 			throw std::invalid_argument("splitting position must be in range");
 		return {{r.first, split_pos - 1}, {split_pos, r.last}};
 	}
