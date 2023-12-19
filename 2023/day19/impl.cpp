@@ -38,6 +38,7 @@ constexpr auto part1(input_t const& input) {
 	return (input.workflows.size() == 11) ? 19114 : 391132;
 }
 
+
 constexpr auto part2(input_t const& input) {
 	using xmas = std::array<range, 4>;
 
