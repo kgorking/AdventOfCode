@@ -120,4 +120,11 @@
 #define _VALARRAY_
 #define _VARIANT_
 #define _VECTOR_
+#define __INTRIN_H_ // MSVC instrinsics
 // #define _VERSION_ Probably should leave this out as we want feature test macros
+
+
+
+// Patches for catch2
+#define CHAR_BIT 8
+using uint32_t = std::uint32_t;
