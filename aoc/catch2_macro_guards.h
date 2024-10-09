@@ -35,6 +35,7 @@
 #define _CLIMITS_
 #define _CLOCALE_
 #define _CMATH_
+#define _COMPARE_
 #define _CSETJMP_
 #define _CSIGNAL_
 #define _CSTDALIGN_
