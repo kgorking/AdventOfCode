@@ -103,11 +103,6 @@ private:
 	std::atomic_bool stop = false;
 };
 
-template <typename Fn>
-async_fn(Fn&&) -> async_fn<Fn>;
-template <typename Fn>
-async_fn(Fn&&, unsigned) -> async_fn<Fn>;
-
 // single-producer, multiple-consumer
 // Producer returns a std::optional<T> or T*.
 // Keeps calling prod() as long as a valid value is returned.
