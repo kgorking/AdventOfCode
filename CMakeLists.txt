@@ -1,18 +1,17 @@
-﻿cmake_minimum_required (VERSION 3.24)
+﻿cmake_minimum_required (VERSION 3.28)
 
 project (AdventOfCode CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-include(cxx_modules_rules.cmake)
+set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 
 # Catch2
 Include(FetchContent)
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.5.0 # or a later release
+  GIT_TAG        v3.6.0 # or a later release
 )
 FetchContent_MakeAvailable(Catch2)
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
