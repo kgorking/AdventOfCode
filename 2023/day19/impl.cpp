@@ -58,25 +58,25 @@ constexpr auto part2(input_t const& input) {
 				// less-than
 				
 				// Split the range at the value
-				// low = [range.first, (-value) - 1]
-				// high = [(-value), range.last]
-				auto const [low, high] = range::split(xmas[rule.cat], -rule.value);
+				// a = [range.first, (-value) - 1]
+				// b = [(-value), range.last]
+				auto const [a, b] = range::split(xmas[rule.cat], -rule.value);
 
 				// Adjust value and recurse
-				xmas[rule.cat] = low;
+				xmas[rule.cat] = a;
 				sum += self(rule.dest, xmas);
 
 				// Adjust value and pass it through to the next rule
-				xmas[rule.cat] = high;
+				xmas[rule.cat] = b;
 				continue;
 
 			} else if (rule.value > 0) {
 				// greater-than
 
-				auto const [low, high] = range::split(xmas[rule.cat], +rule.value + 1);
-				xmas[rule.cat] = high;
+				auto const [a, b] = range::split(xmas[rule.cat], +rule.value + 1);
+				xmas[rule.cat] = b;
 				sum += self(rule.dest, xmas);
-				xmas[rule.cat] = low;
+				xmas[rule.cat] = a;
 				continue;
 
 			} else {
