@@ -14,6 +14,7 @@ function(add_day)
 		target_compile_definitions(${ARGV0}_${dir} PRIVATE
 			AOC_input="../2024/${ARGV0}/input.txt"
 			AOC_sample="../2024/${ARGV0}/sample_input.txt"
+			AOC_MODULE=aoc.${ARGV0}
 			AOC_SZ="2024/${ARGV0}/${dir}"
 			AOC_MAIN_CPP="../2024/${ARGV0}/${dir}.cpp"
 			AOC_NS=aoc2024_${ARGV0}_${dir}
@@ -27,7 +28,7 @@ endfunction()
 
 
 add_day (day01 solution)
-#add_day (day02 solution)
+add_day (day02 solution)
 #add_day (day03 solution)
 #add_day (day04 solution)
 #add_day (day05 solution)
