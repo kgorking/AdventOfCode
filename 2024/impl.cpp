@@ -1,4 +1,5 @@
-﻿import std;
+﻿import aoc;
+import std;
 #include "../aoc/catch2_macro_guards.h"
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/catch_test_macros.hpp>

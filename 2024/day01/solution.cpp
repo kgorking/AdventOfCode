@@ -52,7 +52,7 @@ auto part2(auto&& input) {
 	auto it_left = p.left.begin();
 	auto it_right = p.right.begin();
 
-	// Linearly walk the the two lists and calc the similarity score.
+	// Linearly walk the the two lists and calc the similarity score. O(N).
 	//   similarity = value * count(value, left) * count(value, right)
 	while (it_left != p.left.end()) {
 		int const value = *it_left;
