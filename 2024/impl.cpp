@@ -1,4 +1,4 @@
-﻿import aoc;
+﻿import aoc.solution;
 import std;
 #include "../aoc/catch2_macro_guards.h"
 #include <catch2/benchmark/catch_benchmark.hpp>
@@ -15,10 +15,9 @@ constexpr auto get_input() {
 #include AOC_input
 	;
 }
+constexpr auto sample_input = get_sample_input();
+constexpr auto actual_input = get_input();
 
-#include AOC_MAIN_CPP
-
-namespace AOC_NS {
 TEST_CASE(AOC_SZ " - sample") {
 	auto const part_1 = part1(sample_input);
 	auto const part_2 = part2(sample_input);
@@ -53,4 +52,3 @@ TEST_CASE(AOC_SZ) {
 	};
 }
 #endif
-} // namespace AOC_NS

@@ -1,4 +1,5 @@
-import aoc;
+export module aoc.day02;
+import std;
 
 namespace AOC_NS {
 

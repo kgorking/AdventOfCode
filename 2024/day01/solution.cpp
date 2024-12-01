@@ -1,12 +1,9 @@
+export module aoc.solution;
 import aoc;
 import std;
 
-namespace AOC_NS {
-
-constexpr auto expected_sample = std::make_pair(11, 31);
-constexpr auto expected_input = std::make_pair(1320851, 26859182);
-constexpr auto sample_input = get_sample_input();
-constexpr auto actual_input = get_input();
+export constexpr auto expected_sample = std::make_pair(11, 31);
+export constexpr auto expected_input = std::make_pair(1320851, 26859182);
 
 // input = std::array<std::pair<int,int>>
 
@@ -35,7 +32,7 @@ int count_repeats(auto& i, auto const end, int const value) {
 	return count;
 }
 
-auto part1(auto&& input) {
+export auto part1(auto&& input) {
 	processed const p = process_input(input);
 
 	auto distance = [](int l, int r) -> int { return std::abs(l - r); };
@@ -45,7 +42,7 @@ auto part1(auto&& input) {
 }
 
 
-auto part2(auto&& input) {
+export auto part2(auto&& input) {
 	processed const p = process_input(input);
 
 	int similarity_score = 0;
@@ -77,4 +74,3 @@ auto part2(auto&& input) {
 
 	return similarity_score;
 }
-} // namespace AOC_NS
