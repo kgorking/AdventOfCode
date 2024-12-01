@@ -14,7 +14,7 @@ TEST_CASE(AOC_SZ " - sample") {
 	CHECK(part_1 == expected_part_1);
 	REQUIRE(part_2 == expected_part_2);
 
-	std::cout << std::format(AOC_SZ "\n  Sample Part 1: {}\n  Sample Part 2: {}\n", part_1, part_2);
+	std::cout << std::format(AOC_SZ "\n  Sample Part 1: {}\n  Sample Part 2: {}\n\n", part_1, part_2);
 }
 
 TEST_CASE(AOC_SZ " - actual") {

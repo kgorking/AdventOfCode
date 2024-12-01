@@ -8,11 +8,11 @@ function(add_day)
 		add_executable(${ARGV0}_${dir} "impl.cpp")
 
 		target_compile_definitions(${ARGV0}_${dir} PRIVATE
-			AOC_input="../input.txt"
-			AOC_sample="../sample_input.txt"
-			AOC_NS=aoc2024_${ARGV0}_${dir}
+			AOC_input="../2024/${ARGV0}/input.txt"
+			AOC_sample="../2024/${ARGV0}/sample_input.txt"
 			AOC_SZ="2024/${ARGV0}/${dir}"
 			AOC_MAIN_CPP="../2024/${ARGV0}/${dir}.cpp"
+			AOC_NS=aoc2024_${ARGV0}_${dir}
 		)
 
 		target_link_libraries(${ARGV0}_${dir} PRIVATE AdventOfCode Catch2::Catch2WithMain)
