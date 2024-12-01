@@ -27,7 +27,7 @@ processed process_input(auto&& input) {
 // Optimzed find function. Doesn't need to run to the end of range
 // to make sure the value is found.
 auto find_in_sorted (auto& i, auto const end, int const value) {
-	while (*i < value)
+	while (i != end && *i < value)
 		++i;
 	return (*i == value) ? i : end;
 }
@@ -66,7 +66,7 @@ export auto part2(auto&& input) {
 		int const count_left = count_repeats(it_left, p.left.end(), value);
 
 		// Find the value in the right list
-		auto it_next_right = find_in_sorted(it_right, p.right.end(), value);
+		auto const it_next_right = find_in_sorted(it_right, p.right.end(), value);
 		if (it_next_right != p.right.end()) {
 			// Count the number of times the value appears in the right list
 			int const count_right = count_repeats(it_next_right, p.right.end(), value);
