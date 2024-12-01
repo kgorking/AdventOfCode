@@ -1,4 +1,4 @@
-export module aoc.solution;
+export module aoc.day01;
 import aoc;
 import std;
 
@@ -22,6 +22,12 @@ processed process_input(auto&& input) {
 	std::ranges::sort(p.right);
 
 	return p;
+}
+
+auto find_in_sorted (auto& i, auto const end, int const value) {
+	while (*i < value)
+		++i;
+	return (*i == value) ? i : end;
 }
 
 // Count the repeats of 'value'. Moves 'i' past 'value'.
@@ -58,7 +64,7 @@ export auto part2(auto&& input) {
 		int const count_left = count_repeats(it_left, p.left.end(), value);
 
 		// Find the value in the right list
-		auto it_next_right = std::ranges::find(it_right, p.right.end(), value);
+		auto it_next_right = find_in_sorted(it_right, p.right.end(), value);
 		if (it_next_right != p.right.end()) {
 			// Count the number of times the value appears in the right list
 			int const count_right = count_repeats(it_next_right, p.right.end(), value);
