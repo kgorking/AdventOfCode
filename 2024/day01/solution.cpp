@@ -24,6 +24,8 @@ processed process_input(auto&& input) {
 	return p;
 }
 
+// Optimzed find function. Doesn't need to run to the end of range
+// to make sure the value is found.
 auto find_in_sorted (auto& i, auto const end, int const value) {
 	while (*i < value)
 		++i;
