@@ -18,6 +18,7 @@ auto to_index = [](char c) {
 	case '\\': return 2;
 	case '|': return 3;
 	case '-': return 4;
+	default: std::unreachable();
 	}
 };
 auto to_bit = [](char d) { return 1 << d; };

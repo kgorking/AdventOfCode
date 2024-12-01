@@ -1,4 +1,8 @@
 constexpr auto expected_sample = std::make_pair(0, 0);
-constexpr auto sample_input = std::to_array<std::string_view>({
-	"sample input goes here"
+const auto sample_input = std::to_array<module_decl>({
+	{0, "broadcaster", {"a", "b", "c"}},
+	{1, "a", {"b"}},
+	{1, "b", {"c"}},
+	{1, "c", {"inv"}},
+	{2, "inv", {"a"}},
 });

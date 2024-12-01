@@ -6,7 +6,6 @@ macro(add_day)
 	add_executable (${ARGV0} "main.cpp")
 	add_test(${ARGV0} ${ARGV0})
 
-	target_compile_options(${ARGV0} PRIVATE /ZI /EHsc /nologo /experimental:module) #// /reference std=CMakeFiles\\AdventOfCode.dir\\std.ifc)
 	target_link_options(${ARGV0} PRIVATE /INCREMENTAL /EDITANDCONTINUE)
 	target_compile_definitions(${ARGV0} PRIVATE
 		AOC_IMPL_H="./${ARGV0}/impl.cpp"
@@ -24,7 +23,7 @@ add_subdirectory ("day03")
 add_subdirectory ("day04")
 add_subdirectory ("day05")
 add_subdirectory ("day06")
-add_day ("day07")
+add_day (day07)
 add_day ("day08")
 add_day ("day09")
 add_day ("day10")

@@ -1,2 +1,0 @@
-/EHsc
-/nologo
