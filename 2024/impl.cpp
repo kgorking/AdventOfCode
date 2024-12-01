@@ -3,6 +3,18 @@
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/catch_test_macros.hpp>
 
+constexpr auto get_sample_input() {
+	return
+#include AOC_sample
+	;
+}
+
+constexpr auto get_input() {
+	return
+#include AOC_input
+	;
+}
+
 #include AOC_MAIN_CPP
 
 namespace AOC_NS {
