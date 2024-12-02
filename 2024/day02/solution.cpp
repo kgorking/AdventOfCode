@@ -15,7 +15,7 @@ auto safe_report = [](auto report) {
 
 	// Check deltas between adjacent rows
 	auto deltas = diffs | std::views::transform(kg::abs); // can't use std::abs because that would make sense
-	if (auto const [min, max] = std::ranges::minmax_element(deltas); *min < 1 || *max > 3)
+	if (auto const [min, max] = std::ranges::minmax(deltas); min < 1 || max > 3)
 		return false;
 
 	return true;
