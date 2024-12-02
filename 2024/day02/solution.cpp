@@ -31,8 +31,8 @@ export auto part2(auto&& input) {
 			= std::views::repeat(std::vector(report.size(), 1))
 			| std::views::take(report.size())
 			| std::views::enumerate
-			| std::views::transform([](auto tup) {
-				auto [index, mask] = tup;
+			| std::views::transform([](auto const& tup) {
+				auto const& [index, mask] = tup;
 				auto copy = mask;
 				copy[index] = 0;
 				return copy;
