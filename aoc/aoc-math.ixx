@@ -2,6 +2,13 @@ export module aoc:math;
 import std;
 
 export namespace kg {
+// Return the absolue value
+struct s_abs {
+	auto operator()(auto v) const {
+		return (v < 0) ? -v : v;
+	}
+} abs;
+
 // Calculate the binomial coefficient.
 // n and k must be greater than 0, k must be less than n
 std::uint64_t binomial_coefficient(int n, int k) {
