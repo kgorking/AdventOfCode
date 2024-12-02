@@ -4,10 +4,12 @@ import std;
 export namespace kg {
 // Return the absolue value
 struct s_abs {
-	auto operator()(auto v) const {
+	constexpr auto operator()(auto v) const {
 		return (v < 0) ? -v : v;
 	}
-} abs;
+};
+
+inline constexpr s_abs abs;
 
 // Calculate the binomial coefficient.
 // n and k must be greater than 0, k must be less than n
