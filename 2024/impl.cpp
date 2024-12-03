@@ -15,8 +15,8 @@ constexpr auto get_input() {
 #include AOC_input
 	;
 }
-constexpr auto sample_input = get_sample_input();
-constexpr auto actual_input = get_input();
+const auto sample_input = get_sample_input();
+const auto actual_input = get_input();
 
 TEST_CASE(AOC_SZ " - sample") {
 	auto const part_1 = part1(sample_input);
