@@ -5,7 +5,7 @@ import std;
 export constexpr auto expected_sample = std::make_pair(2, 4);
 export constexpr auto expected_input = std::make_pair(407, 459);
 
-auto safe_report = [](auto const& report) {
+constexpr auto safe_report = [](auto const& report) {
 	auto diffs = report | std::views::pairwise_transform(std::minus{});
 
 	// Check increasing/decreasing values
@@ -26,19 +26,17 @@ export int part1(auto&& input) {
 }
 
 export auto part2(auto&& input) {
-	auto masked_safe_report = [](auto const& report) {
+	auto dampened_safe_report = [](auto const& report) {
 		if (safe_report(report))
 			return true;
 
-		// Delete a level and check if it's safe.
-		auto masked_report = [&](int index) {
+		return std::ranges::any_of(std::views::iota(0ull, report.size()), [&](int index) {
+			// Erase a level and re-check
 			auto copy = report;
 			copy.erase(copy.begin() + index);
 			return safe_report(copy);
-		};
-
-		return std::ranges::any_of(std::views::iota(0ull, report.size()), masked_report);
+		});
 	};
 
-	return std::transform_reduce(input.begin(), input.end(), 0, std::plus{}, masked_safe_report);
+	return std::transform_reduce(input.begin(), input.end(), 0, std::plus{}, dampened_safe_report);
 }
