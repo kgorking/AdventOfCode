@@ -5,7 +5,7 @@ import std;
 export constexpr auto expected_sample = std::make_pair(2, 4);
 export constexpr auto expected_input = std::make_pair(407, 459);
 
-auto safe_report = [](auto report) {
+auto safe_report = [](auto const& report) {
 	auto diffs = report | std::views::pairwise_transform(std::minus{});
 
 	// Check increasing/decreasing values
@@ -30,27 +30,14 @@ export auto part2(auto&& input) {
 		if (safe_report(report))
 			return true;
 
-		auto mask = std::vector(report.size(), 1);
-		mask.front() = 0;
-
-		// Generate masks for the reports to filter out a level
-		auto generate_masks
-			= std::views::repeat(0)
-			| std::views::take(report.size())
-			| std::views::transform([&](int) {
-				std::ranges::rotate(mask, mask.begin() + 1);
-				return mask;
-			});
-
-		// Use a mask to filter out a level and pass it to safe_report
-		auto masked_report = [&](auto const& mask) {
-			return safe_report
-				( std::views::zip(report, mask)
-				| std::views::filter([](auto zip) { return std::get<1>(zip); })
-				| std::views::transform([](auto zip) { return std::get<0>(zip);} ));
+		// Delete a level and check if it's safe.
+		auto masked_report = [&](int index) {
+			auto copy = report;
+			copy.erase(copy.begin() + index);
+			return safe_report(copy);
 		};
 
-		return std::ranges::any_of(generate_masks, masked_report);
+		return std::ranges::any_of(std::views::iota(0ull, report.size()), masked_report);
 	};
 
 	return std::transform_reduce(input.begin(), input.end(), 0, std::plus{}, masked_safe_report);
