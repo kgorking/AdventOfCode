@@ -30,7 +30,7 @@ constexpr std::uint64_t sum_products(std::array<std::string_view, N> ops, std::s
 		std::size_t const op_end = program.find('(', op_begin) + 1; // +1 to include the '('
 		std::string_view const op = program.substr(op_begin, op_end - op_begin);
 
-		// Reload the queue with the next instance of the current operator
+		// Reload the queue with the next index of the current operator
 		queue.pop();
 		std::size_t const next_op = program.find(op, op_end);
 		if (next_op != std::string_view::npos)
