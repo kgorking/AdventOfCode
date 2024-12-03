@@ -2,7 +2,7 @@ export module aoc.day03;
 import aoc;
 import std;
 
-// Holds the expected values for sample + input. Used in unittests.
+// Holds the expected values for sample + input. Used in unit tests.
 export constexpr auto expected_sample = std::make_pair(161, 48);
 export constexpr auto expected_input = std::make_pair(183788984, 62098619);
 
