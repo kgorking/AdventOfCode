@@ -29,7 +29,7 @@ endfunction()
 
 add_day (day01 solution)
 add_day (day02 solution)
-#add_day (day03 solution)
+add_day (day03 solution)
 #add_day (day04 solution)
 #add_day (day05 solution)
 #add_day (day06 solution)
