@@ -13,8 +13,8 @@ template <bool X, int N>
 int xmas_count(std::array<std::string_view, N> input, char const c, std::span<const ipair> directions, std::span<const int, 3> offsets) {
 	int num_found = 0;
 
-	for (std::size_t sy = 0; sy < input.size(); sy++) {
-		for (std::size_t sx = input[sy].find(c); sx != std::string_view::npos; sx = input[sy].find(c, sx + 1)) {
+	for (auto const [sy, line] : input | std::views::enumerate) {
+		for (std::size_t sx = line.find(c); sx != std::string_view::npos; sx = line.find(c, sx + 1)) {
 			int const directions_found = kg::sum(directions | std::views::transform([&](ipair dir) {
 				auto const offset_to_char = std::views::transform([&](int offset) {
 					int const x = sx + (dir.first * offset);
