@@ -38,14 +38,15 @@ int xmas_count(std::array<std::string_view, N> input, char const c, std::span<co
 }
 
 export auto part1(auto const& input) {
-	std::array const directions{/* right */ ipair{1, 0},
-								/* left  */ ipair{-1, 0},
-								/* down  */ ipair{0, 1},
-								/* up    */ ipair{0, -1},
-								/* d r   */ ipair{1, 1},
-								/* d l   */ ipair{-1, 1},
-								/* u r   */ ipair{1, -1},
-								/* u l   */ ipair{-1, -1}};
+	auto const directions = std::to_array<ipair>({
+		/* right */ { 1,  0},
+		/* left  */ {-1,  0},
+		/* down  */ { 0,  1},
+		/* up    */ { 0, -1},
+		/* d r   */ { 1,  1},
+		/* d l   */ {-1,  1},
+		/* u r   */ { 1, -1},
+		/* u l   */ {-1, -1}});
 
 	std::array const offsets{1, 2, 3};
 
@@ -53,10 +54,11 @@ export auto part1(auto const& input) {
 }
 
 export auto part2(auto const& input) {
-	std::array const directions{/* d r   */ ipair{1, 1},
-								/* d l   */ ipair{-1, 1},
-								/* u r   */ ipair{1, -1},
-								/* u l   */ ipair{-1, -1}};
+	auto const directions = std::to_array<ipair>({
+		/* d r */ { 1,  1},
+		/* d l */ {-1,  1},
+		/* u r */ { 1, -1},
+		/* u l */ {-1, -1}});
 
 	std::array const offsets{-1, 0, 1};
 

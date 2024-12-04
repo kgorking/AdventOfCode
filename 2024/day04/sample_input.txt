@@ -1,28 +1,4 @@
 std::to_array<std::string_view>({
-// count == 8
-//"          ",
-//"  S  S  S ",
-//"   A A A  ",
-//"    MMM   ",
-//"  SAMXMAS ",
-//"    MMM   ",
-//"   A A A  ",
-//"  S  S  S ",
-//"          ",
-//"          "
-
-// count == 2
-//"          ",
-//" M M M    ",
-//"  A A     ",
-//"   S S    ",
-//"          ",
-//"          ",
-//"          ",
-//"          ",
-//"          ",
-//"          "
-
 "MMMSXXMASM",
 "MSAMXMSMSA",
 "AMXSXMAAMM",
