@@ -2,7 +2,7 @@ export module aoc:math;
 import std;
 
 export namespace kg {
-// Return the absolue value
+// Return the absolute value
 struct s_abs {
 	constexpr auto operator()(auto v) const {
 		return (v < 0) ? -v : v;
