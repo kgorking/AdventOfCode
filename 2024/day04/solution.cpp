@@ -6,25 +6,20 @@ import std;
 export constexpr auto expected_sample = std::make_pair(18, 9);
 export constexpr auto expected_input = std::make_pair(2406, 1807);
 
-using ipair = std::pair<int, int>;
 constexpr std::string_view search_word{"MAS"};
 
 template <bool X, int N>
-int xmas_count(std::array<std::string_view, N> input, char const c, std::span<const ipair> directions, std::span<const int, 3> offsets) {
+int xmas_count(std::array<std::string_view, N> input, char const c, std::span<const kg::pos2di> directions, std::span<const int, 3> offsets) {
 	int num_found = 0;
 
 	for (auto const [sy, line] : input | std::views::enumerate) {
 		for (std::size_t sx = line.find(c); sx != std::string_view::npos; sx = line.find(c, sx + 1)) {
-			int const directions_found =
-				kg::sum(directions | std::views::transform([&](ipair dir) {
+			int const directions_found = kg::sum(directions | std::views::transform([&](kg::pos2di dir) {
 					// Check if a word exists in the direction
 					return std::ranges::equal(search_word, offsets | std::views::transform([&](int offset) {
-						// Convert an offset to a character in the input
-						int const x = sx + (dir.first * offset);
-						int const y = sy + (dir.second * offset);
-						return (y >= 0 && y < input.size() && x >= 0 && x < input[y].size())
-									? input[y][x]
-									: '\0';
+						// Convert an offset and direction to a char
+						kg::pos2di const p = kg::pos2di(sx, sy) + (dir * offset);
+						return (p.y >= 0 && p.y < input.size() && p.x >= 0 && p.x < input[p.y].size()) ? input[p.y][p.x] : '\0';
 					}));
 				}));
 
@@ -36,9 +31,9 @@ int xmas_count(std::array<std::string_view, N> input, char const c, std::span<co
 }
 
 export auto part1(auto const& input) {
-	return xmas_count<false>(input, 'X', std::to_array<ipair>({{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}}), std::array{1, 2, 3});
+	return xmas_count<false>(input, 'X', std::to_array<kg::pos2di>({{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}}), std::array{1, 2, 3});
 }
 
 export auto part2(auto const& input) {
-	return xmas_count<true>(input, 'A', std::to_array<ipair>({{1, 1}, {-1, 1}, {1, -1}, {-1, -1}}), std::array{-1, 0, 1});
+	return xmas_count<true>(input, 'A', std::to_array<kg::pos2di>({{1, 1}, {-1, 1}, {1, -1}, {-1, -1}}), std::array{-1, 0, 1});
 }
