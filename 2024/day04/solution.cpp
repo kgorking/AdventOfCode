@@ -28,12 +28,7 @@ int xmas_count(std::array<std::string_view, N> input, char const c, std::span<co
 					}));
 				}));
 
-			if (X) {
-				// Only count it as found if the word exists in two directions
-				num_found += (directions_found == 2);
-			} else {
-				num_found += directions_found;
-			}
+			num_found += X ? (directions_found == 2) : directions_found;
 		}
 	}
 
@@ -41,15 +36,9 @@ int xmas_count(std::array<std::string_view, N> input, char const c, std::span<co
 }
 
 export auto part1(auto const& input) {
-	auto const directions = std::to_array<ipair>({{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}});
-	std::array const offsets{1, 2, 3};
-
-	return xmas_count<false>(input, 'X', directions, offsets);
+	return xmas_count<false>(input, 'X', std::to_array<ipair>({{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, 1}, {1, -1}, {-1, -1}}), std::array{1, 2, 3});
 }
 
 export auto part2(auto const& input) {
-	auto const directions = std::to_array<ipair>({{1, 1}, {-1, 1}, {1, -1}, {-1, -1}});
-	std::array const offsets{-1, 0, 1};
-
-	return xmas_count<true>(input, 'A', directions, offsets);
+	return xmas_count<true>(input, 'A', std::to_array<ipair>({{1, 1}, {-1, 1}, {1, -1}, {-1, -1}}), std::array{-1, 0, 1});
 }
