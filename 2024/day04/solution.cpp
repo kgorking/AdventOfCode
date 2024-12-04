@@ -3,13 +3,62 @@ import aoc;
 import std;
 
 // Holds the expected values for sample + input. Used in unit tests.
-export constexpr auto expected_sample = std::make_pair(0, 0);
-export constexpr auto expected_input = std::make_pair(0, 0);
+export constexpr auto expected_sample = std::make_pair(18, 9);
+export constexpr auto expected_input = std::make_pair(2406, 1807);
 
-export auto part1(auto&& input) {
-	return 0;
+using ipair = std::pair<int, int>;
+constexpr std::string_view search_word{"MAS"};
+
+template <bool X, int N>
+int xmas_count(std::array<std::string_view, N> input, char const c, std::span<const ipair> directions, std::span<const int, 3> offsets) {
+	int num_found = 0;
+
+	for (std::size_t sy = 0; sy < input.size(); sy++) {
+		for (std::size_t sx = input[sy].find(c); sx != std::string_view::npos; sx = input[sy].find(c, sx + 1)) {
+			int const directions_found = kg::sum(directions | std::views::transform([&](ipair dir) {
+				auto const offset_to_char = std::views::transform([&](int offset) {
+					int const x = sx + (dir.first * offset);
+					int const y = sy + (dir.second * offset);
+					return (x >= 0 && x < input[y].size() && y >= 0 && y < input.size()) ? input[y][x] : '.';
+				});
+
+				return std::ranges::equal(search_word, offsets | offset_to_char);
+			}));
+
+			if (X) {
+				// Only count it as found if the word exists in two directions
+				num_found += (directions_found == 2);
+			} else {
+				num_found += directions_found;
+			}
+		}
+	}
+
+	return num_found;
 }
 
-export auto part2(auto&& input) {
-	return 0;
+export auto part1(auto const& input) {
+	std::array const directions{/* right */ ipair{1, 0},
+								/* left  */ ipair{-1, 0},
+								/* down  */ ipair{0, 1},
+								/* up    */ ipair{0, -1},
+								/* d r   */ ipair{1, 1},
+								/* d l   */ ipair{-1, 1},
+								/* u r   */ ipair{1, -1},
+								/* u l   */ ipair{-1, -1}};
+
+	std::array const offsets{1, 2, 3};
+
+	return xmas_count<false>(input, 'X', directions, offsets);
+}
+
+export auto part2(auto const& input) {
+	std::array const directions{/* d r   */ ipair{1, 1},
+								/* d l   */ ipair{-1, 1},
+								/* u r   */ ipair{1, -1},
+								/* u l   */ ipair{-1, -1}};
+
+	std::array const offsets{-1, 0, 1};
+
+	return xmas_count<true>(input, 'A', directions, offsets);
 }
