@@ -36,4 +36,7 @@ struct pos2d {
 	auto operator<=>(pos2d const&) const noexcept = default;
 };
 
+using pos2di = pos2d<int>;
+using pos2df = pos2d<float>;
+
 } // namespace kg
