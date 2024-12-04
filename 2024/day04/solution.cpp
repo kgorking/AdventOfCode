@@ -6,28 +6,21 @@ import std;
 export constexpr auto expected_sample = std::make_pair(18, 9);
 export constexpr auto expected_input = std::make_pair(2406, 1807);
 
-constexpr std::string_view search_word{"MAS"};
-
 template <bool X, int N>
 int xmas_count(std::array<std::string_view, N> input, char const c, std::span<const kg::pos2di> directions, std::span<const int, 3> offsets) {
-	int num_found = 0;
-
-	for (auto const [sy, line] : input | std::views::enumerate) {
-		for (std::size_t sx = line.find(c); sx != std::string_view::npos; sx = line.find(c, sx + 1)) {
-			int const directions_found = kg::sum(directions | std::views::transform([&](kg::pos2di dir) {
+	return kg::sum(kg::views::indexed_transform(input, [&](int sy, std::string_view line) {
+		return kg::sum(kg::views::indexed_transform(line, [&](int sx, char v) {
+			return (c != v) ? 0 : kg::sum(directions | std::views::transform([&](kg::pos2di dir) {
 					// Check if a word exists in the direction
-					return std::ranges::equal(search_word, offsets | std::views::transform([&](int offset) {
+					return std::ranges::equal(std::string_view{"MAS"}, offsets | std::views::transform([&](int offset) {
 						// Convert an offset and direction to a char
 						kg::pos2di const p = kg::pos2di(sx, sy) + (dir * offset);
 						return (p.y >= 0 && p.y < input.size() && p.x >= 0 && p.x < input[p.y].size()) ? input[p.y][p.x] : '\0';
 					}));
 				}));
-
-			num_found += X ? (directions_found == 2) : directions_found;
-		}
-	}
-
-	return num_found;
+		})
+		| std::views::transform([](int v) { return X ? (v == 2) : v; }));
+	}));
 }
 
 export auto part1(auto const& input) {
