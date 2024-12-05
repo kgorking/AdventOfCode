@@ -7,6 +7,9 @@ template <typename T, int R, int C = R>
 	requires(R > 0 && C > 0)
 using matrix_t = std::array<std::array<T, C>, R>;
 
+template <typename T, int R>
+using vector_t = matrix_t<T, R, 1>;
+
 template <typename T>
 auto make_dmatrix(int R, int C = R) {
 	auto mat = std::vector<std::vector<T>>(R);
@@ -15,12 +18,22 @@ auto make_dmatrix(int R, int C = R) {
 	return mat;
 };
 
-template <typename T, int R>
-using vector_t = matrix_t<T, R, 1>;
+// Sets a row in a matrix
+template <typename T, int N, int M = N>
+constexpr void set_row(matrix_t<T, N, M>& m, int r, std::ranges::range auto& row) {
+	std::ranges::copy(row, m[r].begin());
+}
+
+template <typename T, int N, int M = N>
+auto make_from_rows(std::ranges::range auto const& ...rows) {
+	matrix_t<T, N, M> m;
+	int i=0;
+	(set_row(m, i++, rows), ...);
+	return m;
+}
 
 // Returns an identity matrix
 template <typename T, int N>
-	requires(N > 0)
 constexpr matrix_t<T, N> mat_identity() {
 	matrix_t<T, N, N> ident;
 	for (int i = 0; i < N; i++) {
@@ -32,7 +45,6 @@ constexpr matrix_t<T, N> mat_identity() {
 
 // Returns a matrix filled with maximum values
 template <typename T, int N, int M = N>
-	requires(N > 0 && M > 0)
 constexpr matrix_t<T, N, M> mat_max() {
 	matrix_t<T, N, M> max;
 	for (int i = 0; i < N; i++)

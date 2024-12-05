@@ -10,9 +10,21 @@ struct pos2d {
 	[[nodiscard]] constexpr pos2d operator+(pos2d const p) const {
 		return {x + p.x, y + p.y};
 	}
+	constexpr void operator+=(pos2d const p) {
+		x += p.x;
+		y += p.y;
+	}
+	constexpr void operator-=(pos2d const p) {
+		x -= p.x;
+		y -= p.y;
+	}
 
 	[[nodiscard]] constexpr pos2d operator*(T t) const {
 		return {x * t, y * t};
+	}
+
+	[[nodiscard]] constexpr pos2d operator-() const {
+		return {-x, -y};
 	}
 
 	// Move this point towards 'p'
@@ -31,6 +43,16 @@ struct pos2d {
 	[[nodiscard]] constexpr int steps_to(pos2d const p) const {
 		auto abs = [](auto v) { return (v < 0) ? -v : +v; };
 		return abs(x - p.x) + abs(y - p.y);
+	}
+
+	// Rotate the vector ccw
+	[[nodiscard]] constexpr pos2d rotated() const {
+		return {-y, x};
+	}
+
+	// Rotate the vector ccw
+	[[nodiscard]] constexpr void rotate() {
+		*this = rotated();
 	}
 
 	auto operator<=>(pos2d const&) const noexcept = default;

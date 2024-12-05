@@ -19,11 +19,12 @@ const auto sample_input = get_sample_input();
 const auto actual_input = get_input();
 
 TEST_CASE(AOC_SZ " - sample") {
-	auto const part_1 = part1(sample_input);
-	auto const part_2 = part2(sample_input);
-
 	auto const [expected_part_1, expected_part_2] = expected_sample;
-	CHECK(part_1 == expected_part_1);
+
+	auto const part_1 = part1(sample_input);
+	REQUIRE(part_1 == expected_part_1);
+
+	auto const part_2 = part2(sample_input);
 	REQUIRE(part_2 == expected_part_2);
 
 	std::cout << std::format(AOC_SZ "\n  Sample Part 1: {}\n  Sample Part 2: {}\n\n", part_1, part_2);

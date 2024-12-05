@@ -1,15 +1,22 @@
+BasedOnStyle: WebKit
+
 AccessModifierOffset: '-4'
 
-AllowShortFunctionsOnASingleLine: Empty
-AllowShortLambdasOnASingleLine: All
+AlignOperands: AlignAfterOperator
 
-AlwaysBreakTemplateDeclarations: 'Yes'
+AlignTrailingComments: Always
+
+#AllowShortFunctionsOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: Inline
+
+AlwaysBreakTemplateDeclarations: Yes
 
 AllowShortCaseLabelsOnASingleLine: Yes
 #AlignConsecutiveShortCaseStatements: True
 
-#AlignArrayOfStructures: Right
-#AlignTrailingComments: True
+BreakBeforeBraces: Attach
+BreakBeforeBinaryOperators: All #NonAssignment
+#BreakBinaryOperations: OnePerLine  # clang 20
 
 ColumnLimit: '140'
 
