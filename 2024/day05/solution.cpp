@@ -6,33 +6,27 @@ import std;
 export constexpr auto expected_sample = std::make_pair(143, 123);
 export constexpr auto expected_input = std::make_pair(4662, 5900);
 
-auto solution(auto&& input, bool fix) {
-	auto [rules, all_updates] = input;
+template <bool fix>
+auto solution(auto&& input) {
+	auto const& [rules, all_updates] = input;
 
 	std::unordered_map<int, std::unordered_set<int>> order;
-	for (auto [before, after] : rules) {
+	for (auto [before, after] : rules)
 		order[before].insert(after);
-	}
 
-	auto sort_fn = [&order](int l, int r) {
-		return order[l].contains(r);
-	};
+	auto sort_fn = [&order](int l, int r) { return order[l].contains(r); };
 
 	if (!fix) {
-		return kg::sum(all_updates
-			| std::views::filter([&](auto const& v) {
-				return std::ranges::is_sorted(v, sort_fn); })
-			| std::views::transform([](auto const& v) {
-				return v[v.size() / 2];}));
+		return kg::sum(all_updates | std::views::filter([&](auto const& v) { return std::ranges::is_sorted(v, sort_fn); })
+					   | std::views::transform([](auto const& v) { return v[v.size() / 2]; }));
 	} else {
-		return kg::sum(all_updates
-			| std::views::filter([&](auto const& v) {
-				return !std::ranges::is_sorted(v, sort_fn); })
-			| std::views::transform([&](auto v) {
-				std::ranges::sort(v, sort_fn);
-				return v[v.size() / 2];}));
+		return kg::sum(all_updates | std::views::filter([&](auto const& v) { return !std::ranges::is_sorted(v, sort_fn); })
+					   | std::views::transform([&](auto v) {
+							 std::ranges::sort(v, sort_fn);
+							 return v[v.size() / 2];
+						 }));
 	}
 }
 
-export auto part1(auto&& input) { return solution(input, false); }
-export auto part2(auto&& input) { return solution(input, true); }
+export auto part1(auto&& input) { return solution<false>(input); }
+export auto part2(auto&& input) { return solution<true>(input); }
