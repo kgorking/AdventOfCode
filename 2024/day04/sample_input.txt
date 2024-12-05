@@ -9,5 +9,4 @@ std::to_array<std::string_view>({
 "SAXAMASAAA",
 "MAMMMXMMMM",
 "MXMXAXMASX"
-
 })

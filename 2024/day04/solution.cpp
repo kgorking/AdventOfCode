@@ -7,8 +7,7 @@ export constexpr auto expected_sample = std::make_pair(18, 9);
 export constexpr auto expected_input = std::make_pair(2406, 1807);
 
 template <bool X, int N>
-int xmas_count(
-	std::array<std::string_view, N> input, char const c, std::span<const kg::pos2di> directions, std::span<const int, 3> offsets) {
+int xmas_count(std::array<std::string_view, N> input, char const c, std::span<const kg::pos2di> directions, std::span<const int, 3> offsets) {
 	return kg::sum(kg::views::indexed_transform(input, [&](int sy, std::string_view line) {
 		return kg::sum(kg::views::indexed_transform(line, [&](int sx, char v) {
 			return (c != v) ? 0 : kg::sum(directions | std::views::transform([&](kg::pos2di dir) {
@@ -28,10 +27,10 @@ export auto part1(auto const& input) {
 		std::array { 1, 2, 3 });
 }
 
-export auto part2(auto& input) {
+export auto part2(auto const& input) {
 	return kg::sum(input
 		| kg::views::matrix<3, 3>
-		| std::views::filter([](auto const& m) { return 'A' == m[1][1]; })
+		| kg::views::filter_eq('A', 1, 1)
 		| std::views::transform([](auto const& m) {
 			return
 				6 == std::abs(m[0][0] - m[2][2]) &&
