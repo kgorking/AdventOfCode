@@ -1,5 +1,6 @@
 export module aoc:views;
 import std;
+import :math;
 
 using namespace std::placeholders;
 
@@ -18,11 +19,24 @@ namespace kg::views {
 export constexpr auto pair_zip_transform = std::bind(std::views::zip_transform, _3, _1, _2);
 export constexpr auto indexed_transform = std::bind(std::views::zip_transform, _2, std::views::iota(0), _1);
 
+export constexpr auto signbit = std::views::transform([](auto&& v) { return std::signbit(v); });
+export constexpr auto abs = std::views::transform(kg::abs);
+
 // TODO
 // at
 // gather?
-// pairwise_diff etc.
 
+// Takes two ranges and outputs the difference between them
+export constexpr auto zip_diff = std::bind_front(std::views::zip_transform, [](auto&& l, auto&& r) {
+	return std::abs(l - r); });
+
+// Applies the function to the input, with optional additional arguments
+export constexpr auto filter_fn = [](auto&& fn, auto&& ...args) {
+	return std::views::filter([&](auto&& v) { return fn(v, args...); });
+};
+
+// Filters if the value is equal to the input.
+// If the input is a range/container, use 'indices' to index into it.
 export constexpr auto filter_eq = [](auto&& val, std::integral auto... indices) {
 	if constexpr (0 == sizeof...(indices))
 		return std::views::filter(std::bind_front(std::equal_to {}, val));
@@ -33,9 +47,12 @@ export constexpr auto filter_eq = [](auto&& val, std::integral auto... indices) 
 	}
 };
 
-// TODO avoid copying into arrays
+
 export template <int N, int M>
 constexpr auto matrix = std::views::adjacent_transform<N>([](auto&&... rows) {
+	static_assert(std::ranges::range<decltype((rows, ...))>, "Input must be at least two-dimensional.");
+
+	// TODO avoid copying into arrays
 	auto as_array = [](auto&&... args) {
 		return std::array { args... };
 	};
