@@ -31,7 +31,7 @@ auto solution(auto&& input, bool fix) {
 				int const page = updates[i];
 				checks[page] = updates.size() - i - 1;
 
-				// Decrement former pages counts if they need to be before the current page
+				// Decrement former pages counts if they need to be located before the current page
 				for (auto [i, end] = ruleset.equal_range(page); i != end; i++) {
 					if (checks.contains(i->second))
 						checks[i->second] -= 1;
@@ -47,12 +47,12 @@ auto solution(auto&& input, bool fix) {
 					for (auto [page, bad_count] : checks) {
 						if (0 == bad_count)
 							continue;
-						// The remaining count for the bad page is used to move it forward
-						// in the list of pages.
+						// The remaining count for the bad page is
+						// used to move it forward in the list of pages.
 						auto it = std::ranges::find(updates, page);
 						std::ranges::swap(*it, *(it + bad_count));
 
-						// Update the mid-value, as it might have changes
+						// Update the mid-value, as it might have changed
 						mid_value = updates[updates.size() / 2];
 
 						// Only fix one page at the time
