@@ -24,7 +24,7 @@ processed process_input(auto&& input) {
 	return p;
 }
 
-// Optimzed find function. Doesn't need to run to the end of range
+// Optimized find function. Doesn't need to run to the end of range
 // to make sure the value is found.
 auto find_in_sorted (auto& i, auto const end, int const value) {
 	while (i != end && *i < value)
@@ -42,11 +42,7 @@ int count_repeats(auto& i, auto const end, int const value) {
 
 export auto part1(auto&& input) {
 	processed const p = process_input(input);
-
-	auto distance = [](int l, int r) -> int { return std::abs(l - r); };
-
-	const auto distances = std::views::zip_transform(distance, p.left, p.right);
-	return std::ranges::fold_left(distances, 0, std::plus{});
+	return kg::sum(kg::views::zip_diff(p.left, p.right));
 }
 
 

@@ -17,10 +17,10 @@ auto solution(auto&& input) {
 	auto sort_fn = [&order](int l, int r) { return order[l].contains(r); };
 
 	if constexpr (!fix) {
-		return kg::sum(all_updates | std::views::filter([&](auto const& v) { return std::ranges::is_sorted(v, sort_fn); })
+		return kg::sum(all_updates | kg::views::filter_fn(std::ranges::is_sorted, sort_fn)
 					   | std::views::transform([](auto const& v) { return v[v.size() / 2]; }));
 	} else {
-		return kg::sum(all_updates | std::views::filter([&](auto const& v) { return !std::ranges::is_sorted(v, sort_fn); })
+		return kg::sum(all_updates | kg::views::filter_fn(std::not_fn(std::ranges::is_sorted), sort_fn)
 					   | std::views::transform([&](auto v) {
 							 std::ranges::sort(v, sort_fn);
 							 return v[v.size() / 2];
