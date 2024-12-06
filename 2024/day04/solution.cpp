@@ -30,7 +30,7 @@ export auto part1(auto const& input) {
 export auto part2(auto const& input) {
 	return kg::sum(input
 		| kg::views::matrix<3, 3>
-		| kg::views::filter_eq('A', 1, 1)
+		| kg::views::filter_eq('A', kg::index<1, 1>{})
 		| std::views::transform([](auto const& m) {
 			return
 				6 == std::abs(m[0][0] - m[2][2]) &&

@@ -4,16 +4,6 @@ import :math;
 
 using namespace std::placeholders;
 
-namespace kg {
-export auto lookup(auto&& v, int I, auto... Is) {
-	if constexpr (sizeof...(Is) > 0) {
-		return lookup(v[I], Is...);
-	}
-	else
-		return v[I];
-}
-}
-
 namespace kg::views {
 
 export constexpr auto pair_zip_transform = std::bind(std::views::zip_transform, _3, _1, _2);
@@ -37,14 +27,9 @@ export constexpr auto filter_fn = [](auto&& fn, auto&& ...args) {
 
 // Filters if the value is equal to the input.
 // If the input is a range/container, use 'indices' to index into it.
-export constexpr auto filter_eq = [](auto&& val, std::integral auto... indices) {
-	if constexpr (0 == sizeof...(indices))
-		return std::views::filter(std::bind_front(std::equal_to {}, val));
-	else {
-		return std::views::filter([=](auto&& in) {
-			return val == lookup(in, indices...);
-			});
-	}
+export constexpr auto filter_eq = [](auto&& val, auto Proj = std::identity {}) {
+	return std::views::filter([&](auto&& in) { return std::equal_to {}(val, Proj(in));
+	});
 };
 
 
