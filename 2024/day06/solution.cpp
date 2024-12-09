@@ -49,40 +49,45 @@ export auto find_visited(input_t input, bool count_loops) {
 	kg::pos2di const guard_start_pos = find_guard_pos(input);
 
 	// Part 1
-	visitmap visited;
 	int loops = 0;
+	visitmap visited;
 	{
 		kg::pos2di dir { 0, -1 };
 		kg::pos2di p = guard_start_pos;
-		while (step(p, dir)) {
+		do {
 			visited[p].insert(dir);
+#if 0
+			if (!count_loops)
+				continue;
 
-			if (false) {
-				kg::pos2di obstruction = p;
-				kg::pos2di lp = p - dir;
-				kg::pos2di ldir = dir;
-				visitmap loop_visited;
-				while (step(lp, ldir, obstruction)) {
-					if (visited.contains(lp) && visited[lp].contains(ldir)) {
-						loops += 1;
-						break;
-					}
-					if (loop_visited.contains(lp) && loop_visited[lp].contains(ldir)) {
-						loops += 1;
-						break;
-					}
-					loop_visited[lp].insert(ldir);
+			kg::pos2di const obstruction = p + dir;
+			if (!is_valid(obstruction) || at(obstruction) == '#')
+				continue;
+
+			kg::pos2di loop_p = p;
+			kg::pos2di loop_dir = dir;
+			visitmap loop_visited;
+
+			while (step(loop_p, loop_dir, obstruction)) {
+				if (visited.contains(loop_p) && visited[loop_p].contains(loop_dir)) {
+					loops += 1;
+					break;
 				}
+				if (loop_visited.contains(loop_p) && loop_visited[loop_p].contains(loop_dir)) {
+					loops += 1;
+					break;
+				}
+				loop_visited[loop_p].insert(loop_dir);
 			}
-		}
+#endif
+		} while (step(p, dir));
 	}
 
 	// Part 2
-	if (count_loops) {
+	if (count_loops && loops == 0) {
 		for (auto const [obstruction, dirs] : visited) {
 			if (obstruction == guard_start_pos)
 				continue;
-
 			kg::pos2di p = guard_start_pos;
 			kg::pos2di dir = { 0, -1 };
 
