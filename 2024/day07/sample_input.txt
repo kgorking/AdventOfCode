@@ -1,1 +1,11 @@
-0
+std::array{
+	std::pair{190ll, std::vector{10, 19}},
+	std::pair{3267ll, std::vector{81, 40, 27}},
+	std::pair{83ll, std::vector{17, 5}},
+	std::pair{156ll, std::vector{15, 6}},
+	std::pair{7290ll, std::vector{6, 8, 6, 15}},
+	std::pair{161011ll, std::vector{16, 10, 13}},
+	std::pair{192ll, std::vector{17, 8, 14}},
+	std::pair{21037ll, std::vector{9, 7, 18, 13}},
+	std::pair{292ll, std::vector{11, 6, 16, 20}},
+}

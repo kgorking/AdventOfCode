@@ -5,19 +5,20 @@ import std;
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-constexpr auto get_sample_input() {
+static constexpr auto get_sample_input() {
 	return
 #include AOC_sample
 	;
 }
 
-constexpr auto get_input() {
+static constexpr auto get_input() {
 	return
 #include AOC_input
 	;
 }
-const auto sample_input = get_sample_input();
-const auto actual_input = get_input();
+
+static const auto sample_input = get_sample_input();
+static const auto actual_input = get_input();
 
 TEST_CASE(AOC_SZ " - sample") {
 	auto const [expected_part_1, expected_part_2] = expected_sample;
@@ -32,6 +33,7 @@ TEST_CASE(AOC_SZ " - sample") {
 }
 
 TEST_CASE(AOC_SZ " - actual") {
+
 	auto const [expected_part_1, expected_part_2] = expected_input;
 
 	auto const part_1 = part1(actual_input);

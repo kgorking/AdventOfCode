@@ -7,7 +7,7 @@ AlignOperands: AlignAfterOperator
 AlignTrailingComments: Always
 
 AllowShortFunctionsOnASingleLine: None
-AllowShortLambdasOnASingleLine: Inline
+AllowShortLambdasOnASingleLine: All
 
 AlwaysBreakTemplateDeclarations: Yes
 
