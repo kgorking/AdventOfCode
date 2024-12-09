@@ -31,6 +31,14 @@ export constexpr auto filter_eq = [](auto&& val, auto Proj = std::identity {}) {
 	return std::views::filter([&](auto&& in) { return std::equal_to {}(val, std::invoke(Proj, in));
 	});
 };
+export constexpr auto filter_ne = [](auto&& val, auto Proj = std::identity {}) {
+	return std::views::filter([&](auto&& in) { return std::not_equal_to{}(val, std::invoke(Proj, in));
+	});
+};
+export constexpr auto filter_gr = [](auto&& val, auto Proj = std::identity {}) {
+	return std::views::filter([&](auto&& in) { return std::greater{}(val, std::invoke(Proj, in));
+	});
+};
 
 
 export template <int N, int M>
