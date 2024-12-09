@@ -22,6 +22,14 @@ struct range {
 	[[nodiscard]] constexpr bool overlaps(range const& other) const {
 		return first <= other.last && other.first <= last;
 	}
+	// Returns the direction of the range
+	[[nodiscard]] constexpr T direction() const {
+		T dir = last - first;
+		dir.x /= size();
+		dir.y /= size();
+		return dir;
+	}
+
 	[[nodiscard]] constexpr static range merge(range const& r1, range const& r2) {
 		//Expects(r1.adjacent(r2));
 		if (r1 < r2)

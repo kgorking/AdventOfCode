@@ -28,7 +28,7 @@ export constexpr auto filter_fn = [](auto&& fn, auto&& ...args) {
 // Filters if the value is equal to the input.
 // If the input is a range/container, use 'indices' to index into it.
 export constexpr auto filter_eq = [](auto&& val, auto Proj = std::identity {}) {
-	return std::views::filter([&](auto&& in) { return std::equal_to {}(val, Proj(in));
+	return std::views::filter([&](auto&& in) { return std::equal_to {}(val, std::invoke(Proj, in));
 	});
 };
 

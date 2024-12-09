@@ -14,6 +14,9 @@ struct pos2d {
 		x += p.x;
 		y += p.y;
 	}
+	[[nodiscard]] constexpr pos2d operator-(pos2d const p) const {
+		return {x - p.x, y - p.y};
+	}
 	constexpr void operator-=(pos2d const p) {
 		x -= p.x;
 		y -= p.y;
