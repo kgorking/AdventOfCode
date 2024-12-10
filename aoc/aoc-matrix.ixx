@@ -5,10 +5,10 @@ export namespace kg {
 
 namespace mat_ops {
 	constexpr auto mul = [](auto acc, auto a, auto b) -> decltype(acc + (a*b)) {
-		if (a == std::numeric_limits<decltype(a)>::max())
-			return acc;
-		if (b == std::numeric_limits<decltype(b)>::max())
-			return acc;
+		//if (a == std::numeric_limits<decltype(a)>::max())
+		//	return acc;
+		//if (b == std::numeric_limits<decltype(b)>::max())
+		//	return acc;
 		return acc + (a * b);
 		};
 	constexpr auto min = [](auto acc, auto a, auto b) {
