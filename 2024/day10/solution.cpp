@@ -6,17 +6,18 @@ import std;
 export constexpr auto expected_sample = std::make_pair(36, 81);
 export constexpr auto expected_input = std::make_pair(798, 1816);
 
+// also exists in 'aoc-graph.ixx'
 void traverse_all_paths(auto const& terrain, kg::pos2di const start_pos, auto&& is_at_end, auto&& valid_neighbour) {
 	const size_t height = terrain.size();
 	const size_t width = terrain[0].size();
 
-	// Initialize priority queue
-	std::priority_queue<kg::pos2di> queue;
-	queue.push(start_pos);
+	// Initialize queue
+	std::vector<kg::pos2di> queue;
+	queue.push_back(start_pos);
 
 	while (!queue.empty()) {
-		auto const p = queue.top();
-		queue.pop();
+		auto const p = queue.back();
+		queue.pop_back();
 
 		if (is_at_end(p, terrain[p.y][p.x])) {
 			continue;
@@ -31,7 +32,7 @@ void traverse_all_paths(auto const& terrain, kg::pos2di const start_pos, auto&& 
 			// Add neighbour to the stack
 			int const adj_val = terrain[adj_pos.y][adj_pos.x];
 			if (valid_neighbour(terrain[p.y][p.x], adj_val))
-				queue.push(adj_pos);
+				queue.push_back(adj_pos);
 		}
 	}
 }
@@ -41,7 +42,7 @@ bool good_neighbour(char me, char n) { return 1 == (n - me); };
 export auto part1(auto&& input) {
 	std::set<kg::pos2di> ends;
 
-	auto at_end = [&](auto p, char val) {
+	auto at_end = [&](kg::pos2di p, char val) {
 		bool const is_end = 9 == val;
 		if (is_end)
 			ends.insert(p);
@@ -66,11 +67,11 @@ export auto part1(auto&& input) {
 export auto part2(auto&& input) {
 	int num_paths = 0;
 
-	auto at_end = [&](auto _, char val) {
+	auto at_end = [&](kg::pos2di _, char val) {
 		bool const is_end = 9 == val;
 		num_paths += is_end;
 		return is_end;
-	};
+		};
 
 	auto enum_grid_and_calc_path_scores
 		= input
@@ -79,9 +80,7 @@ export auto part2(auto&& input) {
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
 			traverse_all_paths(input, p, at_end, good_neighbour);
-			int const sum = num_paths;
-			num_paths = 0;
-			return sum;
+			return std::exchange(num_paths, 0);
 		});
 
 	return kg::sum(enum_grid_and_calc_path_scores);
