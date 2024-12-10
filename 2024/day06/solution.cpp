@@ -26,7 +26,7 @@ export auto find_visited(input_t input, bool count_loops) {
 		kg::pos2di next = p + dir;
 
 		// oob
-		char const next_c = kg::at(input, next, 0);
+		char const next_c = kg::at(input, next, '\0');
 		if (next_c == 0)
 			return false;
 
