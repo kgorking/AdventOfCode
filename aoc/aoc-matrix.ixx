@@ -1,7 +1,23 @@
-export module aoc : matrix;
+export module aoc:matrix;
 import std;
 
 export namespace kg {
+
+namespace mat_ops {
+	constexpr auto mul = [](auto acc, auto a, auto b) -> decltype(acc + (a*b)) {
+		if (a == std::numeric_limits<decltype(a)>::max())
+			return acc;
+		if (b == std::numeric_limits<decltype(b)>::max())
+			return acc;
+		return acc + (a * b);
+		};
+	constexpr auto min = [](auto acc, auto a, auto b) {
+		if (a == std::numeric_limits<decltype(a)>::max())
+			return acc;
+		if (b == std::numeric_limits<decltype(b)>::max())
+			return acc;
+		return std::min({ acc, (a + b) }); };
+}
 
 template <typename T, int R, int C = R>
 	requires(R > 0 && C > 0)
@@ -25,22 +41,35 @@ constexpr void set_row(matrix_t<T, N, M>& m, int r, std::ranges::range auto& row
 }
 
 template <typename T, int N, int M = N>
-auto make_from_rows(std::ranges::range auto const& ...rows) {
+auto make_from_rows(std::ranges::range auto const&... rows) {
 	matrix_t<T, N, M> m;
-	int i=0;
+	int i = 0;
 	(set_row(m, i++, rows), ...);
 	return m;
 }
 
-// Returns an identity matrix
+// Set a matrix to it's identity
 template <typename T, int N>
-constexpr matrix_t<T, N> mat_identity() {
-	matrix_t<T, N, N> ident;
+constexpr void mat_identity(matrix_t<T, N>& ident) {
 	for (int i = 0; i < N; i++) {
 		ident[i].fill(0);
 		ident[i][i] = 1;
 	}
+}
+
+// Returns an identity matrix
+template <typename T, int N>
+[[nodiscard]] constexpr matrix_t<T, N> mat_identity() {
+	matrix_t<T, N, N> ident;
+	mat_identity(ident);
 	return ident;
+}
+
+// Sets a matrix to its maximum values
+template <typename T, int N, int M = N>
+constexpr void mat_max(matrix_t<T, N, M>& max) {
+	for (int i = 0; i < N; i++)
+		max[i].fill(std::numeric_limits<T>::max());
 }
 
 // Returns a matrix filled with maximum values
@@ -52,18 +81,38 @@ constexpr matrix_t<T, N, M> mat_max() {
 	return max;
 }
 
-// Multiplies two matrices A and B
+// Multiplies two matrices A and B using a ternary operator
 template <typename T, int N, int RA, int CB>
-constexpr auto mat_multiply(matrix_t<T, RA, N> const& a, matrix_t<T, N, CB> const& b) {
-	matrix_t<T, RA, CB> r{};
+[[nodiscard]] constexpr auto mat_mul_op(matrix_t<T, RA, N> const& a, matrix_t<T, N, CB> const& b, auto&& op) {
+	matrix_t<T, RA, CB> r {};
 	for (int k = 0; k < N; k++) {
 		for (int i = 0; i < RA; i++) {
 			for (int j = 0; j < CB; j++) {
-				r[i][j] += a[i][k] * b[k][j];
+				r[i][j] = op(r[i][j], a[i][k], b[k][j]);
 			}
 		}
 	}
 	return r;
+}
+
+// Multiplies two matrices A and B using a ternary operator
+template <typename T, int N, int RA, int CB>
+constexpr void mat_mul_op(std::in_place_t, matrix_t<T, RA, N>& a, matrix_t<T, N, CB> const& b, auto&& op) {
+	auto r = std::make_unique<matrix_t<T, RA, CB>>();
+	for (int k = 0; k < N; k++) {
+		for (int i = 0; i < RA; i++) {
+			for (int j = 0; j < CB; j++) {
+				(*r)[i][j] = op((*r)[i][j], a[i][k], b[k][j]);
+			}
+		}
+	}
+	std::ranges::copy(*r, a.begin());
+}
+
+// Multiplies two matrices A and B
+template <typename T, int N, int RA, int CB>
+[[nodiscard]] constexpr auto mat_multiply(matrix_t<T, RA, N> const& a, matrix_t<T, N, CB> const& b) {
+	return mat_mul_op(a, b, mat_ops::mul);
 }
 
 // Add two matrices A and B
@@ -95,32 +144,34 @@ constexpr auto mat_scale(matrix_t<T, R, C> const& a, T s) {
 }
 
 // Raise matrix to the power of p
-template <typename T, int R, int C>
+template <typename T, int R, int C, typename Op = decltype(mat_ops::mul)>
 	requires(R == C) // only for square matrices
-constexpr matrix_t<T, R, C> mat_power(matrix_t<T, R, C> a, int p) {
+constexpr void mat_power(matrix_t<T, R, C>& a, int p, Op&& op = Op {}) {
 	if (p < 0)
 		throw std::invalid_argument("p can not be negative");
 
 	if (p == 0) {
-		return mat_identity<T, R>();
+		mat_identity<T, R>(a);
 	} else {
-		auto b = a;
+		auto b = new matrix_t<T, R, C>();
+		std::ranges::copy(a, b->begin());
 
 		// a^p = a * a^(p - 1).
 		p = p - 1;
 		while (p > 0) {
 			// If n is odd, a = a * b.
 			if (p & 1)
-				a = mat_multiply(a, b);
+				mat_mul_op(std::in_place, a, *b, op);
 
 			// b = b * b.
-			b = mat_multiply(b, b);
+			mat_mul_op(std::in_place, *b, *b, op);
 
 			// n = n / 2.
 			p = p >> 1;
 		}
 
-		return a;
+		delete b;
+		//return a;
 	}
 }
 
@@ -128,7 +179,7 @@ constexpr matrix_t<T, R, C> mat_power(matrix_t<T, R, C> a, int p) {
 template <typename... Ts>
 	requires(sizeof...(Ts) > 0)
 constexpr auto make_linrec(Ts... coefficients) {
-	using T = decltype((Ts{}, ...));
+	using T = decltype((Ts {}, ...));
 	constexpr auto N = sizeof...(Ts);
 
 	matrix_t<T, N, N> m;

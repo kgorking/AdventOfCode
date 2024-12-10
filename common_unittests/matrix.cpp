@@ -35,25 +35,25 @@ consteval void test_matrix_scale() {
 }
 
 consteval void test_matrix_power() {
-	matrix_t<int, 2, 2> const mA{2, 5, 1, 4};
-	auto const mC = mat_power(mA, 3);
+	matrix_t<int, 2, 2> mA{2, 5, 1, 4};
+	mat_power(mA, 3);
 
 	matrix_t<int, 2, 2> const expected{48, 165, 33, 114};
-	if (mC != expected)
+	if (mA != expected)
 		throw "incorrect result";
 }
 
 consteval void test_matrix_power_zero() {
-	matrix_t<int, 3, 3> const mA{2, 4, 4, 5, 1, 4};
-	auto const mC = mat_power(mA, 0);
+	matrix_t<int, 3, 3> mA{2, 4, 4, 5, 1, 4};
+	mat_power(mA, 0);
 
 	matrix_t<int, 3, 3> const expected{1, 0, 0, 0, 1, 0, 0, 0, 1};
-	if (mC != expected)
+	if (mA != expected)
 		throw "incorrect result";
 }
 
 consteval void test_matrix_linrec() {
-	auto const mLR = make_linrec(1, 1);
+	auto mLR = make_linrec(1, 1);
 	if (mLR.size() != 2 && mLR[0].size() != 2)
 		throw "incorrect size";
 
@@ -65,9 +65,9 @@ consteval void test_matrix_linrec() {
 		throw "incorrect result";
 
 	// test 33rd fibonacci number
-	auto const mLR32 = mat_power(mLR, 32); // 32 steps
+	mat_power(mLR, 32); // 32 steps
 	auto const initial = vector_t<int, 2>{0, 1}; // first 2 fib numbers
-	auto const result_32_33 = mat_multiply(mLR32, initial); // 33rd step
+	auto const result_32_33 = mat_multiply(mLR, initial); // 33rd step
 	auto const expected_33 = 3524578;
 	if (result_32_33[1][0] != expected_33)
 		throw "incorrect result";

@@ -43,7 +43,7 @@ target_sources(AdventOfCode
 
 
 # Include sub-projects.
-#add_subdirectory ("common_unittests")
+add_subdirectory ("common_unittests")
 #add_subdirectory ("2015")
 #add_subdirectory ("2020")
 #add_subdirectory ("2021")
