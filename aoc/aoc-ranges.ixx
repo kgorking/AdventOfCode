@@ -2,6 +2,10 @@ export module aoc:ranges;
 import std;
 
 export namespace kg {
+// Returns a specific value in a tuple-like value
+export template <int N>
+constexpr auto select = [](auto&& tup) { return std::get<N>(tup); };
+
 export auto lookup(auto&& v, int I, auto... Is) {
 	if constexpr (sizeof...(Is) > 0) {
 		return lookup(v[I], Is...);

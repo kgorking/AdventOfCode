@@ -51,7 +51,7 @@ export auto part1(auto&& input) {
 	auto enum_grid_and_calc_path_scores
 		= input
 		| kg::views::coord2d
-		| kg::views::filter_eq(0, [](auto tup) { return std::get<0>(tup); })
+		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
 			traverse_all_paths(input, p, at_end, good_neighbour);
@@ -75,7 +75,7 @@ export auto part2(auto&& input) {
 	auto enum_grid_and_calc_path_scores
 		= input
 		| kg::views::coord2d
-		| kg::views::filter_eq(0, [](auto tup) { return std::get<0>(tup); })
+		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
 			traverse_all_paths(input, p, at_end, good_neighbour);
