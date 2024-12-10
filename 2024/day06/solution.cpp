@@ -22,21 +22,16 @@ kg::pos2di find_guard_pos(input_t input) {
 }
 
 export auto find_visited(input_t input, bool count_loops) {
-	auto is_valid = [&input](kg::pos2di p) {
-		return p.x >= 0 && p.x < input[0].size() && p.y >= 0 && p.y < input.size();
-	};
-	auto at = [&input](kg::pos2di p) {
-		return input[p.y][p.x];
-	};
 	auto step = [&](kg::pos2di& p, kg::pos2di& dir, std::optional<kg::pos2di> obstruction = {}) {
 		kg::pos2di next = p + dir;
 
 		// oob
-		if (!is_valid(next))
+		char const next_c = kg::at(input, next, 0);
+		if (next_c == 0)
 			return false;
 
 		// turn if facing an obstruction
-		if (at(next) == '#' || (obstruction.has_value() && next == obstruction)) {
+		if (next_c == '#' || (obstruction.has_value() && next == obstruction)) {
 			dir.rotate();
 		} else {
 			p = next;
