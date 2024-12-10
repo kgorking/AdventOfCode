@@ -39,7 +39,11 @@ target_sources(AdventOfCode
 		
 		"aoc/aoc-async.ixx"
 		"aoc/aoc-array.ixx"
-		"aoc/aoc-string.ixx" "aoc/aoc-ranges.ixx" "aoc/aoc-views.ixx" "aoc/aoc-cursor.ixx")
+		"aoc/aoc-string.ixx"
+		"aoc/aoc-ranges.ixx"
+		"aoc/aoc-views.ixx"
+		"aoc/aoc-cursor.ixx"
+		"aoc/aoc-GRID.ixx")
 
 
 # Include sub-projects.
