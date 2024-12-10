@@ -1,6 +1,7 @@
 export module aoc:views;
 import std;
 import :math;
+import :pos2d;
 
 using namespace std::placeholders;
 
@@ -51,5 +52,21 @@ constexpr auto matrix = std::views::adjacent_transform<N>([](auto&&... rows) {
 	};
 	return std::views::zip_transform(as_array, (rows | std::views::adjacent_transform<M>(as_array))...);
 }) | std::views::join;
+
+
+export constexpr auto coord2d = std::views::enumerate | std::views::transform([](auto const& tup) {
+	auto&& [y, row] = tup;
+
+	auto zip_xform = [](int x, int y, auto&& val) {
+		return std::pair{ val, kg::pos2di(x, y) };
+		};
+
+	return std::views::zip_transform(
+		zip_xform,
+		std::views::iota(0),
+		std::views::repeat(y),
+		row);
+	})
+	| std::views::join;
 
 } // namespace kg::views
