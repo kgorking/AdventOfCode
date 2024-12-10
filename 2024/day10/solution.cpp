@@ -36,6 +36,8 @@ void traverse_all_paths(auto const& terrain, kg::pos2di const start_pos, auto&& 
 	}
 }
 
+bool good_neighbour(char me, char n) { return 1 == (n - me); };
+
 export auto part1(auto&& input) {
 	std::set<kg::pos2di> ends;
 
@@ -45,42 +47,42 @@ export auto part1(auto&& input) {
 			ends.insert(p);
 		return is_end;
 		};
-	auto good_neighbour = [](char me, char n) { return 1 == (n - me); };
 
-	int sum = 0;
-	for (int j = 0; j < input.size(); j++) {
-		for (int i = 0; i < input[j].size(); i++) {
-			if (input[j][i] == 0) {
-				traverse_all_paths(input, { i, j }, at_end, good_neighbour);
-				sum += ends.size();
-				ends.clear();
-			}
-		}
-	}
+	auto enum_grid_and_calc_path_scores
+		= input
+		| kg::views::coord2d
+		| kg::views::filter_eq(0, [](auto tup) { return std::get<0>(tup); })
+		| std::views::values
+		| std::views::transform([&](kg::pos2di p) {
+			traverse_all_paths(input, p, at_end, good_neighbour);
+			int const sum = ends.size();
+			ends.clear();
+			return sum;
+		});
 
-	return sum;
+	return kg::sum(enum_grid_and_calc_path_scores);
 }
 
 export auto part2(auto&& input) {
 	int num_paths = 0;
 
-	auto at_end = [&](auto p, char val) {
+	auto at_end = [&](auto _, char val) {
 		bool const is_end = 9 == val;
 		num_paths += is_end;
 		return is_end;
 	};
-	auto good_neighbour = [](char me, char n) { return 1 == (n - me); };
 
-	int sum = 0;
-	for (int j = 0; j < input.size(); j++) {
-		for (int i = 0; i < input[j].size(); i++) {
-			if (input[j][i] == 0) {
-				traverse_all_paths(input, { i, j }, at_end, good_neighbour);
-				sum += num_paths;
-				num_paths = 0;
-			}
-		}
-	}
+	auto enum_grid_and_calc_path_scores
+		= input
+		| kg::views::coord2d
+		| kg::views::filter_eq(0, [](auto tup) { return std::get<0>(tup); })
+		| std::views::values
+		| std::views::transform([&](kg::pos2di p) {
+			traverse_all_paths(input, p, at_end, good_neighbour);
+			int const sum = num_paths;
+			num_paths = 0;
+			return sum;
+		});
 
-	return sum;
+	return kg::sum(enum_grid_and_calc_path_scores);
 }
