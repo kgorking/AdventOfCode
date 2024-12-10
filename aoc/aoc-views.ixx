@@ -23,21 +23,21 @@ export constexpr auto zip_diff = std::bind_front(std::views::zip_transform, [](a
 
 // Applies the function to the input, with optional additional arguments
 export constexpr auto filter_fn = [](auto&& fn, auto&& ...args) {
-	return std::views::filter([&](auto&& v) { return fn(v, args...); });
+	return std::views::filter([=](auto&& v) { return fn(v, args...); });
 };
 
 // Filters if the value is equal to the input.
 // If the input is a range/container, use 'indices' to index into it.
 export constexpr auto filter_eq = [](auto&& val, auto Proj = std::identity {}) {
-	return std::views::filter([&](auto&& in) { return std::equal_to {}(val, std::invoke(Proj, in));
+	return std::views::filter([=](auto&& in) { return std::equal_to {}(val, std::invoke(Proj, in));
 	});
 };
 export constexpr auto filter_ne = [](auto&& val, auto Proj = std::identity {}) {
-	return std::views::filter([&](auto&& in) { return std::not_equal_to{}(val, std::invoke(Proj, in));
+	return std::views::filter([=](auto&& in) { return std::not_equal_to{}(val, std::invoke(Proj, in));
 	});
 };
 export constexpr auto filter_gr = [](auto&& val, auto Proj = std::identity {}) {
-	return std::views::filter([&](auto&& in) { return std::greater{}(val, std::invoke(Proj, in));
+	return std::views::filter([=](auto&& in) { return std::greater{}(val, std::invoke(Proj, in));
 	});
 };
 
@@ -54,7 +54,7 @@ constexpr auto matrix = std::views::adjacent_transform<N>([](auto&&... rows) {
 }) | std::views::join;
 
 
-export constexpr auto coord2d = std::views::enumerate | std::views::transform([](auto const& tup) {
+export constexpr auto coord2d = std::views::enumerate | std::views::transform([](auto&& tup) {
 	auto&& [y, row] = tup;
 
 	auto zip_xform = [](int x, int y, auto&& val) {
