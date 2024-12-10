@@ -40,13 +40,19 @@ void traverse_all_paths(auto const& terrain, kg::pos2di const start_pos, auto&& 
 bool good_neighbour(char me, char n) { return 1 == (n - me); };
 
 export auto part1(auto&& input) {
-	std::set<kg::pos2di> ends;
+	// Setup visited array
+	auto visited = kg::make_dmatrix<short>(input.size(), input.size());
 
+	int curr_loop = 1; // use this so I don't have to clear the 'visited' matrix
+	int num_paths = 0;
 	auto at_end = [&](kg::pos2di p, char val) {
-		bool const is_end = 9 == val;
-		if (is_end)
-			ends.insert(p);
-		return is_end;
+		// Mark position as visited
+		if (visited[p.y][p.x] == curr_loop)
+			return true;
+		visited[p.y][p.x] = curr_loop;
+
+		num_paths += (9 == val);
+		return (9 == val);
 		};
 
 	auto enum_grid_and_calc_path_scores
@@ -55,10 +61,9 @@ export auto part1(auto&& input) {
 		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
-			traverse_all_paths(input, p, at_end, good_neighbour);
-			int const sum = ends.size();
-			ends.clear();
-			return sum;
+			::traverse_all_paths(input, p, at_end, good_neighbour);
+			curr_loop += 1;
+			return std::exchange(num_paths, 0);
 		});
 
 	return kg::sum(enum_grid_and_calc_path_scores);
@@ -66,11 +71,9 @@ export auto part1(auto&& input) {
 
 export auto part2(auto&& input) {
 	int num_paths = 0;
-
 	auto at_end = [&](kg::pos2di _, char val) {
-		bool const is_end = 9 == val;
-		num_paths += is_end;
-		return is_end;
+		num_paths += (9 == val);
+		return (9 == val);
 		};
 
 	auto enum_grid_and_calc_path_scores
@@ -79,7 +82,7 @@ export auto part2(auto&& input) {
 		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
-			traverse_all_paths(input, p, at_end, good_neighbour);
+			::traverse_all_paths(input, p, at_end, good_neighbour);
 			return std::exchange(num_paths, 0);
 		});
 
