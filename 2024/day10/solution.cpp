@@ -46,7 +46,6 @@ export auto part1(auto&& input) {
 	int curr_loop = 1; // use this so I don't have to clear the 'visited' matrix
 	int num_paths = 0;
 	auto at_end = [&](kg::pos2di p, char val) {
-		// Mark position as visited
 		if (visited[p.y][p.x] == curr_loop)
 			return true;
 		visited[p.y][p.x] = curr_loop;
@@ -57,7 +56,7 @@ export auto part1(auto&& input) {
 
 	auto enum_grid_and_calc_path_scores
 		= input
-		| kg::views::coord2d
+		| kg::views::coord2d // -> {key: v, value: pos2d}
 		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
@@ -78,7 +77,7 @@ export auto part2(auto&& input) {
 
 	auto enum_grid_and_calc_path_scores
 		= input
-		| kg::views::coord2d
+		| kg::views::coord2d // -> {key: v, value: pos2d}
 		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
