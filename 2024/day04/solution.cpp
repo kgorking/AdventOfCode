@@ -19,7 +19,7 @@ export auto part1(auto const& input) {
 				return kg::sum(directions | std::views::transform([&](kg::pos2di dir) {
 					auto word_in_dir = std::views::iota(1,4) | std::views::transform([&](int offset) {
 						kg::pos2di const w = p + (dir * offset);
-						return (w.y >= 0 && w.y < input.size() && w.x >= 0 && w.x < input[w.y].size()) ? input[w.y][w.x] : '\0';
+						return kg::at(input, w, '\0');
 					});
 					return std::ranges::equal(std::string_view { "MAS" }, word_in_dir);
 				}));
