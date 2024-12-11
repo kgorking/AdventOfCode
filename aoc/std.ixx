@@ -134,6 +134,23 @@ export module std;
 #include <vector>
 #include <version>
 
+// C++ 26
+#ifdef __cpp_lib_rcu
+#include <rcu>
+#endif
+#ifdef __cpp_lib_hazard_pointer
+#include <hazard_pointer>
+#endif
+#ifdef __cpp_lib_debugging
+#include <debugging>
+#endif
+#ifdef __cpp_lib_linalg
+#include <linalg>
+#endif
+#ifdef __cpp_lib_simd
+#include <simd>
+#endif
+
 // "C++ headers for C library facilities" [tab:headers.cpp.c]
 #include <cassert>
 #include <cctype>
