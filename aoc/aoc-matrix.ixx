@@ -176,6 +176,7 @@ constexpr void mat_power(matrix_t<T, R, C>& a, int p, Op&& op = Op {}) {
 }
 
 // Create a matrix used for linear recurrences
+// https://en.wikipedia.org/wiki/Linear_recurrence_with_constant_coefficients
 template <typename... Ts>
 	requires(sizeof...(Ts) > 0)
 constexpr auto make_linrec(Ts... coefficients) {
