@@ -58,11 +58,20 @@ export module std;
 #include <execution>
 #include <expected>
 #include <filesystem>
+#ifdef __cpp_lib_flat_map
+#include <flat_map>
+#endif
+#ifdef __cpp_lib_flat_set
+#include <flat_set>
+#endif
 #include <format>
 #include <forward_list>
 #include <fstream>
 #include <functional>
 #include <future>
+#ifdef __cpp_lib_generator
+#include <generator>
+#endif
 #include <initializer_list>
 #include <iomanip>
 #include <ios>
@@ -75,6 +84,9 @@ export module std;
 #include <list>
 #include <locale>
 #include <map>
+#ifdef __cpp_lib_mdspan
+#include <mdspan>
+#endif
 #include <memory>
 #include <memory_resource>
 #include <mutex>
@@ -83,7 +95,9 @@ export module std;
 #include <numeric>
 #include <optional>
 #include <ostream>
+#ifdef __cpp_lib_print
 #include <print>
+#endif
 #include <queue>
 #include <random>
 #include <ranges>
