@@ -57,7 +57,7 @@ consteval void test_matrix_linrec() {
 	if (mLR.size() != 2 && mLR[0].size() != 2)
 		throw "incorrect size";
 
-	// test one step of fibonacci
+	// test one step of Fibonacci
 	auto const v = vector_t<int, 2>{5, 8};
 	auto const result = mat_multiply(mLR, v);
 	auto const expected = vector_t<int, 2>{8, 13};
