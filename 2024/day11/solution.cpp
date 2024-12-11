@@ -27,9 +27,9 @@ std::int64_t calc_spawn(std::int64_t stone_val, int step, auto& cache) {
 		} else {
 			res = calc_spawn(2024 * stone_val, step - 1, cache);
 		}
+		cache[key] = res;
 	}
 
-	cache[key] = res;
 	return res;
 }
 
