@@ -7,7 +7,7 @@ export constexpr auto expected_sample = std::make_pair(55312, 65601038650482LL);
 export constexpr auto expected_input = std::make_pair(189092, 224869647102559LL);
 
 int num_digits(std::int64_t x) {
-	return x ? static_cast<int>(log10(x)) + 1 : 1;
+	return static_cast<int>(log10(x)) + 1;
 }
 
 std::int64_t calc_spawn(std::int64_t stone_val, int step, auto& cache) {
