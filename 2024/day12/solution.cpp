@@ -48,7 +48,7 @@ export auto part1(auto&& input) {
 		| std::views::transform(flood_fill));
 }
 
-export auto part2(auto&& input) {
+export constexpr auto part2(auto&& input) {
 	struct directional_info {
 		bool x:1, positive:1;
 	};
@@ -56,9 +56,12 @@ export auto part2(auto&& input) {
 
 	auto grid = kg::grid { input }; // wrap the input as a grid
 	auto vis = kg::visited(grid);	// create visited matrix from grid size
-	auto x_fences = std::vector<plots>(1 + 2 * input.size());
-	auto y_fences = std::vector<plots>(1 + 2 * input.size());
 	auto stack = std::vector<std::pair<kg::pos2di, directional_info>> {};
+
+	// One vector holds the sides for both x- and y-axis.
+	// x fences = [0, fence_stride[
+	// y fences = [fence_string, 2*fence_stride[
+	auto xy_fences = std::unordered_map<int, plots> {};
 
 	auto const flood_fill = [&](std::pair<char, kg::pos2di> const start) {
 		int area = 0;
@@ -67,7 +70,7 @@ export auto part2(auto&& input) {
 		stack.push_back({ start.second, { 1, 0 } });
 
 		while (!stack.empty()) {
-			auto const [p, info] = stack.back();
+			auto [p, info] = stack.back();
 			stack.pop_back();
 
 			// Check if I'm at a boundary between plots
@@ -82,11 +85,16 @@ export auto part2(auto&& input) {
 				// y=1, so one of them is offset by the size of the input to
 				// create distinct values in the fences map
 
+				// Boundry values can be negative, so move back into the positive
+				p.x += 2;
+				p.y += 2;
+
 				int const offset = input.size() * info.positive;
-				if (info.x)
-					x_fences[1 + p.x].push_back(p.y + offset);
-				else
-					y_fences[1 + p.y].push_back(p.x + offset);
+				if (info.x) {
+					xy_fences[+p.x].push_back(p.y + offset);
+				} else {
+					xy_fences[-p.y].push_back(p.x + offset);
+				}
 				continue;
 			}
 
@@ -104,11 +112,12 @@ export auto part2(auto&& input) {
 			stack.push_back({ { p.x, p.y + 1 }, { false, true } });
 		}
 
-		// sorted vec: 1 2 3   5 6   21 22 34
+		// sorted vec: 1 2 3   5 6   21 22 23  -> 2 holes
 		auto find_fence_holes = std::views::pairwise_transform([](short a, short b) { return b - a != 1; });
 
 		auto count_sides
-			= std::views::filter(std::not_fn(&plots::empty))
+			= std::views::values
+			| std::views::filter(std::not_fn(&plots::empty))
 			| std::views::transform([&](plots& vec) {
 				std::ranges::sort(vec);
 				auto const result = 1 + kg::sum(vec | find_fence_holes);
@@ -116,9 +125,8 @@ export auto part2(auto&& input) {
 				return result;
 				});
 
-		int const x_sides = kg::sum(x_fences | count_sides);
-		int const y_sides = kg::sum(y_fences | count_sides);
-		int const result = area * (x_sides + y_sides);
+		int const sides = kg::sum(xy_fences | count_sides);
+		int const result = area * sides;
 		return result;
 	};
 
