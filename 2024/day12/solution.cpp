@@ -13,18 +13,15 @@ export auto part1(auto&& input) {
 	auto const flood_fill = [&](kg::pos2di const p) {
 		int fences = 0;
 		int area = 0;
-		kg::pos2di last_p = p;
 		char const val = input[p.y][p.x];
-		if (val == 0) // using to_array on strings includes the null terminator
-			return 0;
 
 		// Stack starts at p
-		std::stack<kg::pos2di> stack;
-		stack.push(p);
+		std::vector<kg::pos2di> stack;
+		stack.push_back(p);
 
 		while (!stack.empty()) {
-			auto const p = stack.top();
-			stack.pop();
+			auto const p = stack.back();
+			stack.pop_back();
 
 			// Check if I'm at a boundary between plots
 			if (!in_bounds(p) || input[p.y][p.x] != val) {
@@ -33,18 +30,17 @@ export auto part1(auto&& input) {
 			}
 
 			// Ignore if this position has already been visited
-			if (vis.test(p))
+			if (vis.test_or_set(p))
 				continue;
-			vis.set(p);
 
 			// Increase the area
 			area += 1;
 
 			// Add neighbours to the stack
-			stack.push({ p.x - 1, p.y });
-			stack.push({ p.x + 1, p.y });
-			stack.push({ p.x, p.y - 1 });
-			stack.push({ p.x, p.y + 1 });
+			stack.push_back({ p.x - 1, p.y });
+			stack.push_back({ p.x + 1, p.y });
+			stack.push_back({ p.x, p.y - 1 });
+			stack.push_back({ p.x, p.y + 1 });
 		}
 
 		return area * fences;
@@ -89,7 +85,7 @@ export auto part2(auto&& input) {
 				// 1.  BBBBB
 				// 2.  AAAAA
 				//
-				// Here the two A rows would both have fences running along
+				// Here, the two A rows would both have fences running along
 				// y=1, so one them is offset by the size of the input to
 				// create distinct values in the fences map
 
@@ -101,9 +97,8 @@ export auto part2(auto&& input) {
 			}
 
 			// Ignore if this position has already been visited
-			if (vis.test(p))
+			if (vis.test_or_set(p))
 				continue;
-			vis.set(p);
 
 			// Increase the area
 			area += 1;
