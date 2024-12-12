@@ -24,7 +24,7 @@ TEST_CASE(AOC_SZ " - sample") {
 	auto const [expected_part_1, expected_part_2] = expected_sample;
 
 	auto const part_1 = part1(sample_input);
-	REQUIRE(part_1 == expected_part_1);
+	CHECK(part_1 == expected_part_1);
 
 	auto const part_2 = part2(sample_input);
 	REQUIRE(part_2 == expected_part_2);
