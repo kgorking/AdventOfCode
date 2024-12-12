@@ -1,6 +1,7 @@
 export module aoc:visited;
 import std;
 import :pos2d;
+import :grid;
 
 struct size_info {
 	int w, h;
@@ -22,18 +23,24 @@ class visited : std::conditional_t<(Columns < 1 || Rows < 1), size_info, empty_s
 
 public:
 	constexpr visited()
-		requires(Rows > 0 && Columns > 0)
-	{
+		requires(Rows > 0 && Columns > 0) {
 	}
 
 	constexpr visited(int columns, int rows)
-		requires(Rows == -1 && Columns == -1)
-	{
+		requires(Rows == -1 && Columns == -1) {
 		this->w = rows;
 		this->h = columns;
 		if (rows < 1 || columns < 1)
 			throw std::invalid_argument("Invalid arguments for rows/columns");
 		data.resize(columns * rows);
+	}
+
+	template<typename T>
+	constexpr visited(grid<T> const& g)
+		requires(Rows == -1 && Columns == -1) {
+		this->w = g.width();
+		this->h = g.height();
+		data.resize(this->w * this->h);
 	}
 
 	constexpr void set(kg::pos2di p) {

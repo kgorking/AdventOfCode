@@ -5,6 +5,7 @@ export import :array;
 export import :async;
 export import :bits;
 export import :graph;
+export import :grid;
 export import :math;
 export import :matrix;
 export import :numeric;
