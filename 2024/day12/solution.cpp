@@ -56,8 +56,8 @@ export auto part2(auto&& input) {
 
 	auto grid = kg::grid { input }; // wrap the input as a grid
 	auto vis = kg::visited(grid);	// create visited matrix from grid size
-	auto x_fences = std::unordered_map<int, std::vector<int>> {}; // why is this a map?
-	auto y_fences = std::unordered_map<int, std::vector<int>> {};
+	auto x_fences = std::vector<std::vector<int>>(1+2*input.size());
+	auto y_fences = std::vector<std::vector<int>>(1+2*input.size());
 	auto stack = std::vector<std::pair<kg::pos2di, directional_info>> {};
 
 	auto const flood_fill = [&](std::pair<char, kg::pos2di> const start) {
@@ -83,9 +83,9 @@ export auto part2(auto&& input) {
 				// create distinct values in the fences map
 
 				if (info.x)
-					x_fences[p.x].push_back(p.y + input.size() * info.positive);
+					x_fences[1+p.x].push_back(p.y + input.size() * info.positive);
 				else
-					y_fences[p.y].push_back(p.x + input.size() * info.positive);
+					y_fences[1+p.y].push_back(p.x + input.size() * info.positive);
 				continue;
 			}
 
@@ -106,8 +106,7 @@ export auto part2(auto&& input) {
 		auto find_fence_holes = std::views::pairwise_transform([](int a, int b) { return b - a != 1; });
 
 		auto count_sides
-			= std::views::values
-			| std::views::filter(std::not_fn(&std::vector<int>::empty))
+			= std::views::filter(std::not_fn(&std::vector<int>::empty))
 			| std::views::transform([&](std::vector<int>& vec) {
 				std::ranges::sort(vec);
 				auto const result = 1 + kg::sum(vec | find_fence_holes);
