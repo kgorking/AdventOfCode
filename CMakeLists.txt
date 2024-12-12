@@ -43,7 +43,8 @@ target_sources(AdventOfCode
 		"aoc/aoc-ranges.ixx"
 		"aoc/aoc-views.ixx"
 		"aoc/aoc-cursor.ixx"
-		"aoc/aoc-GRID.ixx")
+		"aoc/aoc-GRID.ixx"
+		"aoc/aoc-visited.ixx")
 
 
 # Include sub-projects.
