@@ -85,7 +85,7 @@ export constexpr auto part2(auto&& input) {
 				// y=1, so one of them is offset by the size of the input to
 				// create distinct values in the fences map
 
-				// Boundry values can be negative, so move back into the positive
+				// Boundary values can be negative, so move back into the positive
 				p.x += 2;
 				p.y += 2;
 
