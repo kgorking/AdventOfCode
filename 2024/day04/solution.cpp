@@ -12,7 +12,7 @@ constexpr auto directions
 export auto part1(auto const& input) {
 	auto count_xmas_in_all_directions
 		= input
-		| kg::views::coord2d_value
+		| kg::views::with_coord2d
 		| kg::views::filter_eq('X', kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {

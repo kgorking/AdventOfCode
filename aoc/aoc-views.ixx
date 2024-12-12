@@ -54,11 +54,28 @@ constexpr auto matrix = std::views::adjacent_transform<N>([](auto&&... rows) {
 }) | std::views::join;
 
 
-export constexpr auto coord2d_value = std::views::enumerate | std::views::transform([](auto&& tup) {
+// Produces a {value, coordinate} pair
+export constexpr auto with_coord2d = std::views::enumerate | std::views::transform([](auto&& tup) {
 	auto&& [y, row] = tup;
 
 	auto zip_xform = [](int x, int y, auto&& val) {
 		return std::pair{ val, kg::pos2di(x, y) };
+		};
+
+	return std::views::zip_transform(
+		zip_xform,
+		std::views::iota(0),
+		std::views::repeat(y),
+		row);
+	})
+	| std::views::join;
+
+// Produces 2d coordinates without the value at the coordinate
+export constexpr auto coord2d = std::views::enumerate | std::views::transform([](auto&& tup) {
+	auto&& [y, row] = tup;
+
+	auto zip_xform = [](int x, int y, auto&&) {
+		return kg::pos2di(x, y);
 		};
 
 	return std::views::zip_transform(
