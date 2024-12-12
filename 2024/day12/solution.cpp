@@ -85,7 +85,7 @@ export auto part2(auto&& input) {
 				// 2.  AAAAA
 				//
 				// Here, the two A rows would both have fences running along
-				// y=1, so one them is offset by the size of the input to
+				// y=1, so one of them is offset by the size of the input to
 				// create distinct values in the fences map
 
 				if (info.x)
