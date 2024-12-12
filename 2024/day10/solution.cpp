@@ -48,7 +48,7 @@ export auto part1(auto&& input) {
 	};
 
 	auto calc_path_scores = input
-		| kg::views::coord2d // -> {key: char, value: kg::pos2di}
+		| kg::views::coord2d_value // -> {key: char, value: kg::pos2di}
 		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
@@ -73,7 +73,7 @@ export auto part2(auto&& input) {
 	};
 
 	auto calc_path_scores = input
-		| kg::views::coord2d // -> {key: char, value: kg::pos2di}
+		| kg::views::coord2d_value // -> {key: char, value: kg::pos2di}
 		| kg::views::filter_eq(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform(traverse);

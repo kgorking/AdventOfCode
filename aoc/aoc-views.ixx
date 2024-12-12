@@ -54,7 +54,7 @@ constexpr auto matrix = std::views::adjacent_transform<N>([](auto&&... rows) {
 }) | std::views::join;
 
 
-export constexpr auto coord2d = std::views::enumerate | std::views::transform([](auto&& tup) {
+export constexpr auto coord2d_value = std::views::enumerate | std::views::transform([](auto&& tup) {
 	auto&& [y, row] = tup;
 
 	auto zip_xform = [](int x, int y, auto&& val) {
