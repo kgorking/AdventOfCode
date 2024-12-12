@@ -6,25 +6,25 @@ import std;
 export constexpr auto expected_sample = std::make_pair(1930, 1206);
 export constexpr auto expected_input = std::make_pair(1549354, 937032);
 
-export auto part1(auto&& input) {
-	kg::visited vis(input.size(), input[0].size());
 
-	auto const in_bounds = [&](kg::pos2di const p) { return (p.x >= 0 && p.y >= 0 && p.y < input.size() && p.x < input[0].size()); };
-	auto const flood_fill = [&](kg::pos2di const start) {
+export auto part1(auto&& input) {
+	auto grid = kg::grid { input }; // wrap the input as a grid
+	auto vis = kg::visited { grid }; // create visited matrix from grid size
+	auto stack = std::vector<kg::pos2di> {};
+
+	auto const flood_fill = [&](std::pair<char, kg::pos2di> const start) {
 		int fences = 0;
 		int area = 0;
-		char const val = input[start.y][start.x];
 
 		// Stack starts at p
-		std::vector<kg::pos2di> stack;
-		stack.push_back(start);
+		stack.push_back(start.second);
 
 		while (!stack.empty()) {
 			kg::pos2di const p = stack.back();
 			stack.pop_back();
 
-			// Check if I'm at a boundary between plots
-			if (!in_bounds(p) || input[p.y][p.x] != val) {
+			// Check if at a boundary between plots
+			if (grid[p] != start.first) {
 				fences += 1;
 				continue;
 			}
@@ -37,47 +37,41 @@ export auto part1(auto&& input) {
 			area += 1;
 
 			// Add neighbours to the stack
-			stack.push_back({ p.x - 1, p.y });
-			stack.push_back({ p.x + 1, p.y });
-			stack.push_back({ p.x, p.y - 1 });
-			stack.push_back({ p.x, p.y + 1 });
+			p.add_neighbours_to(stack);
 		}
 
 		return area * fences;
 	};
 
-	return kg::sum(input
-		| kg::views::coord2d
-		| std::views::values
-		| std::views::filter([&](auto p) { return !vis.test(p); })
+	return kg::sum(grid.values_and_coords()
+		| std::views::filter([&](auto p) { return !vis.test(p.second); })
 		| std::views::transform(flood_fill));
 }
 
 export auto part2(auto&& input) {
-	kg::visited vis(input.size(), input[0].size());
+	// directional info
+	struct directional_info {
+		bool x:1, positive:1;
+	};
 
-	std::unordered_map<int, std::vector<int>> x_fences, y_fences;
+	auto grid = kg::grid { input }; // wrap the input as a grid
+	auto vis = kg::visited(grid);	// create visited matrix from grid size
+	auto x_fences = std::unordered_map<int, std::vector<int>> {}; // why is this a map?
+	auto y_fences = std::unordered_map<int, std::vector<int>> {};
+	auto stack = std::vector<std::pair<kg::pos2di, directional_info>> {};
 
-	auto const in_bounds = [&](kg::pos2di const p) { return (p.x >= 0 && p.y >= 0 && p.y < input.size() && p.x < input[0].size()); };
-	auto const flood_fill = [&](kg::pos2di start) {
+	auto const flood_fill = [&](std::pair<char, kg::pos2di> const start) {
 		int area = 0;
-		char const val = input[start.y][start.x];
-
-		// directional info
-		struct directional_info {
-			bool x:1, positive:1;
-		};
 
 		// Stack starts at p
-		std::vector<std::pair<kg::pos2di, directional_info>> stack;
-		stack.push_back({ start, { 1, 0 } });
+		stack.push_back({ start.second, { 1, 0 } });
 
 		while (!stack.empty()) {
 			auto const [p, info] = stack.back();
 			stack.pop_back();
 
 			// Check if I'm at a boundary between plots
-			if (!in_bounds(p) || input[p.y][p.x] != val) {
+			if (grid[p] != start.first) {
 				// The 'info.positive' value is used to distinguish between closely positioned plots. fx:
 				//
 				// 0.  AAAAA
@@ -127,9 +121,7 @@ export auto part2(auto&& input) {
 		return result;
 	};
 
-	return kg::sum(input
-		| kg::views::coord2d
-		| std::views::values
-		| std::views::filter([&](auto p) { return !vis.test(p); })
+	return kg::sum(grid.values_and_coords()
+		| std::views::filter([&](auto p) { return !vis.test(p.second); })
 		| std::views::transform(flood_fill));
 }
