@@ -11,6 +11,7 @@ export import :numeric;
 export import :pos2d;
 export import :range;
 export import :views;
+export import :visited;
 export import :ranges;
 export import :string;
 //export import :tls_split;
