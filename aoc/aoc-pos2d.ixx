@@ -58,6 +58,15 @@ struct pos2d {
 		*this = rotated();
 	}
 
+	// Add this positions neighbours to a container
+	constexpr void add_neighbours_to(std::ranges::output_range<kg::pos2di> auto& rng) const {
+		auto it = std::inserter(rng, rng.end());
+		*it++ = { x - 1, y };
+		*it++ = { x + 1, y };
+		*it++ = { x, y - 1 };
+		*it++ = { x, y + 1 };
+	}
+
 	auto operator<=>(pos2d const&) const noexcept = default;
 };
 
