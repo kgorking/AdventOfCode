@@ -52,11 +52,12 @@ export auto part2(auto&& input) {
 	struct directional_info {
 		bool x:1, positive:1;
 	};
+	using plots = std::vector<short>;
 
 	auto grid = kg::grid { input }; // wrap the input as a grid
 	auto vis = kg::visited(grid);	// create visited matrix from grid size
-	auto x_fences = std::vector<std::vector<short>>(1 + 2 * input.size());
-	auto y_fences = std::vector<std::vector<short>>(1 + 2 * input.size());
+	auto x_fences = std::vector<plots>(1 + 2 * input.size());
+	auto y_fences = std::vector<plots>(1 + 2 * input.size());
 	auto stack = std::vector<std::pair<kg::pos2di, directional_info>> {};
 
 	auto const flood_fill = [&](std::pair<char, kg::pos2di> const start) {
@@ -107,8 +108,8 @@ export auto part2(auto&& input) {
 		auto find_fence_holes = std::views::pairwise_transform([](short a, short b) { return b - a != 1; });
 
 		auto count_sides
-			= std::views::filter(std::not_fn(&std::vector<short>::empty))
-			| std::views::transform([&](std::vector<short>& vec) {
+			= std::views::filter(std::not_fn(&plots::empty))
+			| std::views::transform([&](plots& vec) {
 				std::ranges::sort(vec);
 				auto const result = 1 + kg::sum(vec | find_fence_holes);
 				vec.clear();
