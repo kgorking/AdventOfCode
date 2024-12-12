@@ -1,4 +1,4 @@
-export module aoc : bits;
+export module aoc:bits;
 import std;
 import :math;
 import :async;
@@ -16,12 +16,12 @@ std::bitset<N> to_bitset(std::string_view sv, char one) {
 	return bs;
 }
 
-// 
+//
 
 // count leading zeroes in a bitset
 template <int N>
 constexpr int clz(std::bitset<N> x) noexcept {
-	constexpr ptrdiff_t Bitsperword = 8 * sizeof(x._Getword(0));
+	constexpr ptrdiff_t Bitsperword = 64;
 	constexpr ptrdiff_t Words = (N - 1) / Bitsperword;
 	constexpr ptrdiff_t Remainder = (N % Bitsperword);
 
@@ -44,12 +44,16 @@ constexpr int clz(std::bitset<N> x) noexcept {
 // count trailing zeroes in a bitset
 template <int N>
 constexpr int ctz(std::bitset<N> x) noexcept {
-	constexpr ptrdiff_t Bitsperword = 8 * sizeof(x._Getword(0));
+	constexpr ptrdiff_t Bitsperword = 64;
 	constexpr ptrdiff_t Words = (N - 1) / Bitsperword;
+	constexpr std::bitset<N> mask(~std::uint64_t{0});
 
 	int count = 0;
+	auto masked = reinterpret_cast<std::uint64_t*>(&x);
 	for (ptrdiff_t i = 0; i < Words + 1; i++) {
-		auto const c = std::countr_zero(x._Getword(i));
+		//auto masked = x & mask; // slow as fuck
+		//x >>= 64;
+		auto const c = std::countr_zero(masked[i]);
 		count += c;
 
 		if (c != Bitsperword)
@@ -62,7 +66,7 @@ constexpr int ctz(std::bitset<N> x) noexcept {
 // Negates a std::bitset
 template <int N>
 constexpr std::bitset<N> negate(std::bitset<N> const& bs) {
-	static constexpr std::bitset<N> bs_one{1};
+	constexpr std::bitset<N> bs_one { 1 };
 	int const lz = ctz(bs);
 	return (~(bs >> lz) | bs_one) << lz;
 }
@@ -111,20 +115,17 @@ constexpr std::bitset<N> bit_subtract(std::bitset<N> l, std::bitset<N> r) {
 // Returns the position of the first set bit
 template <int N>
 constexpr int find_first_set(std::bitset<N> x) noexcept {
-	if (x.none())
-		return N;
-	//return static_cast<int>((x ^ ~negate(x)).count()) - 1;
-	return N - clz(x & negate(x)) - 1;
+	return ctz(x);
 }
 
 // Returns the distance from 'pos' to the first set bit to the left of 'pos'
 template <int N>
 constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
-	//assert(pos >= 0 && pos < N);
+	// assert(pos >= 0 && pos < N);
 	if (pos == N - 1)
 		return 1;
 
-	auto const mask = ~std::bitset<N>{} << (pos + 1);
+	auto const mask = ~std::bitset<N> {} << (pos + 1);
 	x = x & mask;
 	return x.none() ? (N - 1 - pos) : ctz(x) - pos;
 }
@@ -132,11 +133,11 @@ constexpr int bit_distance_left(std::bitset<N> x, int const pos) {
 // Returns the distance from 'pos' to the first set bit to the right of 'pos'
 template <int N>
 constexpr int bit_distance_right(std::bitset<N> x, int const pos) {
-	//assert(pos >= 0 && pos < N);
+	// assert(pos >= 0 && pos < N);
 	if (pos == 0)
 		return 1;
 
-	auto const mask = ~(~std::bitset<N>{} << pos);
+	auto const mask = ~(~std::bitset<N> {} << pos);
 	x = x & mask;
 	return x.none() ? pos : clz(x) - (N - 1 - pos);
 }
@@ -144,36 +145,37 @@ constexpr int bit_distance_right(std::bitset<N> x, int const pos) {
 // Returns the position of the first set bit to the left of 'pos'
 template <int N>
 constexpr int bit_position_left(std::bitset<N> x, int const pos) {
-	//assert(pos >= 0 && pos < N);
-	if (pos >= N - 1)
-		return N;
+	// assert(pos >= 0 && pos < N);
+	//if (pos >= N - 1)
+	//	return N;
 
-	auto const mask = ~std::bitset<N>{} << (pos + 1);
+	auto const mask = ~std::bitset<N> {} << (pos + 1);
 	x = x & mask;
-	return x.none() ? N : ctz(x);
+	//return x.none() ? N : ctz(x);
+	return ctz(x);
 }
 
 // Returns the position to the first set bit to the right of 'pos'
 template <int N>
 constexpr int bit_position_right(std::bitset<N> x, int const pos) {
-	//assert(pos >= 0 && pos < N);
+	// assert(pos >= 0 && pos < N);
 	if (pos == 0)
 		return N;
 
-	auto const mask = ~(~std::bitset<N>{} << pos);
+	auto const mask = ~(~std::bitset<N> {} << pos);
 	x = x & mask;
 	return x.none() ? N : clz(x) - (N - 1);
 }
 
 // Find the nth set bit
-template<int N>
+template <int N>
 constexpr int find_nth_set(std::bitset<N> const& bs, int n) {
 	int i = find_first_set(bs);
 	if (i == N)
 		return N;
 
 	int count = 1;
-	while(count < n) {
+	while (count < n) {
 		i = bit_position_left(bs, i);
 		count += 1;
 	}
@@ -181,7 +183,7 @@ constexpr int find_nth_set(std::bitset<N> const& bs, int n) {
 }
 
 // Iterate the indices in a bitset
-template<int N>
+template <int N>
 constexpr void bit_iterate_set(std::bitset<N> const& bs, auto fn) {
 	for (int i = find_first_set(bs); i < N; i = bit_position_left(bs, i)) {
 		fn(i);
@@ -190,7 +192,7 @@ constexpr void bit_iterate_set(std::bitset<N> const& bs, auto fn) {
 
 // Generate the subsets of the set bits in a bitset.
 // O(2^n), where n is number of set bits
-template<int N>
+template <int N>
 constexpr void bit_subsets(std::bitset<N> const& bs, auto fn) {
 	for (auto subset = bs; subset.any(); subset = bit_minus_one(subset) & bs)
 		fn(subset);
@@ -198,7 +200,7 @@ constexpr void bit_subsets(std::bitset<N> const& bs, auto fn) {
 
 // Generate the subsets of the set bits in a bitset.
 // O(2^n), where n is number of set bits
-template<int N>
+template <int N>
 constexpr void bit_subsets(std::integral auto const bs, auto fn) {
 	for (auto subset = bs; subset.any(); subset = (subset - 1) & bs)
 		fn(subset);
@@ -220,11 +222,11 @@ constexpr void bit_subsets_n(std::bitset<N> const& bs, int x, auto fn) {
 // Generate the x-bits subsets of the set bits in the bit set.
 // Valid subsets are passed asynchronously to 'fn' if the subset has X bits set.
 template <int N, typename Fn>
-constexpr void bit_subsets_n_par(std::bitset<N> const& bs, int x, Fn &&fn) {
+constexpr void bit_subsets_n_par(std::bitset<N> const& bs, int x, Fn&& fn) {
 	int num_subsets = binomial_coefficient(bs.count(), x);
 
 	auto const producer = [=, subset = bs]() mutable {
-		auto ret = std::optional<std::bitset<N>>{};
+		auto ret = std::optional<std::bitset<N>> {};
 		while (subset.any() && num_subsets) {
 			ret = subset;
 			subset = bit_minus_one(subset) & bs;
@@ -239,4 +241,28 @@ constexpr void bit_subsets_n_par(std::bitset<N> const& bs, int x, Fn &&fn) {
 	spmc(producer, std::forward<Fn>(fn));
 }
 
+// Count the number of 'islands' in a bitset
+// fx.  000110010011111000
+// would return 3
+template <int N>
+constexpr int bit_count_islands(std::bitset<N> bs) {
+	int c = 0;
+	int i = ctz(bs);
+	while (i != N) {
+		c += 1;
+		bs >>= (i+1);
+		i = ctz(~bs);
+		bs >>= (i+1);
+		i = ctz(bs);
+	}
+	return c;
+}
+/*
+static_assert(
+	[] {
+		if (1 != bit_count_islands(std::bitset<6>(0b001100)))
+			return false;
+		return true;
+	}(),
+	"ya done goofed");*/
 } // namespace kg
