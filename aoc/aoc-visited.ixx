@@ -36,5 +36,14 @@ public:
 	constexpr bool test(kg::pos2di p) const {
 		return 1 == data[p.y][p.x];
 	}
+
+	constexpr bool test_or_set(kg::pos2di p) {
+		if(!test(p)) {
+			set(p);
+			return false;
+		} else {
+			return true;
+		}
+	}
 };
 }
