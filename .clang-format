@@ -2,7 +2,7 @@ BasedOnStyle: WebKit
 
 AccessModifierOffset: '-4'
 
-AlignOperands: DontAlign #AlignAfterOperator
+AlignOperands: AlignAfterOperator
 
 AlignTrailingComments: Always
 
