@@ -27,7 +27,7 @@ public:
 	}
 
 	constexpr visited(int columns, int rows)
-		requires(Rows == -1 || Columns == -1)
+		requires(Rows == -1 && Columns == -1)
 	{
 		this->w = rows;
 		this->h = columns;
