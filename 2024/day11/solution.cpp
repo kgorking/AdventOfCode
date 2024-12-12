@@ -10,35 +10,37 @@ int num_digits(std::int64_t x) {
 	return static_cast<int>(log10(x)) + 1;
 }
 
-std::int64_t calc_spawn(std::int64_t stone_val, int step, auto& cache) {
-	if (step == 0)
-		return 1;
+std::int64_t calc_spawn_iterative(auto&& input, int steps) {
+	std::unordered_map<std::int64_t, std::int64_t> curr, next;
 
-	std::int64_t const key = (stone_val << 8) | step;
-	std::int64_t res = cache[key];
-	if (res == 0) {
-		if (stone_val == 0) {
-			res = calc_spawn(1, step - 1, cache);
-		} else if (int d = num_digits(stone_val); !(d & 1)) {
-			std::int64_t const half_pow = std::pow(10, d / 2);
-			std::int64_t const l = stone_val / half_pow;
-			std::int64_t const r = stone_val - (l * half_pow);
-			res = calc_spawn(l, step - 1, cache) + calc_spawn(r, step - 1, cache);
-		} else {
-			res = calc_spawn(2024 * stone_val, step - 1, cache);
+	for (std::int64_t i : input)
+		curr.insert({ i, 1 });
+
+	while (steps-- > 0) {
+		for (auto const [stone_val, count] : curr) {
+			if (stone_val == 0) {
+				next[1] += count;
+			} else if (int d = num_digits(stone_val); !(d & 1)) {
+				std::int64_t const half_pow = std::pow(10, d / 2);
+				std::int64_t const l = stone_val / half_pow;
+				std::int64_t const r = stone_val - (l * half_pow);
+				next[l] += count;
+				next[r] += count;
+			} else {
+				next[2024 * stone_val] += count;
+			}
 		}
-		cache[key] = res;
+		curr.swap(next);
+		next.clear();
 	}
 
-	return res;
+	return kg::sum(curr | std::views::values);
 }
 
 export auto part1(auto&& input) {
-	std::unordered_map<std::int64_t, std::int64_t> cache;
-	return kg::sum(input | std::views::transform([&cache](std::int64_t i) { return calc_spawn(i, 25, cache); }));
+	return calc_spawn_iterative(input, 25);
 }
 
 export auto part2(auto&& input) {
-	std::unordered_map<std::int64_t, std::int64_t> cache;
-	return kg::sum(input | std::views::transform([&cache](std::int64_t i) { return calc_spawn(i, 75, cache); }));
+	return calc_spawn_iterative(input, 75);
 }
