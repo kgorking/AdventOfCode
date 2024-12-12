@@ -14,20 +14,19 @@ struct empty_size_info {
 };
 
 export namespace kg {
-template <int Columns = -1, int Rows = -1>
+template <typename T = bool, int Columns = -1, int Rows = -1>
 	requires((Rows == -1 || Rows > 0) && (Columns == -1 || Columns > 0))
-class visited : std::conditional_t<(Columns < 1 || Rows < 1), size_info, empty_size_info<Columns, Rows>> {
-	using value_type = std::conditional_t< Columns < 0 || Rows<0, std::vector<bool>, std::bitset<Rows * Columns>>;
+struct visited : std::conditional_t<(Columns < 1 || Rows < 1), size_info, empty_size_info<Columns, Rows>> {
+	static constexpr bool use_bitset = std::same_as<bool, T> && Columns >= 1 && Rows >= 1;
+	using value_type = std::conditional_t<use_bitset, std::bitset<Rows * Columns>, std::vector<T>>;
 
-	value_type data;
-
-public:
 	constexpr visited()
-		requires(Rows > 0 && Columns > 0) {
-	}
+		requires(!use_bitset)
+	= delete;
 
 	constexpr visited(int columns, int rows)
-		requires(Rows == -1 && Columns == -1) {
+		requires(!use_bitset)
+	{
 		this->w = rows;
 		this->h = columns;
 		if (rows < 1 || columns < 1)
@@ -37,27 +36,35 @@ public:
 
 	template<typename T>
 	constexpr visited(grid<T> const& g)
-		requires(Rows == -1 && Columns == -1) {
-		this->w = g.width();
-		this->h = g.height();
-		data.resize(this->w * this->h);
+	{
+		if constexpr (!use_bitset) {
+			this->w = g.width();
+			this->h = g.height();
+			data.resize(this->w * this->h);
+		} else {
+			if (this->w != g.width() || this->h != g.height())
+				throw std::invalid_argument("size mismatch");
+		}
 	}
 
-	constexpr void set(kg::pos2di p) {
-		data[p.y * this->w + p.x] = 1;
+	constexpr void set(kg::pos2di p, T val = 1) {
+		data[p.y * this->w + p.x] = val;
 	}
 
-	constexpr bool test(kg::pos2di p) const {
-		return 1 == data[p.y * this->w + p.x];
+	constexpr bool test(kg::pos2di p, T val = 1) const {
+		return val == data[p.y * this->w + p.x];
 	}
 
-	constexpr bool test_or_set(kg::pos2di p) {
-		if (!test(p)) {
-			set(p);
+	constexpr bool test_or_set(kg::pos2di p, T val = 1) {
+		if (!test(p, val)) {
+			set(p, val);
 			return false;
 		} else {
 			return true;
 		}
 	}
+
+	private:
+	value_type data;
 };
 }
