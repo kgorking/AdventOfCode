@@ -10,17 +10,17 @@ export auto part1(auto&& input) {
 	kg::visited vis(input.size(), input[0].size());
 
 	auto const in_bounds = [&](kg::pos2di const p) { return (p.x >= 0 && p.y >= 0 && p.y < input.size() && p.x < input[0].size()); };
-	auto const flood_fill = [&](kg::pos2di const p) {
+	auto const flood_fill = [&](kg::pos2di const start) {
 		int fences = 0;
 		int area = 0;
-		char const val = input[p.y][p.x];
+		char const val = input[start.y][start.x];
 
 		// Stack starts at p
 		std::vector<kg::pos2di> stack;
-		stack.push_back(p);
+		stack.push_back(start);
 
 		while (!stack.empty()) {
-			auto const p = stack.back();
+			kg::pos2di const p = stack.back();
 			stack.pop_back();
 
 			// Check if I'm at a boundary between plots
@@ -59,10 +59,9 @@ export auto part2(auto&& input) {
 	std::unordered_map<int, std::vector<int>> x_fences, y_fences;
 
 	auto const in_bounds = [&](kg::pos2di const p) { return (p.x >= 0 && p.y >= 0 && p.y < input.size() && p.x < input[0].size()); };
-	auto const flood_fill = [&](kg::pos2di const p) {
+	auto const flood_fill = [&](kg::pos2di start) {
 		int area = 0;
-		kg::pos2di last_p = p;
-		char const val = input[p.y][p.x];
+		char const val = input[start.y][start.x];
 
 		// directional info
 		struct directional_info {
@@ -71,7 +70,7 @@ export auto part2(auto&& input) {
 
 		// Stack starts at p
 		std::vector<std::pair<kg::pos2di, directional_info>> stack;
-		stack.push_back({ p, { 1, 0 } });
+		stack.push_back({ start, { 1, 0 } });
 
 		while (!stack.empty()) {
 			auto const [p, info] = stack.back();
