@@ -60,7 +60,7 @@ export constexpr auto part2(auto&& input) {
 
 	// One vector holds the sides for both x- and y-axis.
 	// x fences = [0, fence_stride[
-	// y fences = [fence_string, 2*fence_stride[
+	// y fences = [-fence_string, 0[
 	auto xy_fences = std::unordered_map<int, plots> {};
 
 	auto const flood_fill = [&](std::pair<char, kg::pos2di> const start) {
