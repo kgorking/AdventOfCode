@@ -33,7 +33,12 @@ module;
 #include <wchar.h>
 #include <wctype.h>
 
+#include <xmmintrin.h>
+#include <immintrin.h>
+#include <intrin.h>
+
 export module std;
+
 
 // "C++ library headers" [tab:headers.cpp]
 #include <algorithm>

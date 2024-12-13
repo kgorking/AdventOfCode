@@ -19,14 +19,17 @@ list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)
 include(Catch)
 
+# std module
+add_library(std_module STATIC)
+target_sources(std_module PUBLIC FILE_SET CXX_MODULES FILES "aoc/std.ixx")
+
 # AoC module lib
 add_library(AdventOfCode STATIC)
-target_compile_options(AdventOfCode PRIVATE /c)
+target_link_libraries(AdventOfCode PRIVATE std_module)
 
 target_sources(AdventOfCode
   PUBLIC
     FILE_SET CXX_MODULES FILES
-		"aoc/std.ixx"
 		"aoc/aoc.ixx"
 		"aoc/aoc-bits.ixx"
 		"aoc/aoc-pos2d.ixx"

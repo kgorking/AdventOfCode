@@ -1,0 +1,60 @@
+{
+  "configurePresets": [
+    {
+      "hidden": true,
+      "name": "windows-base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ],
+          "enableMicrosoftCodeAnalysis": true,
+          "codeAnalysisRuleset": "CppCoreCheckRules.ruleset"
+        }
+      }
+    },
+    {
+      "name": "windows-2022-debug",
+      "inherts": "windows-base",
+      "displayName": "Debug"
+    },
+    {
+      "name": "windows-2022-debug-clang",
+      "inherts": "windows-base",
+      "displayName": "Clang debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "e:/clang-18/bin/clang++.exe"
+      }
+    },
+    {
+      "name": "windows-2022-release-clang",
+      "inherts": "windows-base",
+      "displayName": "Clang release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_COMPILER": "e:/clang-18/bin/clang++.exe"
+      }
+    },
+    {
+      "name": "windows-2022-release",
+      "inherts": "windows-base",
+      "displayName": "Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "windows-2022-profile",
+      "displayName": "Profile",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ]
+}
