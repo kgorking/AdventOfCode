@@ -1,12 +1,6 @@
-std::to_array<std::string_view>({
-	"RRRRIICCFF",
-	"RRRRIICCCF",
-	"VVRRRCCFFF",
-	"VVRCCCJFFF",
-	"VVVVCJJCFE",
-	"VVIVCCJJEE",
-	"VVIIICJJEE",
-	"MIIIIIJJEE",
-	"MIIISIJEEE",
-	"MMMISSJEEE"
-})
+std::array{
+	std::array{94ll, 22ll, 8400ll, 34ll, 67ll, 5400ll},
+	std::array{26ll, 67ll, 12748ll, 66ll, 21ll, 12176ll},
+	std::array{17ll, 84ll, 7870ll, 86ll, 37ll, 6450ll},
+	std::array{69ll, 27ll, 18641ll, 23ll, 71ll, 10279ll}
+}
