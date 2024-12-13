@@ -1,0 +1,12 @@
+std::to_array<std::string_view>({
+	"RRRRIICCFF",
+	"RRRRIICCCF",
+	"VVRRRCCFFF",
+	"VVRCCCJFFF",
+	"VVVVCJJCFE",
+	"VVIVCCJJEE",
+	"VVIIICJJEE",
+	"MIIIIIJJEE",
+	"MIIISIJEEE",
+	"MMMISSJEEE"
+})
