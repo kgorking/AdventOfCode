@@ -20,7 +20,7 @@ std::bitset<N> to_bitset(std::string_view sv, char one) {
 
 // count leading zeroes in a bitset
 template <int N>
-constexpr int clz(std::bitset<N> x) noexcept {
+constexpr int clz(std::bitset<N> const& x) noexcept {
 	constexpr ptrdiff_t Bitsperword = 64;
 	constexpr ptrdiff_t Words = (N - 1) / Bitsperword;
 	constexpr ptrdiff_t Remainder = (N % Bitsperword);
@@ -43,13 +43,12 @@ constexpr int clz(std::bitset<N> x) noexcept {
 
 // count trailing zeroes in a bitset
 template <int N>
-constexpr int ctz(std::bitset<N> x) noexcept {
+constexpr int ctz(std::bitset<N> const& x) noexcept {
 	constexpr ptrdiff_t Bitsperword = 64;
 	constexpr ptrdiff_t Words = (N - 1) / Bitsperword;
-	constexpr std::bitset<N> mask(~std::uint64_t{0});
 
 	int count = 0;
-	auto masked = reinterpret_cast<std::uint64_t*>(&x);
+	auto masked = reinterpret_cast<std::uint64_t const*>(&x);
 	for (ptrdiff_t i = 0; i < Words + 1; i++) {
 		//auto masked = x & mask; // slow as fuck
 		//x >>= 64;
@@ -114,7 +113,7 @@ constexpr std::bitset<N> bit_subtract(std::bitset<N> l, std::bitset<N> r) {
 
 // Returns the position of the first set bit
 template <int N>
-constexpr int find_first_set(std::bitset<N> x) noexcept {
+constexpr int find_first_set(std::bitset<N> const& x) noexcept {
 	return ctz(x);
 }
 
@@ -241,11 +240,30 @@ constexpr void bit_subsets_n_par(std::bitset<N> const& bs, int x, Fn&& fn) {
 	spmc(producer, std::forward<Fn>(fn));
 }
 
+
+// Find the largest stride of ones in the bitset
+// fx.  000110010011111000
+// would return 5
+template <int N>
+/*constexpr*/ int bit_has_n_contiguous_ones(std::bitset<N> bs, int n) {
+	int i = ctz(bs);
+	while (i != N) {
+		bs >>= i;
+		int const s = i;
+		i = ctz(~bs);
+		if (i - s >= n)
+			return true;
+		bs >>= (i+1);
+		i = ctz(bs);
+	}
+	return false;
+}
+
 // Count the number of 'islands' in a bitset
 // fx.  000110010011111000
 // would return 3
 template <int N>
-constexpr int bit_count_islands(std::bitset<N> bs) {
+/*constexpr*/ int bit_count_islands(std::bitset<N> bs) {
 	int c = 0;
 	int i = ctz(bs);
 	while (i != N) {
@@ -257,12 +275,6 @@ constexpr int bit_count_islands(std::bitset<N> bs) {
 	}
 	return c;
 }
-/*
-static_assert(
-	[] {
-		if (1 != bit_count_islands(std::bitset<6>(0b001100)))
-			return false;
-		return true;
-	}(),
-	"ya done goofed");*/
+
+
 } // namespace kg
