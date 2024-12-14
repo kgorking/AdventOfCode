@@ -7,7 +7,7 @@ export constexpr auto expected_sample = std::make_pair(12, 0);
 export constexpr auto expected_input = std::make_pair(232253028, 8179);
 
 constexpr int quadrant(kg::pos2di p) {
-	return 3 - (2 * std::signbit(p.y) + std::signbit(p.x));
+	return 2 * std::signbit(p.y) + std::signbit(p.x);
 }
 
 export auto part1(auto&& input) {
@@ -32,6 +32,7 @@ export constexpr auto part2(auto&& input) {
 	if (input.size() == 12) // doesn't work with sample data
 		return 0;
 
+	int const num_robots = input.size();
 	kg::pos2di constexpr dim { 101, 103 };
 	kg::pos2di constexpr hdim { dim.x / 2, dim.y / 2 };
 
@@ -47,7 +48,8 @@ export constexpr auto part2(auto&& input) {
 			counts[quadrant(p - hdim)] += (p.x != hdim.x && p.y != hdim.y);
 		}
 
-		if (counts[1] + counts[3] > 2 * (counts[0] + counts[2])) {
+		// Check if a quadrant holds a lot of robots
+		if (std::ranges::max(counts) > num_robots / 3) {
 			std::ranges::sort(robots, [](auto const& l, auto const& r) { return l[0].y < r[0].y; });
 			for (int y = 0; y < dim.y; y++) {
 				// Count the number of robots with the same y-value
