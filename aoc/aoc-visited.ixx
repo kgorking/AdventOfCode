@@ -20,9 +20,8 @@ struct visited : std::conditional_t<(Columns < 1 || Rows < 1), size_info, empty_
 	static constexpr bool use_bitset = std::same_as<bool, T> && Columns >= 1 && Rows >= 1;
 	using value_type = std::conditional_t<use_bitset, std::bitset<Rows * Columns>, std::vector<T>>;
 
-	constexpr visited()
-		requires(!use_bitset)
-	= delete;
+	constexpr visited() requires(use_bitset) = default;
+	constexpr visited() requires(!use_bitset) = delete;
 
 	constexpr visited(int columns, int rows)
 		requires(!use_bitset)
