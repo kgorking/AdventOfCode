@@ -4,10 +4,10 @@ import std;
 export namespace kg {
 
 // two equations with two unknowns
-std::pair<int, int> solve(int a1, int b1, int c1, int a2, int b2, int c2) {
+std::pair<std::int64_t, std::int64_t> solve(std::int64_t a1, std::int64_t b1, std::int64_t c1, std::int64_t a2, std::int64_t b2, std::int64_t c2) {
 	int y = (a1 * c2 - a2 * c1) / (a1 * b2 - a2 * b1);
 	int x = (b2 * c1 - b1 * c2) / (a1 * b2 - a2 * b1);
-	return std::pair { x, y };
+	return { x, y };
 }
 
 // Create a histogram from the container
