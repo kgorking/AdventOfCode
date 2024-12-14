@@ -50,10 +50,9 @@ export constexpr auto part2(auto&& input) {
 		if (counts[1] + counts[3] > 2 * (counts[0] + counts[2])) {
 			std::ranges::sort(robots, [](auto const& l, auto const& r) { return l[0].y < r[0].y; });
 			for (int y = 0; y < dim.y; y++) {
-				int orig_y = y;
-				while (robots[y][0].y == robots[orig_y][0].y) {
+				int const orig_y = y;
+				while (robots[y][0].y == robots[orig_y][0].y)
 					y += 1;
-				}
 
 				if ((y - orig_y) >= 25)
 					return second;
