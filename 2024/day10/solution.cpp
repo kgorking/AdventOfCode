@@ -49,7 +49,7 @@ export auto part1(auto&& input) {
 	};
 
 	auto calc_path_scores = grid.values_and_coords()
-		| kg::views::filter_eq(0, kg::select<0>)
+		| kg::views::filter_equal(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
 				::traverse_all_paths(grid, p, at_end, good_neighbour);
@@ -75,7 +75,7 @@ export auto part2(auto&& input) {
 	};
 
 	auto calc_path_scores = grid.values_and_coords()
-		| kg::views::filter_eq(0, kg::select<0>)
+		| kg::views::filter_equal(0, kg::select<0>)
 		| std::views::values
 		| std::views::transform(traverse);
 

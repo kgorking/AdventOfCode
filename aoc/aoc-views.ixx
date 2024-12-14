@@ -28,17 +28,21 @@ export constexpr auto filter_fn = [](auto&& fn, auto&& ...args) {
 
 // Filters if the value is equal to the input.
 // If the input is a range/container, use 'indices' to index into it.
-export constexpr auto filter_eq = [](auto&& val, auto Proj = std::identity {}) {
-	return std::views::filter([=](auto&& in) { return std::equal_to {}(val, std::invoke(Proj, in));
+export constexpr auto filter = [](auto&& val, auto Comp, auto Proj = std::identity {}) {
+	return std::views::filter([=](auto&& in) { return Comp(val, std::invoke(Proj, in));
 	});
 };
-export constexpr auto filter_ne = [](auto&& val, auto Proj = std::identity {}) {
-	return std::views::filter([=](auto&& in) { return std::not_equal_to{}(val, std::invoke(Proj, in));
-	});
+export constexpr auto filter_equal = [](auto&& val, auto Proj = std::identity {}) {
+	return filter(val, std::equal_to {}, Proj);
 };
-export constexpr auto filter_gr = [](auto&& val, auto Proj = std::identity {}) {
-	return std::views::filter([=](auto&& in) { return std::greater{}(val, std::invoke(Proj, in));
-	});
+export constexpr auto filter_not_equal = [](auto&& val, auto Proj = std::identity {}) {
+	return filter(val, std::not_equal_to {}, Proj);
+};
+export constexpr auto filter_greater = [](auto&& val, auto Proj = std::identity {}) {
+	return filter(val, std::greater {}, Proj);
+};
+export constexpr auto filter_less = [](auto&& val, auto Proj = std::identity {}) {
+	return filter(val, std::less {}, Proj);
 };
 
 

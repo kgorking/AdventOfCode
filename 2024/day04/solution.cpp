@@ -13,7 +13,7 @@ export auto part1(auto const& input) {
 	auto count_xmas_in_all_directions
 		= input
 		| kg::views::with_coord2d
-		| kg::views::filter_eq('X', kg::select<0>)
+		| kg::views::filter_equal('X', kg::select<0>)
 		| std::views::values
 		| std::views::transform([&](kg::pos2di p) {
 				return kg::sum(directions | std::views::transform([&](kg::pos2di dir) {
@@ -31,7 +31,7 @@ export auto part1(auto const& input) {
 export auto part2(auto const& input) {
 	return kg::sum(input
 		| kg::views::matrix<3, 3>
-		| kg::views::filter_eq('A', kg::index<1, 1>{})
+		| kg::views::filter_equal('A', kg::index<1, 1>{})
 		| std::views::transform([](kg::matrix_t<char,3,3> const& m) {
 			return
 				6 == std::abs(m[0][0] - m[2][2]) &&
