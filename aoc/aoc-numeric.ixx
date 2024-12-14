@@ -4,11 +4,12 @@ import std;
 export namespace kg {
 
 // two equations with two unknowns
-std::pair<std::int64_t, std::int64_t> solve(std::int64_t a1, std::int64_t b1, std::int64_t c1, std::int64_t a2, std::int64_t b2, std::int64_t c2) {
-	int y = (a1 * c2 - a2 * c1) / (a1 * b2 - a2 * b1);
-	int x = (b2 * c1 - b1 * c2) / (a1 * b2 - a2 * b1);
+constexpr std::pair<std::int64_t, std::int64_t> solve(std::int64_t a1, std::int64_t b1, std::int64_t c1, std::int64_t a2, std::int64_t b2, std::int64_t c2) {
+	std::int64_t const y = (a1 * c2 - a2 * c1) / (a1 * b2 - a2 * b1);
+	std::int64_t const x = (b2 * c1 - b1 * c2) / (a1 * b2 - a2 * b1);
 	return { x, y };
 }
+
 
 // Create a histogram from the container
 // Returns a pair of std::map and the maximum histogram value
