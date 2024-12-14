@@ -22,6 +22,13 @@ struct pos2d {
 		y -= p.y;
 	}
 
+	constexpr void operator%=(pos2d const p) {
+		x %= p.x;
+		x += (x < 0) * p.x;
+		y %= p.y;
+		y += (y < 0) * p.y;
+	}
+
 	[[nodiscard]] constexpr pos2d operator*(T t) const {
 		return {x * t, y * t};
 	}
