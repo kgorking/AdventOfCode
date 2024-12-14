@@ -22,9 +22,7 @@ export auto part1(auto&& input) {
 	for (auto [p, v] : input) {
 		p += v * 100;
 		p %= dim;
-
-		if (p.x != hdim.x && p.y != hdim.y)
-			counts[quadrant(p - hdim)] += 1;
+		counts[quadrant(p - hdim)] += (p.x != hdim.x && p.y != hdim.y);
 	}
 
 	return counts[0] * counts[1] * counts[2] * counts[3];
@@ -46,9 +44,7 @@ export constexpr auto part2(auto&& input) {
 		for (auto& [p, v] : robots) {
 			p += v;
 			p %= dim;
-
-			if (p.x != hdim.x && p.y != hdim.y)
-				counts[quadrant(p - hdim)] += 1;
+			counts[quadrant(p - hdim)] += (p.x != hdim.x && p.y != hdim.y);
 		}
 
 		if (counts[1] + counts[3] > 2 * (counts[0] + counts[2])) {
