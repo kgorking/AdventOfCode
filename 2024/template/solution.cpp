@@ -1,4 +1,4 @@
-export module aoc.day13;
+export module aoc.template;
 import aoc;
 import std;
 
@@ -11,6 +11,6 @@ export auto part1(auto&& input) {
 	return 0;
 }
 
-export constexpr auto part2(auto&& input) {
+export auto part2(auto&& input) {
 	return 0;
 }
