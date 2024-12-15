@@ -4,6 +4,7 @@ export import std;
 export import :array;
 export import :async;
 export import :bits;
+export import :cursor;
 export import :graph;
 export import :grid;
 export import :math;
