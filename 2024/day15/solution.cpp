@@ -40,11 +40,10 @@ kg::direction char_to_dir(char c) {
 
 export template <int N>
 std::int64_t part1(input_t<N> input) {
-	auto dirs = input.moves | std::views::transform(char_to_dir);
 	auto map = kg::grid { input.map };
 	auto robot = kg::cursor { find_robot(input.map), kg::direction::up };
 
-	for (kg::direction const dir : dirs) {
+	for (kg::direction const dir : input.moves | std::views::transform(char_to_dir)) {
 		kg::cursor const next = robot.peek_in(dir);
 
 		// Empty space, so move there
@@ -79,7 +78,7 @@ std::int64_t part1(input_t<N> input) {
 export template <int N>
 std::int64_t part2(input_t<N> input) {
 	// Widen the map
-	std::array<std::string, input.map.size()> wide_map;
+	std::array<std::string, N> wide_map;
 	for (auto [i, s] : input.map | std::views::enumerate) {
 		for (char c : s) {
 			switch (c) {
@@ -95,8 +94,7 @@ std::int64_t part2(input_t<N> input) {
 	auto map = kg::grid { wide_map };
 	auto robot = kg::cursor { find_robot(wide_map), kg::direction::up };
 
-	for (auto const [i, ch_mov] : input.moves | std::views::enumerate) {
-		kg::direction const dir = char_to_dir(ch_mov);
+	for (kg::direction const dir : input.moves | std::views::transform(char_to_dir)) {
 		kg::cursor const next = robot.peek_in(dir);
 
 		// Empty space, so move there
@@ -107,13 +105,13 @@ std::int64_t part2(input_t<N> input) {
 			// Hit a wall, so do nothing
 		} else {
 			// Search for an empty spot behind crate
-			// Found an empty space, so move the box
 			if (dir == kg::direction::left || dir == kg::direction::right) {
 				kg::cursor search = next;
 				while (map[search] == ']' || map[search] == '[')
 					search.step();
 
 				if (map[search] == '.') {
+					// Found an empty space, so move the box
 					while (search.pos != next.pos) {
 						auto const prev = search.pos;
 						search.step_back();
@@ -132,7 +130,8 @@ std::int64_t part2(input_t<N> input) {
 				//   [][]
 				//    []
 				//    @
-				// one move -> 6 boxes moves
+				// one move up -> 6 boxes moves
+
 				auto can_move = [&](this auto& self, kg::pos2di p) {
 					auto p2 = p;
 					p2.x += (map[p] == ']') ? -1 : +1;
