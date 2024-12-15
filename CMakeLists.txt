@@ -32,6 +32,7 @@ target_sources(AdventOfCode
     FILE_SET CXX_MODULES FILES
 		"aoc/aoc.ixx"
 		"aoc/aoc-bits.ixx"
+		"aoc/aoc-direction.ixx"
 		"aoc/aoc-pos2d.ixx"
 		"aoc/aoc-matrix.ixx"
 		"aoc/aoc-numeric.ixx"
