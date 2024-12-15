@@ -33,7 +33,6 @@ TEST_CASE(AOC_SZ " - sample") {
 }
 
 TEST_CASE(AOC_SZ " - actual") {
-
 	auto const [expected_part_1, expected_part_2] = expected_input;
 
 	auto const part_1 = part1(actual_input);
