@@ -9,7 +9,7 @@ struct grid {
 	using base_type = std::remove_cvref_t<decltype(std::declval<T>()[0][0])>;
 
 	T& ref;
-	base_type oob_val = '\0';
+	base_type oob_val = {};
 
 	constexpr auto coords() const {
 		return ref | kg::views::coord2d;
@@ -17,6 +17,14 @@ struct grid {
 
 	constexpr auto values_and_coords() const {
 		return ref | kg::views::with_coord2d;
+	}
+
+	constexpr base_type& operator[](kg::pos2di p) requires (!std::is_const_v<T>) {
+		if (in_bounds(p)) {
+			return ref[p.y][p.x];
+		} else {
+			return oob_val;
+		}
 	}
 
 	constexpr base_type operator[](kg::pos2di p) const {
