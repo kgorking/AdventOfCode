@@ -39,6 +39,7 @@ export constexpr auto part2(auto&& input) {
 	auto robots = input;
 	std::array<int, 4> counts;
 
+	int last_fac = 0;
 	for (int const second : std::views::iota(1)) {
 		counts.fill(0);
 
@@ -48,8 +49,10 @@ export constexpr auto part2(auto&& input) {
 			counts[quadrant(p - hdim)] += (p.x != hdim.x && p.y != hdim.y);
 		}
 
-		// Check if a quadrant holds a lot of robots
-		if (std::ranges::max(counts) > num_robots / 3) {
+		int const safety_factor = counts[0] * counts[1] * counts[2] * counts[3];
+
+		// Check for safety factor fluctuations
+		if (safety_factor < std::exchange(last_fac, safety_factor) / 4) {
 			std::ranges::sort(robots, [](auto const& l, auto const& r) { return l[0].y < r[0].y; });
 			for (int y = 0; y < dim.y; y++) {
 				// Count the number of robots with the same y-value
