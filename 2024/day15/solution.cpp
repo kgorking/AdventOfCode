@@ -12,6 +12,7 @@ struct input_t {
 	std::string_view moves;
 };
 
+using namespace std::literals::string_literals;
 using map_view = std::span<std::string>;
 
 // Find robot in map
@@ -78,18 +79,21 @@ std::int64_t part1(input_t<N> input) {
 export template <int N>
 std::int64_t part2(input_t<N> input) {
 	// Widen the map
-	std::array<std::string, N> wide_map;
-	for (auto [i, s] : input.map | std::views::enumerate) {
-		for (char c : s) {
-			switch (c) {
-			case '#': wide_map[i] += "##"; break;
-			case 'O': wide_map[i] += "[]"; break;
-			case '.': wide_map[i] += ".."; break;
-			case '@': wide_map[i] += "@."; break;
-			default: throw;
-			}
-		}
-	}
+	auto wide_map = input.map 
+		| std::views::transform([&](std::string const& s) {
+			return s | std::views::transform([](char c) {
+							switch (c) {
+							case '#': return "##"s;
+							case 'O': return "[]"s;
+							case '.': return ".."s;
+							case '@': return "@."s;
+							default: throw;
+							}
+						})
+					 | std::views::join
+					 | std::ranges::to<std::string>();
+			})
+		| std::ranges::to<std::vector>();
 
 	auto map = kg::grid { wide_map };
 	auto robot = kg::cursor { find_robot(wide_map), kg::direction::up };
@@ -105,13 +109,13 @@ std::int64_t part2(input_t<N> input) {
 			// Hit a wall, so do nothing
 		} else {
 			// Search for an empty spot behind crate
-			if (dir == kg::direction::left || dir == kg::direction::right) {
+			if (dir.is_horizontal()) {
 				kg::cursor search = next;
 				while (map[search] == ']' || map[search] == '[')
 					search.step();
 
 				if (map[search] == '.') {
-					// Found an empty space, so move the box
+					// Found an empty space, so move the boxes
 					while (search.pos != next.pos) {
 						auto const prev = search.pos;
 						search.step_back();
@@ -123,8 +127,6 @@ std::int64_t part2(input_t<N> input) {
 					robot = next;
 				}
 			} else {
-				kg::pos2di const v_dir = kg::cursor::directions[(int)dir];
-
 				// move up/down
 				//  [][][]
 				//   [][]
@@ -136,8 +138,8 @@ std::int64_t part2(input_t<N> input) {
 					auto p2 = p;
 					p2.x += (map[p] == ']') ? -1 : +1;
 
-					p += v_dir;
-					p2 += v_dir;
+					p += dir;
+					p2 += dir;
 
 					char const c1 = map[p];
 					char const c2 = map[p2];
@@ -159,17 +161,17 @@ std::int64_t part2(input_t<N> input) {
 					auto p2 = p;
 					p2.x += (map[p] == ']') ? -1 : +1;
 
-					char const& c1 = map[p + v_dir];
-					char const& c2 = map[p2 + v_dir];
+					char const& c1 = map[p + dir];
+					char const& c2 = map[p2 + dir];
 
 					if (c1 == ']' || c1 == '[')
-						self(p + v_dir);
+						self(p + dir);
 					if (c2 == ']' || c2 == '[')
-						self(p2 + v_dir);
+						self(p2 + dir);
 
 					if (c1 == '.' && c2 == '.') {
-						std::swap(map[p], map[p + v_dir]);
-						std::swap(map[p2], map[p2 + v_dir]);
+						std::swap(map[p], map[p + dir]);
+						std::swap(map[p2], map[p2 + dir]);
 					}
 				};
 
