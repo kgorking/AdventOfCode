@@ -6,10 +6,10 @@ import :views;
 export namespace kg {
 template <class T>
 struct grid {
-	using base_type = decltype(std::declval<T>()[0][0]);
+	using base_type = std::remove_cvref_t<decltype(std::declval<T>()[0][0])>;
 
 	T& ref;
-	base_type oob_val {};
+	base_type oob_val = '\0';
 
 	constexpr auto coords() const {
 		return ref | kg::views::coord2d;
