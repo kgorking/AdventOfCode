@@ -33,17 +33,24 @@ struct visited : std::conditional_t<(Columns < 1 || Rows < 1), size_info, empty_
 		data.resize(columns * rows);
 	}
 
-	template<typename T>
-	constexpr visited(grid<T> const& g)
-	{
+	template<typename U>
+	constexpr visited(grid<U> const& g, T initial_value = T {}) {
 		if constexpr (!use_bitset) {
 			this->w = g.width();
 			this->h = g.height();
-			data.resize(this->w * this->h);
+			data.resize(this->w * this->h, initial_value);
 		} else {
 			if (this->w != g.width() || this->h != g.height())
 				throw std::invalid_argument("size mismatch");
 		}
+	}
+
+	constexpr T& operator[](kg::pos2di p) {
+		return data[p.y * this->w + p.x];
+	}
+
+	constexpr T operator[](kg::pos2di p) const {
+		return data[p.y * this->w + p.x];
 	}
 
 	constexpr void set(kg::pos2di p, T val = 1) {
