@@ -4,7 +4,7 @@ project (AdventOfCode CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+#set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 
 # Catch2
 Include(FetchContent)
@@ -51,7 +51,7 @@ target_sources(AdventOfCode
 
 
 # Include sub-projects.
-add_subdirectory ("common_unittests")
+#add_subdirectory ("common_unittests")
 #add_subdirectory ("2015")
 #add_subdirectory ("2020")
 #add_subdirectory ("2021")
