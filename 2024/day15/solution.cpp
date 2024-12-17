@@ -31,10 +31,10 @@ kg::pos2di find_robot(map_view const map) {
 
 kg::direction char_to_dir(char c) {
 	switch (c) {
-	case '^': return kg::direction::up;
-	case '>': return kg::direction::right;
-	case 'v': return kg::direction::down;
-	case '<': return kg::direction::left;
+	case '^': return kg::direction::up();
+	case '>': return kg::direction::right();
+	case 'v': return kg::direction::down();
+	case '<': return kg::direction::left();
 	}
 	std::unreachable();
 }
@@ -42,7 +42,7 @@ kg::direction char_to_dir(char c) {
 export template <int N>
 std::int64_t part1(input_t<N> input) {
 	auto map = kg::grid { input.map };
-	auto robot = kg::cursor { find_robot(input.map), kg::direction::up };
+	auto robot = kg::cursor { find_robot(input.map), kg::direction::up() };
 
 	for (kg::direction const dir : input.moves | std::views::transform(char_to_dir)) {
 		kg::cursor const next = robot.peek_in(dir);
@@ -96,7 +96,7 @@ std::int64_t part2(input_t<N> input) {
 		| std::ranges::to<std::vector>();
 
 	auto map = kg::grid { wide_map };
-	auto robot = kg::cursor { find_robot(wide_map), kg::direction::up };
+	auto robot = kg::cursor { find_robot(wide_map), kg::direction::up() };
 
 	for (kg::direction const dir : input.moves | std::views::transform(char_to_dir)) {
 		kg::cursor const next = robot.peek_in(dir);
