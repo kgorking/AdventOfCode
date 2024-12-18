@@ -1,4 +1,5 @@
 {
+  "version": 8,
   "configurePresets": [
     {
       "hidden": true,
@@ -20,12 +21,12 @@
     },
     {
       "name": "windows-2022-debug",
-      "inherts": "windows-base",
+      "inherits": "windows-base",
       "displayName": "Debug"
     },
     {
       "name": "windows-2022-debug-clang",
-      "inherts": "windows-base",
+      "inherits": "windows-base",
       "displayName": "Clang debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
@@ -34,7 +35,7 @@
     },
     {
       "name": "windows-2022-release-clang",
-      "inherts": "windows-base",
+      "inherits": "windows-base",
       "displayName": "Clang release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
@@ -43,7 +44,7 @@
     },
     {
       "name": "windows-2022-release",
-      "inherts": "windows-base",
+      "inherits": "windows-base",
       "displayName": "Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
