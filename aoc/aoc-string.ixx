@@ -4,6 +4,27 @@ import std;
 import :numeric;
 
 export namespace kg {
+std::vector<int> make_z_array(std::string_view pattern, std::string_view text) {
+	auto const blob = std::to_array({ pattern, text });
+	auto s = blob | std::views::join_with('#') | std::ranges::to<std::string>();
+
+	int const n = blob.size();
+	std::vector<int> z(n);
+
+	int x = 0, y = 0;
+
+	for (int i = 1; i < n; i++) {
+		z[i] = std::max(0, std::min(z[i - x], y - i + 1));
+		while (i + z[i] < n && s[z[i]] == s[i + z[i]]) {
+			x = i;
+			y = i + z[i];
+			z[i]++;
+		}
+	}
+
+	return z;
+}
+
 struct anagram_pattern_matcher {
 	anagram_pattern_matcher(std::string_view pattern) {
 		pattern_size = pattern.size();
