@@ -10,11 +10,9 @@ std::int64_t count_combinations(std::string_view design, std::span<std::string_v
 	std::unordered_map<std::string_view, std::int64_t> cache;
 
 	auto valid_combos = [&](this auto& valid_combos, std::string_view design) {
-		// If we reached the end of the design string, return 1
 		if (design.empty())
 			return 1ll;
 
-		// Return a potential cached value
 		if (cache.contains(design))
 			return cache[design];
 
@@ -24,8 +22,7 @@ std::int64_t count_combinations(std::string_view design, std::span<std::string_v
 			if (design.starts_with(pattern))
 				combos += valid_combos(design.substr(pattern.size()));
 
-		cache[design] = combos;
-		return combos;
+		return cache[design] = combos;
 	};
 
 	return valid_combos(design);
