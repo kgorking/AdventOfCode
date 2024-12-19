@@ -1,0 +1,13 @@
+std::array{
+	std::to_array<std::string_view>({"r", "wr", "b", "g", "bwu", "rb", "gb", "br"}),
+	std::to_array<std::string_view>({
+		"brwrr",
+		"bggr",
+		"gbbr",
+		"rrbgbr",
+		"ubwu",
+		"bwurrg",
+		"brgr",
+		"bbrgwb"
+	})
+}
