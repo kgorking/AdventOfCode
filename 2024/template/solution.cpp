@@ -1,4 +1,4 @@
-export module aoc.template;
+export module aoc.day01;
 import aoc;
 import std;
 
