@@ -19,7 +19,7 @@ namespace mat_ops {
 		return std::min({ acc, (a + b) }); };
 }
 
-template <typename T, int R, int C = R>
+template <typename T, int R, int C>
 	requires(R > 0 && C > 0)
 using matrix_t = std::array<std::array<T, C>, R>;
 
@@ -50,7 +50,7 @@ auto make_from_rows(std::ranges::range auto const&... rows) {
 
 // Set a matrix to it's identity
 template <typename T, int N>
-constexpr void mat_identity(matrix_t<T, N>& ident) {
+constexpr void mat_identity(matrix_t<T, N, N>& ident) {
 	for (int i = 0; i < N; i++) {
 		ident[i].fill(0);
 		ident[i][i] = 1;
@@ -59,7 +59,7 @@ constexpr void mat_identity(matrix_t<T, N>& ident) {
 
 // Returns an identity matrix
 template <typename T, int N>
-[[nodiscard]] constexpr matrix_t<T, N> mat_identity() {
+[[nodiscard]] constexpr matrix_t<T, N, N> mat_identity() {
 	matrix_t<T, N, N> ident;
 	mat_identity(ident);
 	return ident;

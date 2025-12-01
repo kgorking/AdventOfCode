@@ -6,7 +6,7 @@ export namespace kg {
 
 // Note that adjacency matrices are nodes_count^2
 template <typename T, int R, int C>
-auto make_adjacency_mat(kg::matrix_t<T, R, C> mat, auto&& bin_op) -> std::unique_ptr<kg::matrix_t<T, R * C>> {
+auto make_adjacency_mat(kg::matrix_t<T, R, C> mat, auto&& bin_op) -> std::unique_ptr<kg::matrix_t<T, R * C, R*C>> {
 	constexpr kg::pos2di offsets[] = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 	auto adj = std::make_unique<kg::matrix_t<T, R * C>>();
 	kg::mat_max(*adj);
