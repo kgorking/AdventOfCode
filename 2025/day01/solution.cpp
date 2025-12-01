@@ -37,7 +37,7 @@ static auto part2(auto const& input) {
 
 		// Update the position.
 		// Account for modulo of negative numbers
-		position = (newpos % 100 + 100) % 100;
+		position = (newpos + (100i64 << 32)) % 100;
 	}
 
 	return code;
