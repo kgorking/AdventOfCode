@@ -43,4 +43,5 @@ static auto part2(auto const& input) {
 	return code;
 }
 
-#include "../impl.h"
+// Tests and benchmarks
+#include "../tests_and_benchmarks.h"
