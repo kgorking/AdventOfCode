@@ -26,14 +26,15 @@ static auto part2(auto const& input) {
 		// Find the new position
 		int newpos = position + turn;
 
-		// Count the number of full dial rotations
-		int clicks = std::abs(newpos) / 100;
+		// Count the number of full dial rotations.
+		// Zero is passed on each rotation.
+		int times_passed_zero = std::abs(newpos) / 100;
 
-		// Check if zero was passed
-		clicks += position > 0 && newpos <= 0;
+		// Check if zero was passed when moving to the new position.
+		times_passed_zero += position > 0 && newpos <= 0;
 
 		// Add it to the code
-		code += clicks;
+		code += times_passed_zero;
 
 		// Update the position.
 		// Account for modulo of negative numbers
