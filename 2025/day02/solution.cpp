@@ -1,5 +1,6 @@
 import aoc;
 import std;
+#define DAY "day02"
 
 // Holds the expected values for sample + input. Used in unit tests.
 static constexpr auto expected_sample = std::make_pair(0, 0);

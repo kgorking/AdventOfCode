@@ -65,12 +65,7 @@ target_sources(Aoc_2025
 #add_subdirectory ("2022")
 #add_subdirectory ("2023")
 #add_subdirectory ("2024")
-
-# 2025
-target_sources(Aoc_2025 PUBLIC
-    "2025/day01/solution.cpp"
-    "2025/day02/solution.cpp"
-)
+add_subdirectory ("2025")
 
 
 target_link_libraries(Aoc_2025 PRIVATE Catch2::Catch2WithMain)
