@@ -11,6 +11,15 @@ struct grid {
 	T& ref;
 	base_type oob_val = {};
 
+	kg::pos2di find(base_type val) const {
+		for (auto [y, line] : ref | std::views::enumerate) {
+			for (auto [x, c] : line | std::views::enumerate)
+				if (c == val)
+					return { (int)x, (int)y };
+		}
+		return { -1, -1 };
+	}
+
 	constexpr auto coords() const {
 		return ref | kg::views::coord2d;
 	}
