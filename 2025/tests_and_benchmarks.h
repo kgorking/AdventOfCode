@@ -40,7 +40,7 @@ TEST_CASE(DAY) {
 
 // Benchmarks are only run if tests pass in release mode
 #ifndef _DEBUG
-TEST_CASE(DAY) {
+TEST_CASE(DAY " - benchmark") {
 	BENCHMARK("Part 1") {
 		return part1(actual_input);
 	};

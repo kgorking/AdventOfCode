@@ -3,35 +3,44 @@ import std;
 #define DAY "day03"
 
 // Holds the expected values for sample + input. Used in unit tests.
-static constexpr auto expected_sample = std::make_pair(  357, 0);
-static constexpr auto expected_input  = std::make_pair(16854, 0);
+static constexpr auto expected_sample = std::make_pair(  357, 3121910778619);
+static constexpr auto expected_input  = std::make_pair(16854, 167526011932478);
 
-int max_joltage_pair(std::string_view battery_bank) {
-	std::string_view::iterator first, second;
-	first = std::ranges::max_element(battery_bank);
+// Solve it using a monotonic stack approach
+static std::int64_t max_joltage_n(std::string_view battery_bank, int const s) {
+	int n = battery_bank.size() - s;
 
-	if (first == std::prev(battery_bank.end())) {
-		second = std::ranges::max_element(battery_bank.begin(), first);
-		std::swap(first, second);
-	} else {
-		second = std::ranges::max_element(std::ranges::subrange(std::next(first), battery_bank.end()));
+	std::vector<char> mono;
+	mono.reserve(battery_bank.size());
+
+	for (char battery : battery_bank) {
+		while (!mono.empty() && n > 0 && mono.back() < battery) {
+			mono.pop_back();
+			--n;
+		}
+
+		mono.push_back(battery);
 	}
 
-	return ((*first - '0') * 10) + *second - '0';
-}
+	while (n) {
+		mono.pop_back();
+		--n;
+	}
 
-int max_joltage_12(std::string_view battery_bank) {
-	// Find the collection of the twelve largest joltages in the battery bank
+	std::int64_t result = 0;
+	while (n < mono.size()) {
+		result *= 10;
+		result += mono[n++];
+		result -= '0';
+	}
 
-	return 0;
+	return result;
 }
 
 static auto part1(auto const& input) {
 	std::int64_t sum = 0;
 	for (std::string_view battery_bank : input) {
-		int const joltage = max_joltage_pair(battery_bank);
-		std::println("{} ", joltage);
-		sum += joltage;
+		sum += max_joltage_n(battery_bank, 2);
 	}
 	return sum;
 }
@@ -39,9 +48,7 @@ static auto part1(auto const& input) {
 static auto part2(auto const& input) {
 	std::int64_t sum = 0;
 	for (std::string_view battery_bank : input) {
-		int const joltage = max_joltage_12(battery_bank);
-		std::println("{} ", joltage);
-		sum += joltage;
+		sum += max_joltage_n(battery_bank, 12);
 	}
 	return sum;
 }
