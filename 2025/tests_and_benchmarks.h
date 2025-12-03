@@ -17,28 +17,25 @@ static constexpr auto get_input() {
 static constexpr auto sample_input = get_sample_input();
 static constexpr auto actual_input = get_input();
 
-TEST_CASE(DAY " - sample") {
-	auto const [expected_part_1, expected_part_2] = expected_sample;
+TEST_CASE(DAY) {
+	auto const [expected_sample_part_1, expected_sample_part_2] = expected_sample;
+	auto const [expected_input_part_1, expected_input_part_2] = expected_input;
 
 	auto const sample_part_1 = part1(sample_input);
-	CHECK(sample_part_1 == expected_part_1);
+	REQUIRE(sample_part_1 == expected_sample_part_1);
 
 	auto const sample_part_2 = part2(sample_input);
-	REQUIRE(sample_part_2 == expected_part_2);
+	REQUIRE(sample_part_2 == expected_sample_part_2);
 
-	std::print("{}\n  Sample Part 1: {}\n  Sample Part 2: {}\n\n", DAY, sample_part_1, sample_part_2);
-}
-
-TEST_CASE(DAY " - actual") {
-	auto const [expected_part_1, expected_part_2] = expected_input;
 
 	auto const actual_part_1 = part1(actual_input);
-	REQUIRE(actual_part_1 == expected_part_1);
+	REQUIRE(actual_part_1 == expected_input_part_1);
 
 	auto const actual_part_2 = part2(actual_input);
-	REQUIRE(actual_part_2 == expected_part_2);
+	REQUIRE(actual_part_2 == expected_input_part_2);
 
-	std::print("{}\n  Actual part 1: {}\n  Actual part 2: {}\n", DAY, actual_part_1, actual_part_2);
+	std::println("{} - Sample {} / {}", DAY, sample_part_1, sample_part_2);
+	std::println("{} - Actual {} / {}", DAY, actual_part_1, actual_part_2);
 }
 
 // Benchmarks are only run if tests pass in release mode
