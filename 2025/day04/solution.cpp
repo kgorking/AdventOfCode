@@ -6,16 +6,16 @@ import std;
 static constexpr auto expected_sample = std::make_pair(13, 43);
 static constexpr auto expected_input = std::make_pair(1428, 8936);
 
-constexpr auto neighbours_offsets = std::array<kg::pos2di, 8> { kg::pos2di
-	{ -1, -1 }, { 0, -1 }, { 1, -1 },
-	{ -1,  0 },            { 1,  0 },
-	{ -1,  1 }, { 0,  1 }, { 1,  1 },
-};
-
 using matrix_t = kg::matrix_t<char, 138, 138>;
 
 // When a roll is present at a position, count it for all adjacent positions
 matrix_t count_adjacent_rolls(auto const& current_rolls) {
+	constexpr auto neighbours_offsets = std::array<kg::pos2di, 8> { kg::pos2di
+		{ -1, -1 }, { 0, -1 }, { 1, -1 },
+		{ -1,  0 },            { 1,  0 },
+		{ -1,  1 }, { 0,  1 }, { 1,  1 },
+	};
+
 	matrix_t mat {};
 
 	kg::grid grid_mat { mat };
@@ -53,12 +53,19 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
-	using neighbourhood = std::array<char*, 8>; // A delicious 64 bytes stride.
+	using neighbourhood = std::array<char*, 3>; // 24 bytes for 9 positions.
+
+	constexpr auto compact_offsets = std::array<kg::pos2di, 3> { kg::pos2di
+		{ -1, -1 },
+		{ -1,  0 },
+		{ -1,  1 },
+	};
+
 	std::vector<neighbourhood> active_rolls;
 	matrix_t roll_count {};
 	kg::grid grid_roll { roll_count };
 	
-	// Pre-alloc and pre-fault memory for active rolls. Saves ~100us
+	// Pre-alloc and pre-fault memory for active rolls. Saves ~50us
 	int mem_needed = 0;
 	for (int y = 1; y < input.size() - 1; y++) {
 		for (int x = 1; x < input[0].size() - 1; x++)
@@ -69,21 +76,21 @@ static auto part2(auto const& input) {
 	// Stick pointers to paper rolls counts in a vector,
 	// along with the pointers to the neighbouring positions.
 	// This allows me to avoid grid lookups during processing.
-	//for (auto const pos : input | kg::views::coord2d) {
 	std::size_t active = 0;
 	for (int y = 1; y < input.size() - 1; y++) {
 		for (int x = 1; x < input[0].size() - 1; x++) {
 			if ('@' == input[y][x]) {
-				neighbourhood n {};
-
 				auto const pos = kg::pos2di { x, y };
-				for (int i = 0; kg::pos2di const offset : neighbours_offsets) {
-					n[i] = &grid_roll[pos + offset];
-					*n[i] += 1;
-					i += 1;
-				}
 
-				active_rolls[active++] = n;
+				neighbourhood& n = active_rolls[active++];
+				n[0] = &grid_roll[pos + compact_offsets[0]];
+				n[1] = &grid_roll[pos + compact_offsets[1]];
+				n[2] = &grid_roll[pos + compact_offsets[2]];
+
+				// Increase the roll count for all neighbouring positions
+				n[0][0] += 1; n[0][1] += 1; n[0][2] += 1;
+				n[1][0] += 1;               n[1][2] += 1;
+				n[2][0] += 1; n[2][1] += 1; n[2][2] += 1;
 			}
 		}
 	}
@@ -101,12 +108,13 @@ static auto part2(auto const& input) {
 			// Deduce the center position from the neighbour to its left.
 			// This is only done to avoid an extra pointer in the neighbourhood array,
 			// and to keep it the size of cache line.
-			auto const center = n[3] + 1;
+			auto const center = n[1] + 1;
 
 			if (*center < 4) {
 				// Decrease the roll count for all neighbouring positions
-				for (int i = 0; i < 8; i++)
-					*n[i] -= 1;
+				n[0][0] -= 1; n[0][1] -= 1; n[0][2] -= 1;
+				n[1][0] -= 1;               n[1][2] -= 1;
+				n[2][0] -= 1; n[2][1] -= 1; n[2][2] -= 1;
 
 				// Remove the roll from the vector
 				active -= 1;

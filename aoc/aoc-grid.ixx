@@ -28,7 +28,8 @@ struct grid {
 		return ref | kg::views::with_coord2d;
 	}
 
-	constexpr base_type& operator[](kg::pos2di p) requires (!std::is_const_v<T>) {
+	template<typename T>
+	constexpr base_type& operator[](kg::pos2d<T> p) requires (!std::is_const_v<T>) {
 		oob_val = {};
 		if (in_bounds(p)) {
 			return ref[p.y][p.x];
@@ -37,7 +38,8 @@ struct grid {
 		}
 	}
 
-	constexpr base_type operator[](kg::pos2di p) const {
+	template<typename T>
+	constexpr base_type operator[](kg::pos2d<T> p) const {
 		if (in_bounds(p)) {
 			return ref[p.y][p.x];
 		} else {
