@@ -12,35 +12,31 @@ constexpr auto neighbours_offsets = std::array<kg::pos2di, 8> {
 	kg::pos2di { -1,  1 }, kg::pos2di { 0,  1 }, kg::pos2di { 1,  1 },
 };
 
-using floor_t = kg::matrix_t<char, 136, 136>;
+using matrix_t = kg::matrix_t<char, 136, 136>;
 
 // When a roll is present at a position, count it for all adjacent positions
-floor_t count_adjacent_rolls(auto const& current_rolls) {
+matrix_t count_adjacent_rolls(auto const& current_rolls) {
+	matrix_t mat {};
+
 	kg::grid grid { current_rolls };
+	kg::grid grid_mat { mat };
 
-	floor_t mat {};
-	for (auto pos : grid.coords()) {
-		if ('@' != grid[pos])
-			continue;
+	for (kg::pos2di const pos : grid.coords())
+		if ('@' == grid[pos])
+			for (kg::pos2di const offset : neighbours_offsets)
+				grid_mat[pos + offset] += 1;
 
-		for (auto offset : neighbours_offsets) {
-			auto npos = pos + offset;
-			if (grid.in_bounds(npos) && '@' == grid[npos]) {
-				mat[npos.y][npos.x] += 1;
-			}
-		}
-	}
 	return mat;
 }
 
 static auto part1(auto const& input) {
-	floor_t current_rolls {};
+	matrix_t current_rolls {};
 	for (auto pos : input | kg::views::coord2d) {
 		if ('@' == input[pos.y][pos.x])
 			current_rolls[pos.y][pos.x] = '@';
 	}
 
-	floor_t const roll_count = count_adjacent_rolls(current_rolls);
+	matrix_t const roll_count = count_adjacent_rolls(current_rolls);
 
 	int count = 0;
 	for (int y=0; y<input.size(); y++) {
@@ -54,41 +50,38 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
-	std::unordered_set<kg::pos2di> active_rolls;
+	std::deque<kg::pos2di> active_rolls;
 	for (auto pos : input | kg::views::coord2d) {
 		if ('@' == input[pos.y][pos.x]) {
-			active_rolls.insert(pos);
+			active_rolls.push_back(pos);
 		}
 	}
 
 	int total_removed = 0;
-	floor_t roll_count = count_adjacent_rolls(input);
-	kg::grid grid { input };
-	std::vector<kg::pos2di> to_remove;
+	matrix_t roll_count = count_adjacent_rolls(input);
+	kg::grid grid_roll { roll_count };
 
 	while (true) {
-		for (auto pos : active_rolls) {
-			if (roll_count[pos.y][pos.x] < 4)
-				to_remove.push_back(pos);
+		int removed = 0;
+		int active = active_rolls.size();
+		while (active--) {
+			auto const pos = active_rolls.back();
+			active_rolls.pop_back();
+
+			if (roll_count[pos.y][pos.x] < 4) {
+				removed += 1;
+				for (auto offset : neighbours_offsets) {
+					grid_roll[pos + offset] -= 1;
+				}
+			} else {
+				active_rolls.push_front(pos);
+			}
 		}
 
-		if (to_remove.empty())
+		if (!removed)
 			break;
 
-		total_removed += to_remove.size();
-
-		do {
-			auto const pos = to_remove.back();
-			active_rolls.erase(pos);
-			to_remove.pop_back();
-
-			for (auto offset : neighbours_offsets) {
-				auto npos = pos + offset;
-				if (grid.in_bounds(npos) && '@' == grid[npos]) {
-					roll_count[npos.y][npos.x] -= 1;
-				}
-			}
-		} while (!to_remove.empty());
+		total_removed += removed;
 	}
 
 	return total_removed;
