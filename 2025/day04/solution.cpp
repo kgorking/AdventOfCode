@@ -50,10 +50,10 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
-	std::deque<kg::pos2di> active_rolls;
+	std::queue<kg::pos2di> active_rolls;
 	for (auto pos : input | kg::views::coord2d) {
 		if ('@' == input[pos.y][pos.x]) {
-			active_rolls.push_back(pos);
+			active_rolls.push(pos);
 		}
 	}
 
@@ -65,8 +65,8 @@ static auto part2(auto const& input) {
 		int removed = 0;
 		int active = active_rolls.size();
 		while (active--) {
-			auto const pos = active_rolls.back();
-			active_rolls.pop_back();
+			auto const pos = active_rolls.front();
+			active_rolls.pop();
 
 			if (roll_count[pos.y][pos.x] < 4) {
 				removed += 1;
@@ -74,7 +74,7 @@ static auto part2(auto const& input) {
 					grid_roll[pos + offset] -= 1;
 				}
 			} else {
-				active_rolls.push_front(pos);
+				active_rolls.push(pos);
 			}
 		}
 
