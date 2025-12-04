@@ -53,17 +53,7 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
-	using neighbourhood = std::array<char*, 3>; // 24 bytes for 9 positions.
-
-	constexpr auto compact_offsets = std::array<kg::pos2di, 3> { kg::pos2di
-		{ -1, -1 },
-		{ -1,  0 },
-		{ -1,  1 },
-	};
-
-	std::vector<neighbourhood> active_rolls;
-	matrix_t roll_count {};
-	kg::grid grid_roll { roll_count };
+	using neighbourhood = std::array<char*, 4>; // 24 bytes for 9 positions. 8 bytes for padding.
 	
 	// Pre-alloc and pre-fault memory for active rolls. Saves ~50us
 	int mem_needed = 0;
@@ -71,21 +61,24 @@ static auto part2(auto const& input) {
 		for (int x = 1; x < input[0].size() - 1; x++)
 			mem_needed += '@' == input[y][x];
 	}
-	active_rolls.resize(mem_needed);
+	std::vector<neighbourhood> active_rolls(mem_needed);
 
 	// Stick pointers to paper rolls counts in a vector,
 	// along with the pointers to the neighbouring positions.
 	// This allows me to avoid grid lookups during processing.
+	matrix_t roll_count {};
 	std::size_t active = 0;
+
 	for (int y = 1; y < input.size() - 1; y++) {
 		for (int x = 1; x < input[0].size() - 1; x++) {
 			if ('@' == input[y][x]) {
-				auto const pos = kg::pos2di { x, y };
-
 				neighbourhood& n = active_rolls[active++];
-				n[0] = &grid_roll[pos + compact_offsets[0]];
-				n[1] = &grid_roll[pos + compact_offsets[1]];
-				n[2] = &grid_roll[pos + compact_offsets[2]];
+
+				// Get pointers to neighbouring positions
+				auto const pos = kg::pos2di { x, y };
+				n[0] = &roll_count[pos.y - 1][pos.x - 1];
+				n[1] = &roll_count[pos.y    ][pos.x - 1];
+				n[2] = &roll_count[pos.y + 1][pos.x - 1];
 
 				// Increase the roll count for all neighbouring positions
 				n[0][0] += 1; n[0][1] += 1; n[0][2] += 1;
@@ -105,20 +98,15 @@ static auto part2(auto const& input) {
 		for (std::size_t i = 0; i < active;) {
 			neighbourhood const& n = active_rolls[i];
 
-			// Deduce the center position from the neighbour to its left.
-			// This is only done to avoid an extra pointer in the neighbourhood array,
-			// and to keep it the size of cache line.
-			auto const center = n[1] + 1;
-
-			if (*center < 4) {
+			auto const roll = n[1][1];
+			if (roll < 4) {
 				// Decrease the roll count for all neighbouring positions
 				n[0][0] -= 1; n[0][1] -= 1; n[0][2] -= 1;
 				n[1][0] -= 1;               n[1][2] -= 1;
 				n[2][0] -= 1; n[2][1] -= 1; n[2][2] -= 1;
 
 				// Remove the roll from the vector
-				active -= 1;
-				active_rolls[i] = active_rolls[active];
+				active_rolls[i] = active_rolls[--active];
 			} else {
 				// The roll remains in the vector
 				i++;

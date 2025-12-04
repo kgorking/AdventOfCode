@@ -58,7 +58,7 @@ target_sources(Aoc_2025
 		"aoc/aoc-views.ixx"
 		"aoc/aoc-cursor.ixx"
 		"aoc/aoc-visited.ixx"
-		"aoc/aoc-grid.ixx")
+		"aoc/aoc-grid.ixx" )
 
 
 # Include sub-projects.
