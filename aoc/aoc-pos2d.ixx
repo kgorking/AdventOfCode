@@ -81,3 +81,14 @@ using pos2di = pos2d<int>;
 using pos2df = pos2d<float>;
 
 } // namespace kg
+
+namespace std {
+template <>
+struct hash<kg::pos2di> {
+	[[nodiscard]] size_t operator()(kg::pos2di const p) const noexcept {
+		size_t h1 = std::hash<int> {}(p.x);
+		size_t h2 = std::hash<int> {}(p.y);
+		return h1 ^ (h2 << 1);
+	}
+};
+}
