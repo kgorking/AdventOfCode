@@ -50,39 +50,50 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
-	std::queue<kg::pos2di> active_rolls;
+	using neighbourhood = std::array<char*, 9>;
+	std::vector<neighbourhood> active_rolls;
 	matrix_t roll_count {};
 	kg::grid grid_roll { roll_count };
 
-	// Stick paper rolls positions in a stack,
-	// and find the roll counts of neighbouring positions.
+	// Stick pointers to paper rolls counts in a vector,
+	// along with the pointers to the neighbouring positions.
+	// This allows me to avoid grid lookups during processing.
 	for (auto pos : input | kg::views::coord2d) {
 		if ('@' == input[pos.y][pos.x]) {
-			active_rolls.push(pos);
-			for (kg::pos2di const offset : neighbours_offsets)
-				grid_roll[pos + offset] += 1;
+			neighbourhood n { &grid_roll[pos] };
+			auto neighbours = n.data() + 1;
+
+			for (kg::pos2di const offset : neighbours_offsets) {
+				*neighbours = &grid_roll[pos + offset];
+				**neighbours += 1;
+				neighbours += 1;
+			}
+
+			active_rolls.push_back(n);
 		}
 	}
 
 	int total_removed = 0;
 	while (true) {
 		int removed = 0;
-		int active = active_rolls.size();
 
 		// Process all active rolls
-		while (active--) {
-			auto const pos = active_rolls.front();
-			active_rolls.pop();
+		for (int i = 0; i < active_rolls.size();) {
+			auto& n = active_rolls[i];
 
-			if (grid_roll[pos] < 4) {
-				removed += 1;
-
+			if (*n[0] < 4) {
 				// Decrease the roll count for all neighbouring positions
-				for (auto offset : neighbours_offsets)
-					grid_roll[pos + offset] -= 1;
+				for (int i=1; i < 9; i++)
+					*(n[i]) -= 1;
+
+				// Remove the roll from the vector
+				// by swapping with the last element
+				std::swap(n, active_rolls.back());
+				active_rolls.pop_back();
+				removed += 1;
 			} else {
-				// The roll goes back on the stack
-				active_rolls.push(pos);
+				// The roll remains in the vector
+				i++;
 			}
 		}
 
