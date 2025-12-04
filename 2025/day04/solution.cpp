@@ -74,17 +74,19 @@ static auto part2(auto const& input) {
 	}
 
 	int total_removed = 0;
+	std::size_t const initial_active = active_rolls.size();
 	std::size_t active = active_rolls.size();
+
 	while (true) {
-		int const last_active = active;
+		std::size_t const last_active = active;
 
 		// Process all active rolls
-		for (auto i = 0ull; i < active;) {
-			auto& n = active_rolls[i];
+		for (std::size_t i = 0; i < active;) {
+			neighbourhood const& n = active_rolls[i];
 
-			// Deduce the center position from the neighbour to the left.
+			// Deduce the center position from the neighbour to its left.
 			// This is only done to avoid an extra pointer in the neighbourhood array,
-			// and to keep the size of cache line.
+			// and to keep it the size of cache line.
 			auto const center = n[3] + 1;
 
 			if (*center < 4) {
@@ -93,22 +95,20 @@ static auto part2(auto const& input) {
 					*n[i] -= 1;
 
 				// Remove the roll from the vector
-				// by copying the last element into its place
 				active -= 1;
-				n = active_rolls[active];
+				active_rolls[i] = active_rolls[active];
 			} else {
 				// The roll remains in the vector
 				i++;
 			}
 		}
 
-		// Check if I'm done
-		if (active == last_active) break;
-
-		total_removed += (last_active - active);
+		// No change means I'm done
+		if (active == last_active)
+			break;
 	}
 
-	return total_removed;
+	return initial_active - active;
 }
 
 // Tests and benchmarks
