@@ -73,7 +73,7 @@ static auto part2(auto const& input) {
 	do {
 		last_active = active;
 		for (int i = 0; i < active;) {
-			neighbourhood const& n = active_rolls[i];
+			neighbourhood& n = active_rolls[i];
 
 			char const num_roll_neighbours = n[1][1];
 			if (num_roll_neighbours < 4) {
@@ -82,8 +82,8 @@ static auto part2(auto const& input) {
 				n[1][0] -= 1;               n[1][2] -= 1;
 				n[2][0] -= 1; n[2][1] -= 1; n[2][2] -= 1;
 			
-				// Remove the roll from consideration
-				active_rolls[i] = active_rolls[--active];
+				// Overwrite current roll with the last active roll
+				n = active_rolls[--active];
 			} else {
 				// Next roll
 				i++;
