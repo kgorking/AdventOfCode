@@ -6,10 +6,10 @@ import std;
 static constexpr auto expected_sample = std::make_pair(13, 43);
 static constexpr auto expected_input = std::make_pair(1428, 8936);
 
-constexpr auto neighbours_offsets = std::array<kg::pos2di, 8> {
-	kg::pos2di { -1, -1 }, kg::pos2di { 0, -1 }, kg::pos2di { 1, -1 },
-	kg::pos2di { -1,  0 },                       kg::pos2di { 1,  0 },
-	kg::pos2di { -1,  1 }, kg::pos2di { 0,  1 }, kg::pos2di { 1,  1 },
+constexpr auto neighbours_offsets = std::array<kg::pos2di, 8> { kg::pos2di
+	{ -1, -1 }, { 0, -1 }, { 1, -1 },
+	{ -1,  0 },            { 1,  0 },
+	{ -1,  1 }, { 0,  1 }, { 1,  1 },
 };
 
 using matrix_t = kg::matrix_t<char, 136, 136>;
