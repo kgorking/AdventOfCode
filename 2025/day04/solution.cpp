@@ -50,7 +50,7 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
-	using neighbourhood = std::array<char*, 8>;
+	using neighbourhood = std::array<char*, 8>; // A delicious 64 bytes stride.
 	std::vector<neighbourhood> active_rolls;
 	matrix_t roll_count {};
 	kg::grid grid_roll { roll_count };
