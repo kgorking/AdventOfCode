@@ -61,11 +61,10 @@ static auto part2(auto const& input) {
 	}
 
 	int total_removed = 0;
-	do {
-		int count = 0;
-
+	while (true) {
 		floor_t const roll_count = count_adjacent_rolls(current_rolls);
 
+		int count = 0;
 		for (int y = 0; y < input.size(); y++) {
 			for (int x = 0; x < input[0].size(); x++) {
 				bool const is_roll = '@' == current_rolls[y][x];
@@ -82,7 +81,7 @@ static auto part2(auto const& input) {
 		total_removed += count;
 		if (count == 0)
 			break;
-	} while (true);
+	}
 
 	return total_removed;
 }
