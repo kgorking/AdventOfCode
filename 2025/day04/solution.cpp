@@ -12,35 +12,38 @@ constexpr auto neighbours_offsets = std::array<kg::pos2di, 8> { kg::pos2di
 	{ -1,  1 }, { 0,  1 }, { 1,  1 },
 };
 
-using matrix_t = kg::matrix_t<char, 137, 137>;
+using matrix_t = kg::matrix_t<char, 138, 138>;
 
 // When a roll is present at a position, count it for all adjacent positions
 matrix_t count_adjacent_rolls(auto const& current_rolls) {
 	matrix_t mat {};
 
-	kg::grid grid { current_rolls };
 	kg::grid grid_mat { mat };
 
-	for (kg::pos2di const pos : grid.coords())
-		if ('@' == grid[pos])
-			for (kg::pos2di const offset : neighbours_offsets)
-				grid_mat[pos + offset] += 1;
-
+	for (int y = 0; y < current_rolls.size(); y++) {
+		for (int x = 0; x < current_rolls[0].size(); x++) {
+			if ('@' == current_rolls[y][x])
+				for (kg::pos2di pos{ x, y }; kg::pos2di const offset : neighbours_offsets)
+					grid_mat[pos + offset] += 1;
+		}
+	}
 	return mat;
 }
 
 static auto part1(auto const& input) {
 	matrix_t current_rolls {};
-	for (auto pos : input | kg::views::coord2d) {
-		if ('@' == input[pos.y][pos.x])
-			current_rolls[pos.y][pos.x] = '@';
+	for (int y = 1; y < input.size() - 1; y++) {
+		for (int x = 1; x < input[0].size() - 1; x++) {
+			if ('@' == input[y][x])
+				current_rolls[y][x] = '@';
+		}
 	}
 
 	matrix_t const roll_count = count_adjacent_rolls(current_rolls);
 
 	int count = 0;
-	for (int y=0; y<input.size(); y++) {
-		for (int x = 0; x < input[0].size(); x++) {
+	for (int y = 1; y<input.size() - 1; y++) {
+		for (int x = 1; x < input[0].size() - 1; x++) {
 			bool const is_roll = '@' == current_rolls[y][x];
 			count += is_roll && (roll_count[y][x] < 4);
 		}
@@ -54,28 +57,39 @@ static auto part2(auto const& input) {
 	std::vector<neighbourhood> active_rolls;
 	matrix_t roll_count {};
 	kg::grid grid_roll { roll_count };
+	
+	// Pre-alloc and pre-fault memory for active rolls. Saves ~100us
+	int mem_needed = 0;
+	for (int y = 1; y < input.size() - 1; y++) {
+		for (int x = 1; x < input[0].size() - 1; x++)
+			mem_needed += '@' == input[y][x];
+	}
+	active_rolls.resize(mem_needed);
 
 	// Stick pointers to paper rolls counts in a vector,
 	// along with the pointers to the neighbouring positions.
 	// This allows me to avoid grid lookups during processing.
-	for (auto const pos : input | kg::views::coord2d) {
-		if ('@' == input[pos.y][pos.x]) {
-			neighbourhood n { };
-			auto neighbour = n.data();
+	//for (auto const pos : input | kg::views::coord2d) {
+	std::size_t active = 0;
+	for (int y = 1; y < input.size() - 1; y++) {
+		for (int x = 1; x < input[0].size() - 1; x++) {
+			if ('@' == input[y][x]) {
+				neighbourhood n {};
 
-			for (kg::pos2di const offset : neighbours_offsets) {
-				*neighbour = &grid_roll[pos + offset];
-				**neighbour += 1;
-				neighbour += 1;
+				auto const pos = kg::pos2di { x, y };
+				for (int i = 0; kg::pos2di const offset : neighbours_offsets) {
+					n[i] = &grid_roll[pos + offset];
+					*n[i] += 1;
+					i += 1;
+				}
+
+				active_rolls[active++] = n;
 			}
-
-			active_rolls.push_back(n);
 		}
 	}
 
 	int total_removed = 0;
-	std::size_t const initial_active = active_rolls.size();
-	std::size_t active = active_rolls.size();
+	std::size_t const initial_active = active;
 
 	while (true) {
 		std::size_t const last_active = active;
