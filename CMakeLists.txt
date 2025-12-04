@@ -13,7 +13,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project (AdventOfCode LANGUAGES CXX)
 
-
 # Catch2
 Include(FetchContent)
 FetchContent_Declare(
@@ -33,6 +32,11 @@ include(Catch)
 
 # AoC module lib
 add_executable(Aoc_2025 "2025/dummy.cpp")
+
+if (MSVC AND WIN32 AND NOT MSVC_VERSION VERSION_LESS 142)
+    target_link_options(Aoc_2025 PRIVATE $<$<CONFIG:Debug>:/INCREMENTAL>)
+    target_compile_options(Aoc_2025 PRIVATE $<$<CONFIG:Debug>:/ZI>)
+endif()
 
 target_sources(Aoc_2025
   PUBLIC
