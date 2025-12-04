@@ -82,7 +82,9 @@ static auto part2(auto const& input) {
 		for (auto i = 0ull; i < active;) {
 			auto& n = active_rolls[i];
 
-			// Deduce the center position from the neighbour to the left
+			// Deduce the center position from the neighbour to the left.
+			// This is only done to avoid an extra pointer in the neighbourhood array,
+			// and to keep the size of cache line.
 			auto const center = n[3] + 1;
 
 			if (*center < 4) {
