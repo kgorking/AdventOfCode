@@ -84,7 +84,7 @@ static auto part2(auto const& input) {
 			if (*n[0] < 4) {
 				// Decrease the roll count for all neighbouring positions
 				for (int i=1; i < 9; i++)
-					*(n[i]) -= 1;
+					*n[i] -= 1;
 
 				// Remove the roll from the vector
 				// by swapping with the last element
