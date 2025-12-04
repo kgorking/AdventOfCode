@@ -53,10 +53,9 @@ static auto part2(auto const& input) {
 					neighbourhood& n = active_rolls[active++];
 
 					// Get pointers to neighbouring positions
-					auto const pos = kg::pos2di { x, y };
-					n[0] = &roll_count[pos.y - 1][pos.x - 1];
-					n[1] = &roll_count[pos.y    ][pos.x - 1];
-					n[2] = &roll_count[pos.y + 1][pos.x - 1];
+					n[0] = &roll_count[y - 1][x - 1];
+					n[1] = &roll_count[y    ][x - 1];
+					n[2] = &roll_count[y + 1][x - 1];
 
 					// Increase the roll count for all neighbouring positions
 					n[0][0] += 1; n[0][1] += 1; n[0][2] += 1;
