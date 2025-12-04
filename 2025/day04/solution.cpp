@@ -12,7 +12,7 @@ constexpr auto neighbours_offsets = std::array<kg::pos2di, 8> { kg::pos2di
 	{ -1,  1 }, { 0,  1 }, { 1,  1 },
 };
 
-using matrix_t = kg::matrix_t<char, 136, 136>;
+using matrix_t = kg::matrix_t<char, 137, 137>;
 
 // When a roll is present at a position, count it for all adjacent positions
 matrix_t count_adjacent_rolls(auto const& current_rolls) {
@@ -50,7 +50,7 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
-	using neighbourhood = std::array<char*, 9>;
+	using neighbourhood = std::array<char*, 8>;
 	std::vector<neighbourhood> active_rolls;
 	matrix_t roll_count {};
 	kg::grid grid_roll { roll_count };
@@ -58,15 +58,15 @@ static auto part2(auto const& input) {
 	// Stick pointers to paper rolls counts in a vector,
 	// along with the pointers to the neighbouring positions.
 	// This allows me to avoid grid lookups during processing.
-	for (auto pos : input | kg::views::coord2d) {
+	for (auto const pos : input | kg::views::coord2d) {
 		if ('@' == input[pos.y][pos.x]) {
-			neighbourhood n { &grid_roll[pos] };
-			auto neighbours = n.data() + 1;
+			neighbourhood n { };
+			auto neighbour = n.data();
 
 			for (kg::pos2di const offset : neighbours_offsets) {
-				*neighbours = &grid_roll[pos + offset];
-				**neighbours += 1;
-				neighbours += 1;
+				*neighbour = &grid_roll[pos + offset];
+				**neighbour += 1;
+				neighbour += 1;
 			}
 
 			active_rolls.push_back(n);
@@ -74,23 +74,26 @@ static auto part2(auto const& input) {
 	}
 
 	int total_removed = 0;
+	std::size_t active = active_rolls.size();
 	while (true) {
-		int removed = 0;
+		int const last_active = active;
 
 		// Process all active rolls
-		for (int i = 0; i < active_rolls.size();) {
+		for (auto i = 0ull; i < active;) {
 			auto& n = active_rolls[i];
 
-			if (*n[0] < 4) {
+			// Deduce the center position from the neighbour to the left
+			auto const center = n[3] + 1;
+
+			if (*center < 4) {
 				// Decrease the roll count for all neighbouring positions
-				for (int i=1; i < 9; i++)
+				for (int i = 0; i < 8; i++)
 					*n[i] -= 1;
 
 				// Remove the roll from the vector
-				// by swapping with the last element
-				std::swap(n, active_rolls.back());
-				active_rolls.pop_back();
-				removed += 1;
+				// by copying the last element into its place
+				active -= 1;
+				n = active_rolls[active];
 			} else {
 				// The roll remains in the vector
 				i++;
@@ -98,9 +101,9 @@ static auto part2(auto const& input) {
 		}
 
 		// Check if I'm done
-		if (!removed) break;
+		if (active == last_active) break;
 
-		total_removed += removed;
+		total_removed += (last_active - active);
 	}
 
 	return total_removed;

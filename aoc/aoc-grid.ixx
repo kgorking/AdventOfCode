@@ -9,7 +9,7 @@ struct grid {
 	using base_type = std::remove_cvref_t<decltype(std::declval<T>()[0][0])>;
 
 	T& ref;
-	base_type oob_val = {};
+	mutable base_type oob_val = {};
 
 	kg::pos2di find(base_type val) const {
 		for (auto [y, line] : ref | std::views::enumerate) {
@@ -29,6 +29,7 @@ struct grid {
 	}
 
 	constexpr base_type& operator[](kg::pos2di p) requires (!std::is_const_v<T>) {
+		oob_val = {};
 		if (in_bounds(p)) {
 			return ref[p.y][p.x];
 		} else {
@@ -40,7 +41,7 @@ struct grid {
 		if (in_bounds(p)) {
 			return ref[p.y][p.x];
 		} else {
-			return oob_val;
+			return {};
 		}
 	}
 
