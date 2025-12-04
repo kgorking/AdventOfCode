@@ -44,7 +44,7 @@ static auto part2(auto const& input) {
 	std::array<neighbourhood, 13000> active_rolls{};
 
 	// Set up the initial roll counts and active rolls
-	std::size_t active = 0;
+	int active = 0;
 	{
 		matrix_t roll_count {};
 		for (int y = 1; y < input.size() - 1; y++) {
@@ -67,12 +67,12 @@ static auto part2(auto const& input) {
 	}
 
 	// Process active rolls until no more can be removed
-	std::size_t const initial_active = active;
-	std::size_t last_active;
+	int const initial_active = active;
+	int last_active;
 
 	do {
 		last_active = active;
-		for (std::size_t i = 0; i < active;) {
+		for (int i = 0; i < active;) {
 			neighbourhood const& n = active_rolls[i];
 
 			char const num_roll_neighbours = n[1][1];
