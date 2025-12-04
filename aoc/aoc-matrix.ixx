@@ -57,6 +57,14 @@ constexpr void mat_identity(matrix_t<T, N, N>& ident) {
 	}
 }
 
+// Set a matrix to zero
+template <typename T, int N>
+constexpr void mat_zero(matrix_t<T, N, N>& ident) {
+	for (int i = 0; i < N; i++) {
+		ident[i].fill(0);
+	}
+}
+
 // Returns an identity matrix
 template <typename T, int N>
 [[nodiscard]] constexpr matrix_t<T, N, N> mat_identity() {
