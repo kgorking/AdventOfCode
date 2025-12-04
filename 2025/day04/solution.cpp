@@ -42,20 +42,20 @@ static auto part2(auto const& input) {
 	// This allows me to avoid grid lookups during processing.
 	using neighbourhood = std::array<char*, 3>; // 24 bytes to store a paper rolls entire neighbourhood.
 	std::array<neighbourhood, 13000> active_rolls{};
+	matrix_t roll_counts {};
 
 	// Set up the initial roll counts and active rolls
 	int active = 0;
 	{
-		matrix_t roll_count {};
 		for (int y = 1; y < input.size() - 1; y++) {
 			for (int x = 1; x < input[0].size() - 1; x++) {
 				if ('@' == input[y][x]) {
 					neighbourhood& n = active_rolls[active++];
 
 					// Get pointers to neighbouring positions
-					n[0] = &roll_count[y - 1][x - 1];
-					n[1] = &roll_count[y    ][x - 1];
-					n[2] = &roll_count[y + 1][x - 1];
+					n[0] = &roll_counts[y - 1][x - 1];
+					n[1] = &roll_counts[y    ][x - 1];
+					n[2] = &roll_counts[y + 1][x - 1];
 
 					// Increase the roll count for all neighbouring positions
 					n[0][0] += 1; n[0][1] += 1; n[0][2] += 1;
