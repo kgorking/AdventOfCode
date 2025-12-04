@@ -51,35 +51,43 @@ static auto part1(auto const& input) {
 
 static auto part2(auto const& input) {
 	std::queue<kg::pos2di> active_rolls;
+	matrix_t roll_count {};
+	kg::grid grid_roll { roll_count };
+
+	// Stick paper rolls positions in a stack,
+	// and find the roll counts of neighbouring positions.
 	for (auto pos : input | kg::views::coord2d) {
 		if ('@' == input[pos.y][pos.x]) {
 			active_rolls.push(pos);
+			for (kg::pos2di const offset : neighbours_offsets)
+				grid_roll[pos + offset] += 1;
 		}
 	}
 
 	int total_removed = 0;
-	matrix_t roll_count = count_adjacent_rolls(input);
-	kg::grid grid_roll { roll_count };
-
 	while (true) {
 		int removed = 0;
 		int active = active_rolls.size();
+
+		// Process all active rolls
 		while (active--) {
 			auto const pos = active_rolls.front();
 			active_rolls.pop();
 
-			if (roll_count[pos.y][pos.x] < 4) {
+			if (grid_roll[pos] < 4) {
 				removed += 1;
-				for (auto offset : neighbours_offsets) {
+
+				// Decrease the roll count for all neighbouring positions
+				for (auto offset : neighbours_offsets)
 					grid_roll[pos + offset] -= 1;
-				}
 			} else {
+				// The roll goes back on the stack
 				active_rolls.push(pos);
 			}
 		}
 
-		if (!removed)
-			break;
+		// Check if I'm done
+		if (!removed) break;
 
 		total_removed += removed;
 	}
