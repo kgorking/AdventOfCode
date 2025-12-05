@@ -4,4 +4,6 @@ target_sources(Aoc_2025 PUBLIC
     "day01/solution.cpp"
     "day02/solution.cpp"
 	"day03/solution.cpp"
-	"day04/solution.cpp")
+	"day04/solution.cpp"
+	"day05/solution.cpp"
+)

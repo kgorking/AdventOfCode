@@ -14,8 +14,8 @@ static constexpr auto get_input() {
 		;
 }
 
-static constexpr auto sample_input = get_sample_input();
-static constexpr auto actual_input = get_input();
+static const auto sample_input = get_sample_input();
+static const auto actual_input = get_input();
 
 TEST_CASE(DAY) {
 	auto const [expected_sample_part_1, expected_sample_part_2] = expected_sample;

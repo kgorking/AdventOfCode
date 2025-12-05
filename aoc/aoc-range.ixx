@@ -32,10 +32,7 @@ struct range {
 
 	[[nodiscard]] constexpr static range merge(range const& r1, range const& r2) {
 		//Expects(r1.adjacent(r2));
-		if (r1 < r2)
-			return range{r1.first, r2.last};
-		else
-			return range{r2.first, r1.last};
+		return range { std::min(r1.first, r2.first), std::max(r1.last, r2.last) };
 	}
 	// Returns a range that overlaps the two ranges
 	[[nodiscard]] constexpr static range overlapping(range const& r1, range const& r2) {
