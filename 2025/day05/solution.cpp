@@ -6,8 +6,6 @@ import std;
 static constexpr auto expected_sample = std::make_pair(3, 14);
 static constexpr auto expected_input = std::make_pair(707, 361615643045059);
 
-using range = kg::range<std::int64_t>;
-
 auto make_interval_map(std::ranges::range auto const& rng) {
 	std::map<std::int64_t, bool> intervals;
 
@@ -41,6 +39,8 @@ static auto part1(auto const& input) {
 }
 
 static auto part2(auto const& input) {
+	using range = kg::range<std::int64_t>;
+
 	auto [arr_ranges, ids] = input;
 	std::ranges::sort(arr_ranges);
 
